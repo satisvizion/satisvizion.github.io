@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Satisvizion is a solo Unity Asset Store developer building Unity games, tools, and production-ready assets."
+    />
+    <meta name="theme-color" content="#0a0d10" />
+    <meta property="og:title" content="Satisvizion - Unity Asset Store Developer" />
+    <meta
+      property="og:description"
+      content="Unity games, tools, and Asset Store assets built by a solo developer."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/satisvizion-hero.png" />
+    <title>Satisvizion - Unity Asset Store Developer</title>
+    <link rel="preload" href="assets/satisvizion-hero.png" as="image" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas class="motion-field" id="motionField" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Satisvizion home">
+        <span class="brand-mark" aria-hidden="true">S</span>
+        <span>Satisvizion</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#work">Work</a>
+        <a href="#focus">Focus</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <img src="assets/satisvizion-hero.png" alt="" />
+        </div>
+        <div class="hero-shade" aria-hidden="true"></div>
+
+        <div class="hero-content">
+          <p class="eyebrow">Solo Unity Asset Store Developer</p>
+          <h1 id="hero-title">Satisvizion</h1>
+          <p class="hero-copy">
+            I build Unity games, editor tools, and production-ready assets designed for developers who want useful systems they can ship with.
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button button-primary" href="mailto:satisvizion@gmail.com">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 6h16v12H4z" />
+                <path d="m4 7 8 6 8-6" />
+              </svg>
+              Contact
+            </a>
+            <a class="button button-secondary" href="https://github.com/satisvizion" rel="noreferrer">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M15 22v-4a4.8 4.8 0 0 0-1.3-3.5c4.2-.5 8.6-2.1 8.6-9.2a7.2 7.2 0 0 0-2-5 6.7 6.7 0 0 1-.1-5s-1.6-.5-5.2 2a18 18 0 0 0-9.5 0c-3.6-2.5-5.2-2-5.2-2a6.7 6.7 0 0 1-.1 5 7.2 7.2 0 0 0-2 5c0 7.1 4.4 8.7 8.6 9.2A4.8 4.8 0 0 0 5 18v4" />
+              </svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <aside class="status-panel" aria-label="Developer profile" data-reveal>
+          <div>
+            <span class="status-label">Craft</span>
+            <strong>Unity tools and assets</strong>
+          </div>
+          <div>
+            <span class="status-label">Mode</span>
+            <strong>Solo development</strong>
+          </div>
+          <div>
+            <span class="status-label">Contact</span>
+            <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section intro-section" id="work" aria-labelledby="work-title">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">What I Make</p>
+          <h2 id="work-title">Unity assets with a builder's eye for real projects.</h2>
+        </div>
+        <div class="work-grid">
+          <article class="work-card" data-reveal>
+            <span class="card-index">01</span>
+            <h3>Editor Tools</h3>
+            <p>Workflow-focused utilities that help Unity creators move faster, keep projects organized, and spend more time building.</p>
+          </article>
+          <article class="work-card" data-reveal>
+            <span class="card-index">02</span>
+            <h3>Runtime Systems</h3>
+            <p>Reusable gameplay and visualization systems shaped for practical integration, clear setup, and dependable behavior.</p>
+          </article>
+          <article class="work-card" data-reveal>
+            <span class="card-index">03</span>
+            <h3>Asset Store Products</h3>
+            <p>Packages prepared for Unity developers who need useful components, clean documentation, and support from the author.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section focus-section" id="focus" aria-labelledby="focus-title">
+        <div class="focus-copy" data-reveal>
+          <p class="eyebrow">Development Focus</p>
+          <h2 id="focus-title">Games, tools, and assets made for Unity creators.</h2>
+          <p>
+            Satisvizion is my solo development label for Unity work. I create games and developer-facing tools, with a strong focus on assets that can be distributed through the Unity Asset Store.
+          </p>
+        </div>
+
+        <div class="signal-stack" aria-label="Development strengths" data-reveal>
+          <div class="signal-row">
+            <span>Game systems</span>
+            <meter min="0" max="100" value="88">88%</meter>
+          </div>
+          <div class="signal-row">
+            <span>Unity tooling</span>
+            <meter min="0" max="100" value="94">94%</meter>
+          </div>
+          <div class="signal-row">
+            <span>Asset Store polish</span>
+            <meter min="0" max="100" value="91">91%</meter>
+          </div>
+          <div class="signal-row">
+            <span>Customer support</span>
+            <meter min="0" max="100" value="86">86%</meter>
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+        <div class="contact-panel" data-reveal>
+          <p class="eyebrow">Get In Touch</p>
+          <h2 id="contact-title">Questions, support, and asset ideas are welcome.</h2>
+          <p>
+            Customers and Unity developers can reach me directly by email for product questions, support, or collaboration inquiries.
+          </p>
+          <a class="button button-primary" href="mailto:satisvizion@gmail.com">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 6h16v12H4z" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+            satisvizion@gmail.com
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Satisvizion</span>
+      <span>Unity games, tools, and Asset Store assets.</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
