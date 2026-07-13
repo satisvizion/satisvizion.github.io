@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrefabCapsule - Documentation</title>
+<style>
+:root {
+  --bg: #0D0B1A;
+  --bg-card: #161230;
+  --bg-card-hover: #1E1840;
+  --bg-code: #1A1535;
+  --bg-sidebar: #100D20;
+  --text: #e2e2ea;
+  --text-dim: #9088b0;
+  --text-code: #c8c8d8;
+  --accent: #9333EA;
+  --accent-light: #A855F7;
+  --accent-glow: rgba(147,51,234,0.15);
+  --green: #00cec9;
+  --green-dim: rgba(0,206,201,0.12);
+  --yellow: #fdcb6e;
+  --yellow-dim: rgba(253,203,110,0.12);
+  --pink: #EC4899;
+  --pink-dim: rgba(236,72,153,0.12);
+  --orange: #e17055;
+  --orange-dim: rgba(225,112,85,0.12);
+  --blue: #818cf8;
+  --blue-dim: rgba(129,140,248,0.12);
+  --border: #2D2550;
+  --border-light: #3D3560;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --sidebar-w: 280px;
+  --header-h: 64px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 24px); }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: #fff; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* ---- HEADER ---- */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  background: rgba(13,11,26,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  gap: 16px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.header-logo .dot {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, #9333EA, #EC4899);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #fff;
+}
+
+.header-search {
+  flex: 1;
+  max-width: 420px;
+  margin-left: auto;
+  position: relative;
+}
+
+.header-search input {
+  width: 100%;
+  padding: 8px 16px 8px 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.header-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.header-search input::placeholder { color: var(--text-dim); }
+
+.header-search .search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text-dim); font-size: 14px; pointer-events: none;
+}
+
+.header-version {
+  font-size: 12px; color: var(--text-dim);
+  background: var(--bg-card);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.menu-toggle {
+  display: none;
+  background: none; border: none;
+  color: var(--text); font-size: 22px;
+  cursor: pointer; padding: 4px;
+}
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 20px 0;
+  z-index: 90;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-group { margin-bottom: 8px; }
+
+.sidebar-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-dim);
+  padding: 12px 24px 6px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 24px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13.5px;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.sidebar a:hover {
+  color: var(--text);
+  background: var(--accent-glow);
+}
+
+.sidebar a.active {
+  color: var(--accent-light);
+  background: var(--accent-glow);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+.sidebar a .nav-icon {
+  width: 20px;
+  text-align: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ---- MAIN ---- */
+.main {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--header-h);
+  padding: 40px 48px 80px;
+  max-width: 960px;
+}
+
+/* ---- HERO ---- */
+.hero {
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fff 0%, #A855F7 40%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 17px;
+  color: var(--text-dim);
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-purple { background: var(--accent-glow); color: var(--accent-light); border: 1px solid rgba(147,51,234,0.25); }
+.badge-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,206,201,0.25); }
+.badge-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(253,203,110,0.25); }
+.badge-pink { background: var(--pink-dim); color: var(--pink); border: 1px solid rgba(236,72,153,0.25); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(129,140,248,0.25); }
+
+/* ---- SECTIONS ---- */
+.section {
+  margin-bottom: 56px;
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+
+.section h2 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section h2 .section-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.section > .section-desc {
+  color: var(--text-dim);
+  margin-bottom: 28px;
+  font-size: 15px;
+}
+
+h3 {
+  font-size: 19px;
+  font-weight: 700;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  color: var(--text);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  color: var(--accent-light);
+}
+
+p { margin-bottom: 12px; }
+
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 4px; }
+
+a { color: var(--accent-light); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---- CARDS ---- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+
+.card:hover { border-color: var(--border-light); }
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.mini-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.mini-card:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.mini-card h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--text);
+  border: none;
+  padding: 0;
+}
+
+.mini-card p {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ---- CODE ---- */
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 18px 22px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-code);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+pre .lang-tag {
+  position: absolute;
+  top: 8px; right: 12px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+  opacity: 0.6;
+  font-family: var(--font);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--bg-code);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--accent-light);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+.kw { color: #C084FC; }
+.str { color: #c3e88d; }
+.cm { color: #6B5F8A; font-style: italic; }
+.fn { color: #818cf8; }
+.tp { color: #ffcb6b; }
+.num { color: #f78c6c; }
+.op { color: #A78BFA; }
+
+/* ---- TABLES ---- */
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+thead th {
+  background: var(--bg-code);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(147,51,234,0.04); }
+
+/* ---- COLLAPSIBLE ---- */
+details {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+details[open] { border-color: var(--border-light); }
+
+summary {
+  padding: 14px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+  list-style: none;
+  transition: color 0.15s;
+}
+
+summary::-webkit-details-marker { display: none; }
+
+summary::before {
+  content: '\25B6';
+  font-size: 10px;
+  color: var(--text-dim);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+details[open] > summary::before { transform: rotate(90deg); }
+
+summary:hover { color: var(--accent-light); }
+
+details .details-body { padding: 0 20px 18px; }
+details .details-body p:first-child { margin-top: 0; }
+
+/* ---- CALLOUT ---- */
+.callout {
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.callout > div { flex: 1; }
+.callout p { margin-bottom: 6px; }
+.callout p:last-child { margin-bottom: 0; }
+
+.callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.callout-tip { background: var(--green-dim); border: 1px solid rgba(0,206,201,0.2); }
+.callout-tip .callout-icon { color: var(--green); }
+
+.callout-warn { background: var(--yellow-dim); border: 1px solid rgba(253,203,110,0.2); }
+.callout-warn .callout-icon { color: var(--yellow); }
+
+.callout-info { background: var(--blue-dim); border: 1px solid rgba(129,140,248,0.2); }
+.callout-info .callout-icon { color: var(--blue); }
+
+.callout-danger { background: var(--pink-dim); border: 1px solid rgba(236,72,153,0.2); }
+.callout-danger .callout-icon { color: var(--pink); }
+
+/* ---- STEP LIST ---- */
+.steps { counter-reset: step; margin-bottom: 16px; }
+
+.step {
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  counter-increment: step;
+}
+
+.step:last-child { border-bottom: none; }
+
+.step::before {
+  content: counter(step);
+  width: 28px; height: 28px;
+  background: var(--accent-glow);
+  color: var(--accent-light);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.step-content { flex: 1; }
+.step-content strong { color: var(--text); }
+
+/* ---- FLOW DIAGRAM ---- */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.flow-node {
+  padding: 8px 16px;
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.flow-arrow {
+  padding: 0 8px;
+  color: var(--text-dim);
+  font-size: 16px;
+}
+
+/* ---- TAGS ---- */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-required { background: var(--pink-dim); color: var(--pink); }
+.tag-optional { background: var(--green-dim); color: var(--green); }
+.tag-auto { background: var(--accent-glow); color: var(--accent-light); }
+.tag-platform { background: var(--yellow-dim); color: var(--yellow); }
+.tag-info { background: var(--blue-dim); color: var(--blue); }
+
+/* ---- SEARCH RESULTS ---- */
+.search-overlay {
+  display: none;
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 95;
+}
+
+.search-results {
+  display: none;
+  position: fixed;
+  top: calc(var(--header-h) + 8px);
+  left: 50%; transform: translateX(-50%);
+  width: 520px;
+  max-width: calc(100vw - 32px);
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  z-index: 96;
+  padding: 8px;
+}
+
+.search-results.visible { display: block; }
+.search-overlay.visible { display: block; }
+
+.search-item {
+  display: block;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.1s;
+}
+
+.search-item:hover { background: var(--accent-glow); text-decoration: none; }
+.search-item-section { font-size: 11px; color: var(--accent-light); margin-bottom: 2px; }
+.search-item-title { font-weight: 600; font-size: 14px; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 24px 20px 60px; }
+  .menu-toggle { display: block; }
+  .header-search { max-width: 200px; }
+  .hero h1 { font-size: 28px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .header { padding: 0 16px; }
+  .header-version { display: none; }
+  .header-search { max-width: 160px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+  <a href="#overview" class="header-logo">
+    <div class="dot">P</div>
+    <span>PrefabCapsule</span>
+  </a>
+  <div class="header-search">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="searchInput" placeholder="Search docs... (Ctrl+K)" autocomplete="off">
+  </div>
+  <span class="header-version">v1.0.0 &middot; Unity 2022.3 LTS+</span>
+</header>
+
+<!-- SEARCH -->
+<div class="search-overlay" id="searchOverlay"></div>
+<div class="search-results" id="searchResults"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Getting Started</div>
+    <a href="#overview"><span class="nav-icon">&#127968;</span> Overview</a>
+    <a href="#installation"><span class="nav-icon">&#10515;</span> Installation</a>
+    <a href="#quickstart"><span class="nav-icon">&#9889;</span> Quick Start</a>
+    <a href="#how-it-works"><span class="nav-icon">&#9881;</span> How It Works</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Core Pillars</div>
+    <a href="#seal"><span class="nav-icon">&#128274;</span> Seal (Capsule Lock)</a>
+    <a href="#expose"><span class="nav-icon">&#128221;</span> Expose &amp; Facets</a>
+    <a href="#apply-guard"><span class="nav-icon">&#128737;</span> Apply Guard</a>
+    <a href="#adopt"><span class="nav-icon">&#128270;</span> Adopt (Override Scanner)</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Team &amp; Governance</div>
+    <a href="#roles"><span class="nav-icon">&#128101;</span> Roles</a>
+    <a href="#facet-presets"><span class="nav-icon">&#127912;</span> Facet Presets</a>
+    <a href="#health"><span class="nav-icon">&#128202;</span> Capsule Health</a>
+    <a href="#api-serialization"><span class="nav-icon">&#128230;</span> API &amp; Serialization</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">No-Code</div>
+    <a href="#editor-tools"><span class="nav-icon">&#128295;</span> Editor Tools / No-Code</a>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-title">Reference</div>
+    <a href="#api"><span class="nav-icon">&#128217;</span> Scripting API</a>
+    <a href="#troubleshooting"><span class="nav-icon">&#128161;</span> Troubleshooting</a>
+    <a href="#faq"><span class="nav-icon">&#10067;</span> FAQ</a>
+    <a href="#support"><span class="nav-icon">&#128236;</span> Support</a>
+  </div>
+
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ============================================ -->
+<!--                  HERO                        -->
+<!-- ============================================ -->
+<div class="hero" id="overview">
+  <h1>PrefabCapsule</h1>
+  <p>An editor-only tool that turns any prefab into an encapsulated module. Collapse it to one governed node in the Hierarchy, expose exactly the properties a designer should touch, and guard the source asset from accidental Apply &mdash; with zero runtime footprint.</p>
+  <div class="hero-badges">
+    <span class="badge badge-purple">Unity 2022.3 LTS+</span>
+    <span class="badge badge-green">Editor-only &middot; Zero runtime cost</span>
+    <span class="badge badge-yellow">Built-in / URP / HDRP</span>
+    <span class="badge badge-pink">No-code workflow</span>
+  </div>
+</div>
+
+<section class="section">
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>One idea, four moves: Seal &rarr; Expose &rarr; Adopt/Govern &rarr; Ship.</strong> Add a <code>PrefabCapsule</code> component to <strong>Seal</strong> a prefab instance into a single governed node, <strong>Expose</strong> a curated surface of members onto that node, <strong>Adopt</strong> the overrides an existing project already has (and govern who sees what), then <strong>Ship</strong> &mdash; the marker component carries no runtime logic and is stripped from built scenes.</div>
+  </div>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">&#9989;</span>
+    <div><strong>Non-destructive by design.</strong> The Seal is an editor-only visualization &mdash; children stay present at runtime, your prefab data is never rewritten, and the capsule config is stored as primitive, <a href="#api-serialization">diffable</a> values. Remove the component and everything is exactly as it was.</div>
+  </div>
+
+  <div class="card-grid">
+    <a class="mini-card" href="#seal"><h4>&#128274; Seal in one click</h4><p>Collapse a busy prefab instance to a single locked node &mdash; the Hierarchy stops being a wall of children.</p></a>
+    <a class="mini-card" href="#expose"><h4>&#128221; Curated surface</h4><p>Allow-list exactly the properties, methods and references a designer may touch, grouped into named <strong>Facets</strong>.</p></a>
+    <a class="mini-card" href="#apply-guard"><h4>&#128737; Apply Guard</h4><p>Stop accidental Apply of instance overrides back to the shared asset &mdash; while Revert always works.</p></a>
+    <a class="mini-card" href="#adopt"><h4>&#128270; Adopt existing work</h4><p>Inventory the overrides already scattered across your scenes, then Reveal them as a Facet or Clean them in one click.</p></a>
+    <a class="mini-card" href="#health"><h4>&#128202; Capsule Health</h4><p>A project-wide dashboard for broken exposes, empty capsules and drift &mdash; plus a headless CI validator.</p></a>
+    <a class="mini-card" href="#editor-tools"><h4>&#128295; No code required</h4><p>Menu items and a custom Inspector do the whole workflow. The API is there when you want it.</p></a>
+  </div>
+
+  <p>This guide starts with <a href="#installation">install</a> and a <a href="#quickstart">quick start</a>, walks the <a href="#how-it-works">four-move flow</a>, then documents each pillar in its own page. The prominent <a href="#editor-tools">Editor Tools / No-Code</a> page and the <a href="#api">Scripting API</a> reference are near the end.</p>
+</section>
+
+<!-- ============================================ -->
+<!--             INSTALLATION                     -->
+<!-- ============================================ -->
+<section class="section" id="installation">
+  <h2><span class="section-icon" style="background:var(--accent-glow);color:var(--accent-light)">&#10515;</span> Installation</h2>
+  <p class="section-desc">Import once, seal a prefab. There is nothing to configure and no runtime setup.</p>
+
+  <div class="steps">
+    <div class="step"><div class="step-content"><strong>Import from the Asset Store</strong><br>In <code>Window &rarr; Package Manager &rarr; My Assets</code>, download and import PrefabCapsule. It lands at <code>Assets/PrefabCapsule/</code>.</div></div>
+    <div class="step"><div class="step-content"><strong>Read the Welcome window</strong><br>A first-run <strong>Welcome</strong> window opens once automatically. Reopen it any time from <code>Tools &rarr; PrefabCapsule &rarr; Welcome</code>.</div></div>
+    <div class="step"><div class="step-content"><strong>(Optional) Import the demo dependencies</strong><br>The interactive demo scene uses <code>com.unity.ugui</code> and <code>com.unity.inputsystem</code>. Add them in the Package Manager if you want to open and play the demo &mdash; the core tool needs neither.</div></div>
+    <div class="step"><div class="step-content"><strong>Seal your first prefab</strong><br>Select a prefab instance in a scene and choose <code>GameObject &rarr; PrefabCapsule &rarr; Seal Selected Prefab</code>. See the <a href="#quickstart">Quick Start</a>.</div></div>
+  </div>
+
+  <h3>Requirements</h3>
+  <ul>
+    <li>Unity <strong>2022.3 LTS or newer</strong> (compile-verified on 2022.3.56f1; developed on Unity 6000.0).</li>
+    <li><strong>Render-pipeline-agnostic</strong> &mdash; Built-in, URP and HDRP all work. PrefabCapsule is an editor tool and does not touch rendering.</li>
+    <li>The core tool has <strong>zero package dependencies</strong>. Only the optional demo scene requires <code>com.unity.ugui</code> + <code>com.unity.inputsystem</code>.</li>
+  </ul>
+
+  <h3>What gets installed</h3>
+  <pre><code><span class="kw">Assets/PrefabCapsule/</span>
+  Editor/         <span class="cm">// the whole tool: Seal, Expose/Facets, Apply Guard, Adopt,</span>
+                  <span class="cm">//   Roles, Capsule Health, the UI-Toolkit Inspector, PrefabCapsuleApi,</span>
+                  <span class="cm">//   the diffable serializer and the CI validator</span>
+  Runtime/        <span class="cm">// one editor-only marker component (no runtime logic) plus a</span>
+                  <span class="cm">//   build post-processor that strips it from built scenes</span>
+  Demos/          <span class="cm">// an interactive demo scene + per-feature sample scenes (open + Play)</span>
+  Documentation/  <span class="cm">// You are here</span>
+  Tests/          <span class="cm">// EditMode + PlayMode</span><span class="lang-tag">Project</span></code></pre>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Zero runtime footprint.</strong> The only thing that ever lives on a GameObject is a marker component with no runtime logic, and a build post-processor removes it from built scenes. Nothing PrefabCapsule does costs you a frame at runtime.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             QUICK START                      -->
+<!-- ============================================ -->
+<section class="section" id="quickstart">
+  <h2><span class="section-icon" style="background:var(--accent-glow);color:var(--accent-light)">&#9889;</span> Quick Start</h2>
+  <p class="section-desc">Seal a prefab, expose one property, guard the asset &mdash; in under a minute, no code.</p>
+
+  <div class="steps">
+    <div class="step"><div class="step-content"><strong>Pick a prefab instance</strong><br>Select any prefab instance in your scene. Variants, nested prefabs and 2D prefabs all work.</div></div>
+    <div class="step"><div class="step-content"><strong>Seal it</strong><br><code>GameObject &rarr; PrefabCapsule &rarr; Seal Selected Prefab</code> (or <code>Add Component &rarr; PrefabCapsule</code>). The instance collapses to one node with a lock badge; its children dim in the Hierarchy but stay present at runtime.</div></div>
+    <div class="step"><div class="step-content"><strong>Expose what a designer should touch</strong><br>In the custom Inspector, create a <strong>Facet</strong> (for example "Designer") and add exposed members to it &mdash; a property, a whole component, a method button, a reference, or a child. That curated surface now draws on the collapsed root.</div></div>
+    <div class="step"><div class="step-content"><strong>Guard the asset &amp; ship</strong><br>Toggle <strong>Apply Guard</strong> so nobody accidentally applies overrides back to the shared prefab (Revert still works). Build normally &mdash; the marker component is stripped from the build.</div></div>
+  </div>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">&#128161;</span>
+    <div><strong>Already have a project full of override chaos?</strong> Start with <a href="#adopt">Adopt</a> instead. Point it at an existing prefab instance and it inventories the overrides you already have, then lets you Reveal them as a Facet or Clean them &mdash; and can encapsulate the prefab and draft a starter facet for you.</div>
+  </div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Prefer to see it running?</strong> Open the bundled interactive demo scene and the per-feature sample scenes under <code>Assets/PrefabCapsule/Demos/</code> &mdash; open one and press Play to try each pillar hands-on.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             HOW IT WORKS                     -->
+<!-- ============================================ -->
+<section class="section" id="how-it-works">
+  <h2><span class="section-icon" style="background:var(--accent-glow);color:var(--accent-light)">&#9881;</span> How It Works</h2>
+  <p class="section-desc">The whole tool is one workflow with four moves.</p>
+
+  <div class="flow">
+    <span class="flow-node">Any prefab instance</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-node">Seal</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-node">Expose surface</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-node">Adopt / Govern</span>
+    <span class="flow-arrow">&rarr;</span>
+    <span class="flow-node">Ship (stripped)</span>
+  </div>
+
+  <ol>
+    <li><strong>Seal.</strong> Add a <code>PrefabCapsule</code> component and the instance collapses to one governed node &mdash; a non-destructive dim of the children plus a lock badge on the root. Nothing is deleted; children still exist at runtime.</li>
+    <li><strong>Expose.</strong> Allow-list exactly the members a designer should touch &mdash; a property, a whole component, a method button, a UnityEvent, a read-only reference or a child &mdash; and group them into named <strong>Facets</strong> that draw on the collapsed root.</li>
+    <li><strong>Adopt / Govern.</strong> Inventory the overrides an existing project already has and Reveal or Clean them; gate writes with <a href="#apply-guard">Apply Guard</a>; and filter which Facets each teammate sees with <a href="#roles">Roles</a>.</li>
+    <li><strong>Ship.</strong> The marker component has no runtime logic, and a build post-processor strips it from built scenes &mdash; so the whole workflow costs nothing at runtime.</li>
+  </ol>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>It is an editor tool, end to end.</strong> Every pillar &mdash; Seal, Expose, Apply Guard, Adopt, Roles, Health &mdash; runs in the Unity Editor against your prefabs and scenes. There is no second component to maintain, no runtime manager, and no per-frame work.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             SEAL                             -->
+<!-- ============================================ -->
+<section class="section" id="seal">
+  <h2><span class="section-icon" style="background:var(--accent-glow);color:var(--accent-light)">&#128274;</span> Seal (Capsule Lock)</h2>
+  <p class="section-desc">Collapse a prefab instance to one governed node so the Hierarchy stops being a wall of children.</p>
+
+  <p>Add a <code>PrefabCapsule</code> component to a prefab instance and it becomes a <strong>capsule</strong>: the root gets a lock badge and its children are dimmed (non-destructively) so the whole thing reads as a single node. The children are still there at runtime &mdash; this is an editor-only visualization, not a deletion.</p>
+
+  <h3>Seal states</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>State</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Sealed</strong></td><td>The capsule reads as one governed node with a lock badge; children are dimmed in the Hierarchy.</td></tr>
+      <tr><td><strong>Sealed + HideTransform</strong></td><td>As Sealed, and the interior transform hierarchy is hidden for the cleanest possible node.</td></tr>
+      <tr><td><strong>Unsealed</strong></td><td>The capsule is temporarily open &mdash; children show normally while you work inside.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Peek</h3>
+  <p><strong>Peek</strong> temporarily reveals one capsule&rsquo;s insides <em>without</em> changing its Seal state, and auto-reverts as soon as your selection moves away. It is the quick "let me look inside for a second" gesture &mdash; no toggling, no risk of leaving a capsule open by accident.</p>
+
+  <h3>Pick Shape &mdash; select a sealed capsule in the Scene view</h3>
+  <p>Because a sealed capsule reads as one node, PrefabCapsule lets you click its <em>body</em> in the Scene view to select it. Choose the <strong>Pick Shape</strong> that best matches the object:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Pick Shape</th><th>Selects by</th></tr></thead>
+    <tbody>
+      <tr><td><code>Bounds</code></td><td>The capsule&rsquo;s bounding box (the default; fast and good for most objects).</td></tr>
+      <tr><td><code>Mesh</code></td><td>The actual mesh surface &mdash; use this for concave geometry where the box is too coarse.</td></tr>
+      <tr><td><code>Skinned</code></td><td>A skinned mesh renderer&rsquo;s surface.</td></tr>
+      <tr><td><code>Sprite</code></td><td>A sprite&rsquo;s bounds &mdash; for 2D capsules.</td></tr>
+      <tr><td><code>Root</code></td><td>The root transform only.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">&#9989;</span>
+    <div><strong>No Gizmos toggle required.</strong> Picking a sealed capsule by its body works without the Scene-view Gizmos dependency that older workflows require. And if the prefab is ever unpacked, the capsule <strong>self-heals</strong> back to a consistent state.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             EXPOSE & FACETS                  -->
+<!-- ============================================ -->
+<section class="section" id="expose">
+  <h2><span class="section-icon" style="background:var(--pink-dim);color:var(--pink)">&#128221;</span> Expose &amp; Facets</h2>
+  <p class="section-desc">The curated surface &mdash; allow-list exactly what surfaces on the collapsed root, grouped into persona views.</p>
+
+  <p>Once a prefab is sealed, you decide what a teammate is actually allowed to touch. <strong>Expose</strong> adds individual members to the collapsed root as an allow-list &mdash; nothing surfaces unless you put it there.</p>
+
+  <h3>What you can expose</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Exposed member</th><th>Surfaces as</th></tr></thead>
+    <tbody>
+      <tr><td>A <strong>property</strong></td><td>An editable field for a single serialized property.</td></tr>
+      <tr><td>A whole <strong>component</strong></td><td>The component&rsquo;s full inspector, inline on the root.</td></tr>
+      <tr><td>A public <strong>method</strong></td><td>A clickable button that invokes the method.</td></tr>
+      <tr><td>A <strong>UnityEvent</strong></td><td>The event, editable inline.</td></tr>
+      <tr><td>An <strong>object reference</strong></td><td>A read-only reference field.</td></tr>
+      <tr><td>A <strong>child GameObject</strong></td><td>A handle to a specific child.</td></tr>
+      <tr><td><strong>Header / Comment / Separator</strong></td><td>Layout &amp; documentation items to organize the surface.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Facets &mdash; persona views of the same prefab</h3>
+  <p>Group exposed members into named <strong>Facets</strong> such as "Designer" or "Programmer". Each Facet is a different curated surface of the <em>same</em> prefab, so different team members open the same object and see exactly the controls that make sense for them. Give any exposed member a custom display name &mdash; including CJK and other unicode text.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>One prefab, many surfaces.</strong> A "Designer" facet might expose a handful of tuning properties and a couple of method buttons, while a "Programmer" facet exposes whole components. Pair Facets with <a href="#roles">Roles</a> to control who sees which.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             APPLY GUARD                      -->
+<!-- ============================================ -->
+<section class="section" id="apply-guard">
+  <h2><span class="section-icon" style="background:var(--green-dim);color:var(--green)">&#128737;</span> Apply Guard</h2>
+  <p class="section-desc">One-way write protection &mdash; a strong guardrail against accidentally applying instance overrides back to the shared asset.</p>
+
+  <p>Turn on <strong>Apply Guard</strong> for a prefab and instances of it can no longer <strong>Apply</strong> their overrides back to the shared source asset. The most expensive prefab accident &mdash; one person&rsquo;s local tweak silently rewriting the prefab everyone depends on &mdash; is taken off the table. Crucially, this is one-way: <strong>Revert</strong> and <strong>Revert All</strong> always work, so pulling an instance back in line with the asset is never blocked.</p>
+
+  <h3>Where it holds</h3>
+  <ul>
+    <li>Apply Guard gates at the <strong>instance level</strong>, not at the property drawer &mdash; so it holds even for custom-drawn and Odin-decorated properties.</li>
+    <li>Revert and Revert All remain available at all times, on guarded and unguarded prefabs alike.</li>
+  </ul>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">&#9888;</span>
+    <div><strong>An honest guardrail, not an absolute lock.</strong> No editor guardrail is unbreakable &mdash; a determined user with enough Unity knowledge can always find another path. What Apply Guard does is remove the <em>easy footguns</em>: the one-click accidental Apply that quietly corrupts a shared asset. Treat it as strong protection against mistakes, not a security boundary.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             ADOPT                            -->
+<!-- ============================================ -->
+<section class="section" id="adopt">
+  <h2><span class="section-icon" style="background:var(--yellow-dim);color:var(--yellow)">&#128270;</span> Adopt (Override Scanner)</h2>
+  <p class="section-desc">The standout &mdash; the migration path for bringing the workflow to a project that already exists.</p>
+
+  <p>Most prefab tools assume a clean start. <strong>Adopt</strong> assumes the opposite: you already have scenes full of prefab instances with overrides scattered across them. Point Adopt at a prefab instance and it <strong>inventories the overrides that already exist</strong> across your scenes, grouped by component and by child, so you can finally see the whole picture in one place.</p>
+
+  <h3>What you do with the inventory</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Action</th><th>Effect</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Reveal</strong></td><td>Promote the overrides you want to keep into a <a href="#expose">Facet</a> &mdash; one click turns "hidden ad-hoc tweaks" into an intentional, curated surface.</td></tr>
+      <tr><td><strong>Clean</strong></td><td>Revert the overrides you did not mean to keep &mdash; one click to bring instances back in line with the asset.</td></tr>
+      <tr><td><strong>Encapsulate this prefab</strong></td><td>Adds a capsule to the prefab and auto-drafts a starter Facet, so you go from "raw prefab" to "governed capsule with a first surface" immediately.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">&#128161;</span>
+    <div><strong>This is how you adopt PrefabCapsule on an existing project.</strong> You do not have to rebuild anything. Scan what you already have, keep the good overrides as Facets, clean the accidental ones, and let the encapsulate action seal the prefab and draft its first surface &mdash; then govern from there.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             ROLES                            -->
+<!-- ============================================ -->
+<section class="section" id="roles">
+  <h2><span class="section-icon" style="background:var(--blue-dim);color:var(--blue)">&#128101;</span> Roles</h2>
+  <p class="section-desc">Native team governance &mdash; decide which roles may see each Facet.</p>
+
+  <p><strong>Roles</strong> are built into PrefabCapsule (not a separate add-on). For each <a href="#expose">Facet</a> you set which roles may see it; the <strong>active editor role</strong> then filters the visible facets, so each teammate&rsquo;s Inspector shows only the surfaces meant for them. A designer opening a capsule sees the designer surface; a programmer sees the programmer surface &mdash; from the same prefab, with no duplicated assets.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Governance, not access control.</strong> Roles shape what the Editor <em>presents</em> to whoever is working, so teams stay focused and out of each other&rsquo;s controls. Combine Roles with <a href="#apply-guard">Apply Guard</a> to also protect the shared asset from accidental writes.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             FACET PRESETS                    -->
+<!-- ============================================ -->
+<section class="section" id="facet-presets">
+  <h2><span class="section-icon" style="background:var(--pink-dim);color:var(--pink)">&#127912;</span> Facet Presets</h2>
+  <p class="section-desc">Reusable Facet definitions you apply to any capsule.</p>
+
+  <p>Define a Facet once and reuse it everywhere. A <strong>Facet Preset</strong> is a ScriptableObject you create with <code>Assets &rarr; Create &rarr; PrefabCapsule &rarr; Facet Preset</code> and apply to any capsule. Standardize the "Designer" surface (or any persona view) across many prefabs instead of rebuilding it by hand each time.</p>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">&#128161;</span>
+    <div><strong>Consistency across a project.</strong> Presets make your curated surfaces uniform &mdash; every capsule of a given kind exposes the same controls, so teammates always know where to look.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             CAPSULE HEALTH                   -->
+<!-- ============================================ -->
+<section class="section" id="health">
+  <h2><span class="section-icon" style="background:var(--green-dim);color:var(--green)">&#128202;</span> Capsule Health</h2>
+  <p class="section-desc">A project-wide dashboard for the state of every capsule &mdash; plus a headless CI validator.</p>
+
+  <p>Open <code>Tools &rarr; PrefabCapsule &rarr; Capsule Health</code> for a project-wide dashboard that flags:</p>
+  <ul>
+    <li><strong>Broken exposes</strong> &mdash; an exposed member whose target child, component or property no longer resolves.</li>
+    <li><strong>Empty sealed capsules</strong> &mdash; a capsule that seals nothing meaningful.</li>
+    <li><strong>Drift</strong> &mdash; capsules that have wandered from their intended configuration.</li>
+  </ul>
+
+  <h3>CI validation</h3>
+  <p>The same checks run headlessly. Call the CI validator from your build pipeline and it exits non-zero if any capsule is broken, so a bad capsule fails the build instead of shipping:</p>
+  <pre><code><span class="cm">// Headless validation entry point &mdash; exits non-zero on any broken capsule</span>
+<span class="tp">PrefabCapsule</span>.<span class="tp">Editor</span>.<span class="tp">CI</span>.<span class="tp">ValidateAllCapsules</span>.Run();<span class="lang-tag">C#</span></code></pre>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Catch problems before they ship.</strong> Run Capsule Health interactively while you work, and wire <code>ValidateAllCapsules.Run</code> into CI so broken exposes and drift are caught automatically on every build.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--          API & SERIALIZATION                 -->
+<!-- ============================================ -->
+<section class="section" id="api-serialization">
+  <h2><span class="section-icon" style="background:var(--blue-dim);color:var(--blue)">&#128230;</span> Public API &amp; Diffable Serialization</h2>
+  <p class="section-desc">A scriptable surface for automation, and a version-control-friendly on-disk format.</p>
+
+  <h3>Scriptable API</h3>
+  <p>Everything the Inspector does is also available through <code>PrefabCapsuleApi</code> &mdash; <code>EnsureCapsule</code>, <code>CreateFacet</code> and <code>Expose</code> &mdash; so you can script capsule setup, generate facets in bulk, or standardize a whole project from an editor tool of your own. See the <a href="#api">Scripting API</a> reference for signatures and snippets.</p>
+
+  <h3>Deterministic, diffable serialization</h3>
+  <p>Facet configuration is serialized <strong>deterministically</strong>: regenerating the same configuration produces <strong>byte-identical</strong> output. That means clean prefab diffs in version control &mdash; no noisy churn from re-saving &mdash; and it makes the format friendly to code review and CI.</p>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">&#9989;</span>
+    <div><strong>Clean diffs, by construction.</strong> Because the serializer is deterministic, two people who build the same facet get the same bytes. Combine that with the <a href="#health">CI validator</a> for a workflow that stays honest in a shared repository.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--          EDITOR TOOLS / NO-CODE              -->
+<!-- ============================================ -->
+<section class="section" id="editor-tools">
+  <h2><span class="section-icon" style="background:var(--accent-glow);color:var(--accent-light)">&#128295;</span> Editor Tools / No-Code</h2>
+  <p class="section-desc">The whole workflow is menu items and a custom Inspector. You never have to write a line of code &mdash; the API is there only if you want it.</p>
+
+  <p>PrefabCapsule is a no-code tool first. Seal, Expose, Guard, Adopt, govern with Roles, and check Health entirely from the Editor UI. Here is the complete surface.</p>
+
+  <h3>Menu items</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Menu</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>GameObject &rarr; PrefabCapsule &rarr; Seal Selected Prefab</code></td><td>Scaffolds a sealed capsule on the selected prefab instance.</td></tr>
+      <tr><td><code>Tools &rarr; PrefabCapsule &rarr; Adopt</code></td><td>Opens the <a href="#adopt">Override Scanner</a> to inventory, Reveal or Clean existing overrides.</td></tr>
+      <tr><td><code>Tools &rarr; PrefabCapsule &rarr; Capsule Health</code></td><td>Opens the project-wide <a href="#health">health dashboard</a>.</td></tr>
+      <tr><td><code>Tools &rarr; PrefabCapsule &rarr; Welcome</code></td><td>Reopens the first-run Welcome window.</td></tr>
+      <tr><td><code>Assets &rarr; Create &rarr; PrefabCapsule &rarr; Facet Preset</code></td><td>Creates a reusable <a href="#facet-presets">Facet Preset</a> asset.</td></tr>
+      <tr><td><code>Assets &rarr; Create &rarr; PrefabCapsule &rarr; Settings</code></td><td>Creates a PrefabCapsule settings asset.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>The custom Inspector (UI Toolkit)</h3>
+  <p>Selecting a capsule shows a purpose-built UI-Toolkit Inspector with everything in one place:</p>
+  <ul>
+    <li><strong>Seal</strong>, <strong>Pick Shape</strong> and <strong>Apply Guard</strong> toggles.</li>
+    <li>The capsule&rsquo;s <strong>Facets</strong>, each listing its exposed members.</li>
+    <li>An <strong>Adopt</strong> button, a <strong>Capsule Health</strong> button and a <strong>Peek</strong> button, right where you are working.</li>
+  </ul>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>First-run Welcome &amp; samples.</strong> A Welcome window opens once on first import to orient you. The package also ships an interactive demo scene plus per-feature sample scenes under <code>Assets/PrefabCapsule/Demos/</code> &mdash; open one and press Play to try each pillar without writing anything.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             SCRIPTING API                    -->
+<!-- ============================================ -->
+<section class="section" id="api">
+  <h2><span class="section-icon" style="background:var(--blue-dim);color:var(--blue)">&#128217;</span> Scripting API</h2>
+  <p class="section-desc">Optional. Everything below is editor-side automation &mdash; namespaces <code>PrefabCapsule</code> and <code>PrefabCapsule.Editor</code>.</p>
+
+  <h3>Create a capsule and expose a property</h3>
+  <pre><code><span class="kw">using</span> PrefabCapsule;
+<span class="kw">using</span> PrefabCapsule.Editor;
+
+<span class="cm">// Ensure the selected GameObject is a capsule</span>
+<span class="kw">var</span> capsule = <span class="tp">PrefabCapsuleApi</span>.EnsureCapsule(go);
+
+<span class="cm">// Create a persona view</span>
+<span class="kw">var</span> facet = <span class="tp">PrefabCapsuleApi</span>.CreateFacet(capsule, <span class="str">"Designer"</span>);
+
+<span class="cm">// Expose the Rigidbody mass of the "Body" child onto the collapsed root</span>
+<span class="tp">PrefabCapsuleApi</span>.Expose(capsule, facet, <span class="kw">new</span> <span class="tp">ExposedMember</span>(<span class="tp">MemberKind</span>.Property){
+    ChildPath     = <span class="str">"Body"</span>,
+    ComponentType = <span class="str">"UnityEngine.Rigidbody"</span>,
+    PropertyPath  = <span class="str">"m_Mass"</span>
+});<span class="lang-tag">C#</span></code></pre>
+
+  <h3>Adopt, Health, Guard &amp; serialization</h3>
+  <pre><code><span class="cm">// Adopt: inventory the overrides on an existing instance, then Reveal or Clean</span>
+<span class="kw">var</span> report = <span class="tp">AdoptScanner</span>.ScanInstance(instance);
+<span class="tp">AdoptActions</span>.RevealOverrides(capsule, report);   <span class="cm">// promote into a Facet</span>
+<span class="tp">AdoptActions</span>.CleanOverrides(instance, report);    <span class="cm">// revert the rest</span>
+
+<span class="cm">// Capsule Health: scan the whole project</span>
+<span class="kw">var</span> health = <span class="tp">HealthScanner</span>.ScanProject();
+
+<span class="cm">// Apply Guard: Revert always works, even on a guarded prefab</span>
+<span class="tp">ApplyGuardPolicy</span>.RevertAllOverrides(instance);
+
+<span class="cm">// Diffable serialization: deterministic, byte-identical for the same config</span>
+<span class="kw">string</span> text = <span class="tp">FacetSerializer</span>.Serialize(capsule);<span class="lang-tag">C#</span></code></pre>
+
+  <h3>Key types</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Type / member</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>PrefabCapsuleApi.EnsureCapsule(go)</code></td><td>Return (creating if needed) the capsule on a GameObject.</td></tr>
+      <tr><td><code>PrefabCapsuleApi.CreateFacet(capsule, name)</code></td><td>Add a named Facet (persona view) to a capsule.</td></tr>
+      <tr><td><code>PrefabCapsuleApi.Expose(capsule, facet, ExposedMember)</code></td><td>Allow-list a member onto the collapsed root.</td></tr>
+      <tr><td><code>ExposedMember / MemberKind</code></td><td>Describes one exposed item (Property, Component, Method, UnityEvent, reference, child, layout items).</td></tr>
+      <tr><td><code>AdoptScanner.ScanInstance(instance)</code></td><td>Inventory the overrides on an instance, grouped by component + child.</td></tr>
+      <tr><td><code>AdoptActions.RevealOverrides / CleanOverrides</code></td><td>Promote overrides into a Facet, or revert them.</td></tr>
+      <tr><td><code>HealthScanner.ScanProject()</code></td><td>Project-wide scan for broken exposes, empty capsules and drift.</td></tr>
+      <tr><td><code>ApplyGuardPolicy.RevertAllOverrides(instance)</code></td><td>Revert an instance&rsquo;s overrides &mdash; always allowed, guarded or not.</td></tr>
+      <tr><td><code>FacetSerializer.Serialize(capsule)</code></td><td>Deterministic, diffable serialization of a capsule&rsquo;s facets.</td></tr>
+      <tr><td><code>PrefabCapsule.Editor.CI.ValidateAllCapsules.Run()</code></td><td>Headless CI validator; exits non-zero on any broken capsule.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">&#9432;</span>
+    <div><strong>Editor-side by design.</strong> The API drives the same editor operations as the Inspector &mdash; it is for automation and tooling, not for runtime. There is no runtime API to call because there is no runtime logic.</div>
+  </div>
+</section>
+
+<!-- ============================================ -->
+<!--             TROUBLESHOOTING                  -->
+<!-- ============================================ -->
+<section class="section" id="troubleshooting">
+  <h2><span class="section-icon" style="background:var(--pink-dim);color:var(--pink)">&#128161;</span> Troubleshooting</h2>
+  <p class="section-desc">The issues that come up most, and how to fix them.</p>
+
+  <details open>
+    <summary>A sealed prefab isn&rsquo;t selectable in the Scene view</summary>
+    <div class="details-body">
+      <p>Set the <strong>Pick Shape</strong> for the capsule. <code>Bounds</code> is the default and works for most objects; switch to <code>Mesh</code> for concave geometry where the bounding box doesn&rsquo;t match the visible shape (or <code>Skinned</code> / <code>Sprite</code> / <code>Root</code> as appropriate). No Scene-view Gizmos toggle is needed &mdash; picking a capsule by its body works without it.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Capsule Health reports a broken expose</summary>
+    <div class="details-body">
+      <p>A broken expose means the exposed member&rsquo;s target &mdash; a child, a component, or a property &mdash; was renamed or deleted, so the path no longer resolves. Fix the path so it points at the current member, or remove the exposed item if it&rsquo;s no longer needed. Re-run <a href="#health">Capsule Health</a> to confirm it&rsquo;s clear.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>I use Odin Inspector &mdash; is it supported?</summary>
+    <div class="details-body">
+      <p>Yes. Odin support is compiled behind the <code>ODIN_INSPECTOR</code> define, so it activates when Odin is present in your project. <a href="#apply-guard">Apply Guard</a> also holds for Odin-decorated properties because it gates at the instance level, not at the property drawer.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Will the marker component end up in my build?</summary>
+    <div class="details-body">
+      <p>No. The marker component is editor-only and carries no runtime logic, and a build post-processor strips it from built scenes. There is zero runtime cost &mdash; nothing PrefabCapsule adds survives into the shipped build.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================ -->
+<!--                  FAQ                         -->
+<!-- ============================================ -->
+<section class="section" id="faq">
+  <h2><span class="section-icon" style="background:var(--blue-dim);color:var(--blue)">&#10067;</span> FAQ</h2>
+  <p class="section-desc">Quick answers to the questions that come up most.</p>
+
+  <details open>
+    <summary>Is PrefabCapsule editor-only?</summary>
+    <div class="details-body">
+      <p>Yes. It is an editor tool with zero runtime cost. The only thing on a GameObject is a marker component with no runtime logic, and a build post-processor strips it from built scenes.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Does it change my prefab data destructively?</summary>
+    <div class="details-body">
+      <p>No. The Seal is a non-destructive editor visualization &mdash; children stay present at runtime and nothing is rewritten on disk. The capsule configuration itself is stored as primitive values and serialized in a deterministic, <a href="#api-serialization">diffable</a> format.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Can my whole team use it?</summary>
+    <div class="details-body">
+      <p>Yes &mdash; that&rsquo;s the point. Use <a href="#roles">Roles</a> so each teammate sees only the Facets meant for them, and <a href="#facet-presets">Facet Presets</a> to standardize surfaces across many prefabs. <a href="#apply-guard">Apply Guard</a> protects the shared asset from accidental writes.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Which Unity versions are supported?</summary>
+    <div class="details-body">
+      <p>Unity 2022.3 LTS or newer. It is compile-verified on 2022.3.56f1 and was developed on Unity 6000.0. It is render-pipeline-agnostic (Built-in / URP / HDRP), since it&rsquo;s an editor tool that doesn&rsquo;t touch rendering.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Does it work with Prefab Variants, nested prefabs and 2D?</summary>
+    <div class="details-body">
+      <p>Yes. Variants, nested prefabs and 2D prefabs all work &mdash; and the <code>Sprite</code> Pick Shape is there specifically for selecting 2D capsules in the Scene view.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Is Apply Guard an absolute lock?</summary>
+    <div class="details-body">
+      <p>No &mdash; and we won&rsquo;t claim otherwise. No editor guardrail is unbreakable. Apply Guard is a strong guardrail against the <em>accidental</em> Apply that quietly corrupts a shared asset; it removes the easy footguns rather than acting as a security boundary. Revert and Revert All always remain available.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============================================ -->
+<!--                SUPPORT                       -->
+<!-- ============================================ -->
+<section class="section" id="support">
+  <h2><span class="section-icon" style="background:var(--accent-glow);color:var(--accent-light)">&#128236;</span> Support</h2>
+  <p class="section-desc">Need help? We&rsquo;re here for you.</p>
+
+  <div class="card" style="text-align:center;padding:40px 24px;">
+    <div style="font-size:48px;margin-bottom:16px;">&#128231;</div>
+    <h3 style="border:none;margin-top:0;padding:0;text-align:center;">Get in Touch</h3>
+    <p style="color:var(--text-dim);max-width:480px;margin:8px auto 24px;">Bug reports, feature requests, workflow questions &mdash; reach out and we&rsquo;ll get back to you.</p>
+    <a href="mailto:szekipapa77@gmail.com" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--accent),var(--pink));color:#fff;text-decoration:none;border-radius:var(--radius-sm);font-weight:700;font-size:15px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+      &#9993; szekipapa77@gmail.com
+    </a>
+    <p style="color:var(--text-dim);font-size:13px;margin-top:16px;">We typically respond within 24&ndash;48 hours.</p>
+  </div>
+
+  <div class="card-grid" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-title">&#128172; Before contacting</div>
+      <ul style="padding-left:20px;color:var(--text-dim);font-size:14px;line-height:1.9;">
+        <li>Check the <a href="#troubleshooting">Troubleshooting</a> section</li>
+        <li>Run <strong>Capsule Health</strong> for broken exposes and drift</li>
+        <li>Confirm the <strong>PrefabCapsule</strong> component is on the instance</li>
+        <li>Try the <strong>Pick Shape</strong> options if a capsule won&rsquo;t select</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">&#128203; Helpful info to include</div>
+      <ul style="padding-left:20px;color:var(--text-dim);font-size:14px;line-height:1.9;">
+        <li>Unity version (e.g. <code>2022.3.56f1</code>)</li>
+        <li>PrefabCapsule version (<strong>v1.0.0</strong>)</li>
+        <li>Render pipeline (Built-in / URP / HDRP)</li>
+        <li>Whether it&rsquo;s a Variant / nested / 2D prefab, and what you selected</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-tip" style="margin-top:20px;">
+    <span class="callout-icon">&#11088;</span>
+    <div><strong>Enjoying PrefabCapsule?</strong> A review on the Unity Asset Store helps other developers discover the asset and helps us keep improving it. Thank you!</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--border);padding-top:32px;margin-top:48px;text-align:center;color:var(--text-dim);font-size:13px;">
+  <p>PrefabCapsule v1.0.0 &middot; Built for Unity 2022.3 LTS+ &middot; Editor-only, zero runtime cost</p>
+  <p style="margin-top:8px;">Support: <a href="mailto:szekipapa77@gmail.com" style="color:var(--accent-light);text-decoration:none;">szekipapa77@gmail.com</a></p>
+</div>
+
+</main>
+
+<!-- SCRIPTS -->
+<script>
+// Search functionality
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+const searchOverlay = document.getElementById('searchOverlay');
+
+const sections = [];
+document.querySelectorAll('.section, .hero').forEach(s => {
+  const h2 = s.querySelector('h2');
+  const h1 = s.querySelector('h1');
+  const desc = s.querySelector('.section-desc');
+  const h3s = s.querySelectorAll('h3');
+  const id = s.id || (s.parentElement && s.parentElement.id) || '';
+  if (!id) return;
+  sections.push({
+    id: id,
+    title: h2 ? h2.textContent.trim() : (h1 ? h1.textContent.trim() : ''),
+    desc: desc ? desc.textContent.trim() : '',
+    content: s.textContent.toLowerCase(),
+    h3: Array.from(h3s).map(h => h.textContent.trim())
+  });
+});
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (q.length < 2) {
+    searchResults.classList.remove('visible');
+    searchOverlay.classList.remove('visible');
+    return;
+  }
+  const matches = sections.filter(s => s.content.includes(q)).slice(0, 8);
+  if (matches.length === 0) {
+    searchResults.innerHTML = '<div style="padding:16px;color:var(--text-dim);text-align:center;">No results found</div>';
+  } else {
+    searchResults.innerHTML = matches.map(m => {
+      const matchH3 = m.h3.find(h => h.toLowerCase().includes(q));
+      return '<a href="#' + m.id + '" class="search-item" onclick="closeSearch()">' +
+        '<div class="search-item-section">' + m.title + '</div>' +
+        '<div class="search-item-title">' + (matchH3 || m.desc || m.title) + '</div>' +
+      '</a>';
+    }).join('');
+  }
+  searchResults.classList.add('visible');
+  searchOverlay.classList.add('visible');
+});
+
+function closeSearch() {
+  searchResults.classList.remove('visible');
+  searchOverlay.classList.remove('visible');
+  searchInput.value = '';
+  document.querySelector('.sidebar').classList.remove('open');
+}
+
+searchOverlay.addEventListener('click', closeSearch);
+
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+  }
+  if (e.key === 'Escape') closeSearch();
+});
+
+// Active sidebar link via IntersectionObserver
+const navLinks = document.querySelectorAll('.sidebar a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const link = document.querySelector('.sidebar a[href="#' + entry.target.id + '"]');
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+
+document.querySelectorAll('.section[id], .hero[id]').forEach(s => observer.observe(s));
+
+// Close mobile sidebar on nav click
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
