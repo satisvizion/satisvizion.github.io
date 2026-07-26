@@ -1,0 +1,669 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Game Templates &middot; Cards 3.0 Pack &mdash; Documentation</title>
+  <style>
+    :root { --bg:#faf9f6; --ink:#232830; --muted:#6b7280; --line:#e4e2d9; --card:#ffffff;
+            --accent:#0e7c66; --accent2:#b3541e; --side:#20263a; --side-ink:#c8cfe8; --code:#f1efe8; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; display:flex; font-family:Segoe UI, Arial, sans-serif; color:var(--ink);
+           background:var(--bg); line-height:1.55; }
+    nav.side { flex:0 0 250px; position:sticky; top:0; height:100vh; overflow-y:auto;
+               background:var(--side); color:var(--side-ink); padding:20px 0 30px; }
+    nav.side .brand { padding:0 20px 14px; font-weight:700; font-size:16px; color:#ffffff;
+                      border-bottom:1px solid #333c58; margin-bottom:10px; }
+    nav.side .brand span { display:block; font-weight:400; font-size:12px; color:#8d97bd; margin-top:2px; }
+    nav.side .group { padding:14px 20px 4px; font-size:11px; text-transform:uppercase;
+                      letter-spacing:.09em; color:#8d97bd; }
+    nav.side a { display:block; padding:4px 20px; color:var(--side-ink); text-decoration:none; font-size:13px; }
+    nav.side a:hover { background:#2b3350; color:#ffffff; }
+    main { flex:1; min-width:0; padding:34px 46px 60px; max-width:940px; }
+    h1 { margin:0 0 6px; font-size:32px; }
+    h2 { margin:36px 0 10px; font-size:22px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+    h3 { margin:20px 0 8px; font-size:15px; }
+    p { margin:0 0 12px; }
+    .lead { color:var(--muted); font-size:15px; }
+    .dim { color:var(--muted); font-size:12px; }
+    .stats { margin:10px 0 4px; }
+    .stats span { display:inline-block; background:var(--card); border:1px solid var(--line);
+                  border-radius:20px; padding:3px 12px; margin:0 6px 6px 0; font-size:12px; color:var(--muted); }
+    code { background:var(--code); border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:12.5px; }
+    pre { background:#272d3a; color:#e6e9f2; border-radius:8px; padding:14px 16px; overflow-x:auto;
+          font-size:12.5px; line-height:1.5; }
+    pre code { background:none; border:none; color:inherit; padding:0; }
+    table { border-collapse:collapse; width:100%; margin:8px 0 14px; background:var(--card); font-size:13px; }
+    th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+    th { background:#f2f0e8; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin:12px 0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:13px 15px; }
+    .card strong { display:block; margin-bottom:3px; }
+    .card span { color:var(--muted); font-size:12.5px; }
+    .info { border-left:4px solid var(--accent); background:#e9f5f1; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    .warn { border-left:4px solid var(--accent2); background:#fdf3e6; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    ol, ul { margin:8px 0 12px 22px; padding:0; }
+    li { margin:5px 0; }
+    .backtop { font-size:12px; margin-top:10px; }
+    a { color:var(--accent); }
+    footer { border-top:1px solid var(--line); margin-top:40px; padding-top:16px; color:var(--muted); font-size:13px; }
+    @media (max-width: 900px) {
+      body { flex-direction:column; }
+      nav.side { position:static; height:auto; width:100%; flex:none; }
+      main { padding:22px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="side">
+    <div class="brand">Mini Game Templates<span>Cards 3.0 Pack</span></div>
+    <div class="group">Getting started</div>
+    <a href="#overview">Overview</a>
+    <a href="#how">How it works</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#architecture">Architecture</a>
+    <div class="group">The 10 games</div>
+      <a href="#g-cards3_caribbean_stud">Caribbean Stud</a>
+      <a href="#g-cards3_let_it_ride">Let It Ride</a>
+      <a href="#g-cards3_red_dog">Red Dog</a>
+      <a href="#g-cards3_casino_war">Casino War</a>
+      <a href="#g-cards3_texas_holdem">Texas Hold&#39;em</a>
+      <a href="#g-cards3_seven_half">Seven &amp; a Half</a>
+      <a href="#g-cards3_monte">Three-Card Monte</a>
+      <a href="#g-cards3_pairs">Pairs</a>
+      <a href="#g-cards3_columns">Card Columns</a>
+      <a href="#g-cards3_lucky_draw">Lucky Draw</a>
+
+    <div class="group">Game systems</div>
+    <a href="#boosters">Boosters</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#reskins">Reskins</a>
+    <a href="#tutorials">Tutorials</a>
+    <a href="#levels">Level scaling</a>
+    <a href="#theme">Light &amp; dark mode</a>
+    <a href="#liveops">LiveOps Kit (bundled)</a>
+    <div class="group">Integration</div>
+    <a href="#integrate">Add to your project</a>
+    <a href="#customize">Customizing</a>
+    <a href="#newgames">Adding new games</a>
+    <div class="group">Help</div>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#support">Support &amp; review</a>
+  </nav>
+  <main>
+    <header id="top">
+      <h1>Mini Game Templates &middot; Cards 3.0 Pack</h1>
+      <p class="lead">Classic playing-card game templates — casino, duel, and shedding games with a shared 52-card model, poker evaluator, procedural card visuals, and per-game settings.</p>
+      <div class="stats">
+        <span>Unity 6000.0.62f1+</span><span>10 games</span><span>20 boosters</span><span>30 achievements</span><span>LiveOps Kit bundled</span>
+      </div>
+    </header>
+
+    <section id="overview">
+      <h2>&#127968; Overview</h2>
+      <p>10 fully playable mini-games, each with boosters, achievements, reskin slots, a first-run tutorial, per-level difficulty scaling and light/dark theming &mdash; all driven by one shared runtime.</p>
+      <div class="grid">
+        <div class="card"><strong>Caribbean Stud</strong><span>Ante, then play or fold against the dealer&#39;s five.</span></div>
+        <div class="card"><strong>Let It Ride</strong><span>Pull bets back or let them ride toward a paying hand.</span></div>
+        <div class="card"><strong>Red Dog</strong><span>Bet the third card lands inside the two-card spread.</span></div>
+        <div class="card"><strong>Casino War</strong><span>High card wins; tie means war or surrender.</span></div>
+        <div class="card"><strong>Texas Hold&#39;em</strong><span>Heads-up hold&#39;em against an AI across four streets.</span></div>
+        <div class="card"><strong>Seven &amp; a Half</strong><span>Draw toward 7.5 on a 40-card deck without busting.</span></div>
+        <div class="card"><strong>Three-Card Monte</strong><span>Track the Queen through the shuffle and tap her.</span></div>
+        <div class="card"><strong>Pairs</strong><span>Flip for points, but a matching rank busts your row.</span></div>
+        <div class="card"><strong>Card Columns</strong><span>Drop cards into three columns and hit 21.</span></div>
+        <div class="card"><strong>Lucky Draw</strong><span>Pick three of nine and out-total the dealer.</span></div>
+
+      </div>
+      <div class="info"><strong>One contract, 10 implementations.</strong> Every game implements <code>IMiniGame</code> and is discovered automatically by reflection &mdash; no scene wiring, no prefab lists.</div>
+      <h3>Shared capabilities</h3>
+      <div class="grid">
+        <div class="card"><strong>&#128165; Boosters</strong><span>Per-game power-ups with persistent counts and refund safety.</span></div>
+        <div class="card"><strong>&#127942; Achievements</strong><span>Progression goals per game, tracked persistently, with coin rewards.</span></div>
+        <div class="card"><strong>&#127912; Reskins</strong><span>Drop in your own art per slot, per game &mdash; no code required.</span></div>
+        <div class="card"><strong>&#127919; Tutorials</strong><span>First-run overlay walkthroughs, defined declaratively per game.</span></div>
+        <div class="card"><strong>&#128200; Level scaling</strong><span>Auto-generated difficulty curves, editable in the Studio.</span></div>
+        <div class="card"><strong>&#127769; Light &amp; dark</strong><span>One toggle re-themes the chrome and every game.</span></div>
+        <div class="card"><strong>&#127873; LiveOps Kit bundled</strong><span>Ads, IAP, haptics, rate-us, notifications and more &mdash; the full HyperCasual LiveOps Kit ships in this pack.</span></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <h2>&#9881; How it works</h2>
+      <p><strong>This is a procedural-UI games template.</strong> Every game builds its own interface and logic in C# at runtime inside the <code>RectTransform</code> you give it &mdash; there are no hand-placed prefabs to wire up. The shipped demo scene is a pre-baked snapshot of that build, so you can inspect the full hierarchy without pressing Play; on Play it rebuilds itself and becomes fully interactive.</p>
+      <h3>The Studio</h3>
+      <p>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> for per-game tuning panels. Settings you edit are saved to ScriptableObject assets under <code>Assets/MiniGameTemplates/Resources/Config/</code> and loaded by the games at runtime.</p>
+      <h3>Customization at a glance</h3>
+      <table>
+        <tr><th>What to change</th><th>Where to find it</th></tr>
+        <tr><td>Game rules / difficulty / dimensions</td><td>Studio, or the game's <code>&lt;Game&gt;Settings</code> asset</td></tr>
+        <tr><td>Per-level difficulty curve</td><td>Studio &gt; game panel &gt; Levels editor</td></tr>
+        <tr><td>Colours / overall look</td><td><code>MiniGameTheme</code> asset, or the in-app DARK/LIGHT toggle</td></tr>
+        <tr><td>Game art (tiles, pieces, backgrounds&hellip;)</td><td>Reskin system &mdash; <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em></td></tr>
+        <tr><td>Boosters offered</td><td>Each game's <code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Deeper layout / behaviour</td><td>The game's <code>&lt;Game&gt;Game.cs</code> build code</td></tr>
+      </table>
+      <div class="warn"><strong>Heads-up:</strong> because the UI is procedural, customization happens through data (settings assets, theme, reskins) rather than dragging things around a scene. The data-driven path covers day-to-day tweaks; source access covers the rest.</div>
+    </section>
+
+    <section id="quickstart">
+      <h2>&#9889; Quick start</h2>
+      <ol>
+        <li>Import <code>MiniGameTemplates-Cards3.unitypackage</code>. If Unity offers to import <strong>TMP Essentials</strong>, accept &mdash; the demo UI uses TextMeshPro.</li>
+        <li>Open <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Cards3.unity</code>. The full demo is already baked into the scene.</li>
+        <li>Press <strong>Play</strong> &mdash; the dashboard lists every Cards 3.0 game; pick, play, and try the boosters and cheat rail.</li>
+        <li>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> and tune any game's settings.</li>
+        <li>(Optional) Open <em>Tools &gt; HLK &gt; Guided Setup</em> to configure the bundled LiveOps kit &mdash; ads, IAP, notifications, rate-us and more (see the <a href="#liveops">LiveOps Kit</a> section).</li>
+        <li>To ship a single game inside your own UI, use the <code>IMiniGame</code> contract:</li>
+      </ol>
+      <pre><code>IMiniGame game = new CaribbeanStudGame();
+game.Mount(hostRect, context);   // context : IMiniGameContext
+// ... later, when done:
+game.Unmount();</code></pre>
+      <div class="info"><strong>Tip:</strong> the demo scene's dashboard is a complete reference implementation of <code>IMiniGameContext</code> (theme, audio, save, events, wallet, score) &mdash; copy it or implement the interface with your own services.</div>
+    </section>
+
+    <section id="architecture">
+      <h2>&#128736; Architecture</h2>
+      <h3>The <code>IMiniGame</code> contract</h3>
+      <pre><code>public interface IMiniGame {
+    string Id { get; }                 // stable snake_case id, e.g. "cards3_caribbean_stud"
+    string DisplayName { get; }
+    string Category { get; }
+    string ShortDescription { get; }
+    void Mount(RectTransform host, IMiniGameContext ctx);
+    void Unmount();
+    void NewRound();
+    IEnumerable&lt;CheatAction&gt; GetCheatActions();
+}</code></pre>
+      <h3>Auto-discovery</h3>
+      <table>
+        <tr><th>Registry</th><th>Discovers</th><th>Convention</th></tr>
+        <tr><td><code>MiniGameRegistry</code></td><td><code>IMiniGame</code> classes with a <code>[MiniGame]</code> attribute</td><td>one per game</td></tr>
+        <tr><td>Booster registry</td><td><code>IBoosterSpec</code> implementations</td><td><code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Achievement registry</td><td><code>IAchievementSpec</code> implementations</td><td><code>&lt;Game&gt;AchievementSpec.cs</code></td></tr>
+        <tr><td>Reskin registry</td><td><code>IReskinSpec</code> implementations</td><td><code>&lt;Game&gt;ReskinSpec.cs</code></td></tr>
+        <tr><td>Tutorial registry</td><td><code>ITutorialSpec</code> implementations</td><td><code>&lt;Game&gt;TutorialSpec.cs</code></td></tr>
+      </table>
+      <h3>Per-game folder layout</h3>
+      <pre><code>Assets/MiniGameTemplates/Runtime/Cards3/&lt;Game&gt;/
+    &lt;Game&gt;Game.cs             // gameplay + procedural UI
+    &lt;Game&gt;Settings.cs         // ScriptableObject settings (+ static Default)
+    &lt;Game&gt;BoosterSpec.cs      // booster definitions
+    &lt;Game&gt;AchievementSpec.cs  // achievement definitions
+    &lt;Game&gt;ReskinSpec.cs       // reskinnable sprite slots
+    &lt;Game&gt;TutorialSpec.cs     // first-run walkthrough steps</code></pre>
+      <div class="info"><strong>Modular by design.</strong> Delete any single game's folder and the rest keep working. Add a new game by mirroring the layout &mdash; no edits to any other file required.</div>
+      <h3>Runtime flow</h3>
+      <p><code>Mount(host, ctx)</code> &rarr; <code>NewRound()</code> &rarr; player input loop &rarr; <code>RoundWon</code> / <code>RoundLost</code> event &rarr; <code>NewRound()</code> or <code>Unmount()</code></p>
+    </section>
+
+    <section id="g-cards3_caribbean_stud">
+      <h2>&#127918; Caribbean Stud</h2>
+      <p class="lead">Ante, then play or fold against the dealer&#39;s five.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>You paid an ante. Look at your five cards versus the dealer&#39;s one up card.</li>
+        <li>PLAY adds a 2x bet; FOLD forfeits the ante. The dealer must qualify to pay it.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal one more of the dealer&#39;s face-down cards.</td></tr>
+        <tr><td><strong>Mulligan</strong></td><td><code>mulligan</code></td><td>Redraw your five cards once before you decide.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Island Fortune</strong><br><span class="dim">Build your stack up to 400 chips.</span></td><td>400</td><td>&mdash;</td></tr>
+        <tr><td><strong>Stud Winner</strong><br><span class="dim">Win 15 hands in total.</span></td><td>15</td><td>150 coins</td></tr>
+        <tr><td><strong>Qualifier Killer</strong><br><span class="dim">Beat a qualified dealer 10 times.</span></td><td>10</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Ante wagered each hand (the play bet is twice this).</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_let_it_ride">
+      <h2>&#127918; Let It Ride</h2>
+      <p class="lead">Pull bets back or let them ride toward a paying hand.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>You have three cards and two community cards. Three bets ride on the final five.</li>
+        <li>PULL takes a bet back; LET IT RIDE keeps it. Tens-or-better pays each remaining bet.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Advisor</strong></td><td><code>hint</code></td><td>Advises whether to pull a bet or let it ride.</td></tr>
+        <tr><td><strong>Insurance</strong></td><td><code>insure</code></td><td>Refund one bet if the final hand does not pay.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Riding High</strong><br><span class="dim">Build your stack up to 400 chips.</span></td><td>400</td><td>&mdash;</td></tr>
+        <tr><td><strong>On A Roll</strong><br><span class="dim">Make 15 paying hands.</span></td><td>15</td><td>150 coins</td></tr>
+        <tr><td><strong>Flush Rush</strong><br><span class="dim">Land 5 flush-or-better hands.</span></td><td>5</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Size of each of the three equal bets.</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_red_dog">
+      <h2>&#127918; Red Dog</h2>
+      <p class="lead">Bet the third card lands inside the two-card spread.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>The spread is how many ranks sit strictly between the two outer cards.</li>
+        <li>RAISE doubles your bet. The middle card wins if its rank falls inside the spread.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal the colour of the upcoming third card.</td></tr>
+        <tr><td><strong>Widen</strong></td><td><code>widen</code></td><td>Widen the winning spread window by one rank each side.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Top Dog</strong><br><span class="dim">Build your stack up to 300 chips.</span></td><td>300</td><td>&mdash;</td></tr>
+        <tr><td><strong>Inside Job</strong><br><span class="dim">Win 15 hands in total.</span></td><td>15</td><td>150 coins</td></tr>
+        <tr><td><strong>Threading The Needle</strong><br><span class="dim">Win a spread-of-one hand.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Base stake wagered per hand (a raise doubles it).</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_casino_war">
+      <h2>&#127918; Casino War</h2>
+      <p class="lead">High card wins; tie means war or surrender.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each hand you and the dealer get one card. The higher rank wins even money.</li>
+        <li>On a tie, GO TO WAR for another card each, or SURRENDER to lose only half.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal the dealer&#39;s war card before you commit.</td></tr>
+        <tr><td><strong>War Boost</strong></td><td><code>boost</code></td><td>Automatically win the next war you enter.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Spoils Of War</strong><br><span class="dim">Build your stack up to 300 chips.</span></td><td>300</td><td>&mdash;</td></tr>
+        <tr><td><strong>Frontline Veteran</strong><br><span class="dim">Win 20 hands in total.</span></td><td>20</td><td>150 coins</td></tr>
+        <tr><td><strong>To The Victor</strong><br><span class="dim">Win 3 wars.</span></td><td>3</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Fixed stake wagered per hand (a war posts an equal bet).</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_texas_holdem">
+      <h2>&#127918; Texas Hold&#39;em</h2>
+      <p class="lead">Heads-up hold&#39;em against an AI across four streets.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Make the best five-card hand from your two cards and the shared community cards.</li>
+        <li>Use CHECK/CALL, BET/RAISE or FOLD each street. Best hand at showdown wins the pot.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Read Hand</strong></td><td><code>hint</code></td><td>Show the strength of your current hand.</td></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal one of the AI&#39;s hole cards.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Chip Leader</strong><br><span class="dim">Build your stack up to 400 chips.</span></td><td>400</td><td>&mdash;</td></tr>
+        <tr><td><strong>Grinder</strong><br><span class="dim">Win 15 hands in total.</span></td><td>15</td><td>150 coins</td></tr>
+        <tr><td><strong>Nut Flush</strong><br><span class="dim">Win a showdown with a flush or better.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Fixed bet / raise size (the ante is half this).</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_seven_half">
+      <h2>&#127918; Seven &amp; a Half</h2>
+      <p class="lead">Draw toward 7.5 on a 40-card deck without busting.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Aces to sevens score their pips; face cards score a half. Aim for 7.5, no higher.</li>
+        <li>HIT to draw, STAND to hold. The dealer draws to 5.5; closest to 7.5 wins.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal the value of the next card in the shoe.</td></tr>
+        <tr><td><strong>Safe Hit</strong></td><td><code>safe</code></td><td>Your next hit is guaranteed not to bust you.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Mezzo Millionaire</strong><br><span class="dim">Build your stack up to 300 chips.</span></td><td>300</td><td>&mdash;</td></tr>
+        <tr><td><strong>Perfect Seven</strong><br><span class="dim">Hit exactly 7.5 five times.</span></td><td>5</td><td>200 coins</td></tr>
+        <tr><td><strong>Table Regular</strong><br><span class="dim">Win 15 hands in total.</span></td><td>15</td><td>150 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Fixed stake wagered per hand.</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_monte">
+      <h2>&#127918; Three-Card Monte</h2>
+      <p class="lead">Track the Queen through the shuffle and tap her.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>The Queen is shown, then the cards flip down and shuffle. Keep your eye on her.</li>
+        <li>Tap the card you think is the Queen. Miss three times and the run is over.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Briefly flash the Queen face up.</td></tr>
+        <tr><td><strong>Eliminate</strong></td><td><code>eliminate</code></td><td>Turn over and remove one wrong card.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Sharp Eyes</strong><br><span class="dim">Reach a score of 100.</span></td><td>100</td><td>&mdash;</td></tr>
+        <tr><td><strong>Unshakeable</strong><br><span class="dim">Build a streak of 10 correct calls.</span></td><td>10</td><td>150 coins</td></tr>
+        <tr><td><strong>Eagle Eye</strong><br><span class="dim">Find the Queen 50 times.</span></td><td>50</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Lives</code></td><td><code>3</code></td><td>Wrong guesses allowed before the run ends.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_pairs">
+      <h2>&#127918; Pairs</h2>
+      <p class="lead">Flip for points, but a matching rank busts your row.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each FLIP adds escalating points — but a card matching any rank in the row busts you.</li>
+        <li>CASH OUT banks the pending points safely. Three busts and the run ends.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Preview the rank of the next card.</td></tr>
+        <tr><td><strong>Shield</strong></td><td><code>shield</code></td><td>Survive the next pair without busting.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Bankroll</strong><br><span class="dim">Bank 150 points in total.</span></td><td>150</td><td>&mdash;</td></tr>
+        <tr><td><strong>Cool Hand</strong><br><span class="dim">Reach a 10-card row.</span></td><td>10</td><td>150 coins</td></tr>
+        <tr><td><strong>Bank Regular</strong><br><span class="dim">Cash out 20 times.</span></td><td>20</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Lives</code></td><td><code>3</code></td><td>Busts allowed before the run ends.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_columns">
+      <h2>&#127918; Card Columns</h2>
+      <p class="lead">Drop cards into three columns and hit 21.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap a column to drop the current card there. Each column keeps a blackjack total.</li>
+        <li>Exactly 21 scores big and clears the column; over 21 busts it. Place the whole deck!</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Skip</strong></td><td><code>skip</code></td><td>Discard the current card and draw the next.</td></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal the next card in the deck.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Column Master</strong><br><span class="dim">Reach a score of 200.</span></td><td>200</td><td>&mdash;</td></tr>
+        <tr><td><strong>Hat Trick</strong><br><span class="dim">Make three 21s.</span></td><td>3</td><td>150 coins</td></tr>
+        <tr><td><strong>Full Sweep</strong><br><span class="dim">Clear the whole deck.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>TwentyOneBonus</code></td><td><code>50</code></td><td>Bonus points awarded for hitting exactly 21 in a column.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-cards3_lucky_draw">
+      <h2>&#127918; Lucky Draw</h2>
+      <p class="lead">Pick three of nine and out-total the dealer.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap three of the nine face-down cards to claim them (aces are high).</li>
+        <li>The dealer then flips three of the rest. The higher rank total wins the bet.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Peek</strong></td><td><code>peek</code></td><td>Reveal one grid card before you choose.</td></tr>
+        <tr><td><strong>Reroll</strong></td><td><code>reroll</code></td><td>Redeal the whole grid once before picking.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Lucky Streak</strong><br><span class="dim">Build your stack up to 300 chips.</span></td><td>300</td><td>&mdash;</td></tr>
+        <tr><td><strong>Draw Winner</strong><br><span class="dim">Win 20 rounds in total.</span></td><td>20</td><td>150 coins</td></tr>
+        <tr><td><strong>Landslide</strong><br><span class="dim">Beat the dealer by 15 or more in one round.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>background</code> <code>card_back</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>StartingChips</code></td><td><code>100</code></td><td>Chips the player starts each session with.</td></tr>
+        <tr><td><code>BetSize</code></td><td><code>10</code></td><td>Fixed stake wagered each round.</td></tr>
+        <tr><td><code>TargetChips</code></td><td><code>300</code></td><td>Reach this chip count to win the session.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+
+    <section id="boosters">
+      <h2>&#128165; Boosters</h2>
+      <p>Per-game power-ups with persistent counts and refund safety, auto-discovered from each game's <code>&lt;Game&gt;BoosterSpec.cs</code>. The demo dashboard renders them as the bottom booster bar.</p>
+      <h3>Activating a booster</h3>
+      <pre><code>bool OnBoosterActivated(string key) {
+    if (_ended || _busy) return false;   // returning false REFUNDS the charge
+    switch (key) { /* per-key effects */ }
+    return false;                        // unknown key -&gt; refund
+}</code></pre>
+      <div class="info"><strong>Refund safety:</strong> returning <code>false</code> from the handler refunds the booster &mdash; use it whenever the activation can't proceed. Returning <code>true</code> deducts the charge.</div>
+      <p>Award boosters programmatically with <code>BoosterManager.Add(gameId, key, count)</code>.</p>
+      <h3>Full booster catalogue</h3>
+      <table>
+        <tr><th>Game</th><th>Booster keys</th></tr>
+        <tr><td><strong>Caribbean Stud</strong></td><td><code>peek</code> <code>mulligan</code></td></tr>
+        <tr><td><strong>Let It Ride</strong></td><td><code>hint</code> <code>insure</code></td></tr>
+        <tr><td><strong>Red Dog</strong></td><td><code>peek</code> <code>widen</code></td></tr>
+        <tr><td><strong>Casino War</strong></td><td><code>peek</code> <code>boost</code></td></tr>
+        <tr><td><strong>Texas Hold&#39;em</strong></td><td><code>hint</code> <code>peek</code></td></tr>
+        <tr><td><strong>Seven &amp; a Half</strong></td><td><code>peek</code> <code>safe</code></td></tr>
+        <tr><td><strong>Three-Card Monte</strong></td><td><code>peek</code> <code>eliminate</code></td></tr>
+        <tr><td><strong>Pairs</strong></td><td><code>peek</code> <code>shield</code></td></tr>
+        <tr><td><strong>Card Columns</strong></td><td><code>skip</code> <code>peek</code></td></tr>
+        <tr><td><strong>Lucky Draw</strong></td><td><code>peek</code> <code>reroll</code></td></tr>
+
+      </table>
+    </section>
+
+    <section id="achievements">
+      <h2>&#127942; Achievements</h2>
+      <p>Progression goals per game, defined in <code>&lt;Game&gt;AchievementSpec.cs</code> and tracked persistently by <code>AchievementManager</code>. Unlocks pop a toast card over the game and auto-credit any coin reward. Each game's own goals are listed in its section above.</p>
+      <p>Reset helpers for testing: <code>AchievementManager.ResetForGame(gameId)</code> and <code>AchievementManager.ResetAll()</code> (also exposed in the demo's cheat rail).</p>
+    </section>
+
+    <section id="reskins">
+      <h2>&#127912; Reskins</h2>
+      <p>Drop in your own art per slot, per game &mdash; no code required. Open <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>, pick a game, and assign an image per slot. Art is copied to <code>Resources/Reskin/&lt;gameId&gt;/&lt;slot&gt;.png</code> and imported as a Sprite automatically. In-game, the Skin pill toggles between Default and Custom art.</p>
+      <h3>Per-game slot list</h3>
+      <table>
+        <tr><th>Game</th><th>Slots</th></tr>
+        <tr><td><strong>Caribbean Stud</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Let It Ride</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Red Dog</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Casino War</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Texas Hold&#39;em</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Seven &amp; a Half</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Three-Card Monte</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Pairs</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Card Columns</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+        <tr><td><strong>Lucky Draw</strong></td><td><code>background</code> <code>card_back</code></td></tr>
+
+      </table>
+      <div class="warn"><strong>Sprite-only.</strong> The reskin system swaps sprites &mdash; layouts, colours and animations stay the same. Until custom art is added the games use clean procedural sprites and the pill shows <code>Skin: &mdash;</code>.</div>
+    </section>
+
+    <section id="tutorials">
+      <h2>&#127919; Tutorials</h2>
+      <p>First-run overlay walkthroughs, defined declaratively in <code>&lt;Game&gt;TutorialSpec.cs</code> as an ordered list of captioned spotlight steps. Each shows once per game's first session and can be replayed from the demo's cheat rail. Reset with <code>TutorialManager.Reset(gameId)</code>.</p>
+    </section>
+
+    <section id="levels">
+      <h2>&#128200; Level scaling</h2>
+      <p>Per-game difficulty progression &mdash; auto-generated out of the box, fully editable in the Studio.</p>
+      <pre><code>int level = LevelManager.GetCurrent(gameId);          // player's current level
+var diff  = LevelManager.GetDifficultyForCurrent(gameId);
+float mult = diff.Get("difficulty", 1f);              // ramp targets / timers / AI</code></pre>
+      <p>The Studio's Levels editor can regenerate a curve (level count, start/end difficulty) or hand-edit individual levels; edits are saved as a <code>LevelSet</code> asset under <code>Resources/Config/Levels/&lt;gameId&gt;.asset</code>. Reset progress with <code>LevelManager.ResetProgress(gameId)</code>.</p>
+    </section>
+
+    <section id="theme">
+      <h2>&#127769; Light &amp; dark mode</h2>
+      <p>One toggle re-themes the whole scene &mdash; chrome and every game. Games read every colour from <code>ctx.Theme</code>, a <code>MiniGameTheme</code> asset that carries both palettes:</p>
+      <pre><code>theme.ApplyMode(light: true);   // swap palettes
+bool isLight = theme.IsLightMode;</code></pre>
+      <p>The demo dashboard's header has a DARK / LIGHT pill; the choice persists between sessions (default: dark). Both palettes are contrast-checked &mdash; panel/text/accent pairings stay readable in either mode.</p>
+      <div class="info"><strong>Tip:</strong> when customizing, read colours from <code>ctx.Theme</code> (<code>Accent</code>, <code>TextPrimary</code>, <code>PanelBackground</code>, &hellip;) rather than hardcoding, and your changes work in both modes.</div>
+    </section>
+
+    <section id="liveops">
+      <h2>&#127873; LiveOps Kit (bundled)</h2>
+      <p>The <strong>full HyperCasual LiveOps Kit</strong> is included in this pack &mdash; no stripping, nothing to buy on top. It provides the production meta-game layer around the games:</p>
+      <div class="grid">
+        <div class="card"><strong>Ads</strong><span>Rewarded, interstitial and banner service with mediation backends (AdMob, LevelPlay, AppLovin, Unity Ads). Runs a safe mock backend until a real SDK is installed.</span></div>
+        <div class="card"><strong>IAP</strong><span>Unity Purchasing integration with catalog, dummy store for testing, and purchase-reward hooks.</span></div>
+        <div class="card"><strong>Haptics</strong><span>Cross-platform vibration service &mdash; already wired to every game's audio events in this demo.</span></div>
+        <div class="card"><strong>Rate Us</strong><span>Native store-review prompts (Android in-app review / iOS SKStoreReviewController) with dummy editor backend.</span></div>
+        <div class="card"><strong>Notifications</strong><span>Local notification scheduling with permission flow (mobile packages activate it).</span></div>
+        <div class="card"><strong>Consent &amp; privacy</strong><span>Google UMP / Apple ATT consent flow with editor-safe dummy backend.</span></div>
+        <div class="card"><strong>Analytics &amp; crash</strong><span>Pluggable analytics (Unity Analytics / Firebase) and crash-reporter hooks.</span></div>
+        <div class="card"><strong>Retention systems</strong><span>Daily rewards, quests, battle pass, energy, offers, shop, unlocks, deep links, sharing, update prompt.</span></div>
+      </div>
+      <h3>How it is hooked up in this demo</h3>
+      <ul>
+        <li><strong>Vibrations:</strong> every game's sound events (taps, wins, errors) fire matching haptics through the kit automatically.</li>
+        <li><strong>Rewarded ad:</strong> winning a round with a coin reward offers a &ldquo;Watch Ad&rdquo; doubler; completing the (mock) ad credits the bonus.</li>
+        <li><strong>Interstitial:</strong> auto-shows after every 3rd round (skipped after a No-Ads purchase).</li>
+        <li><strong>Banner + shop:</strong> the cheat rail's <em>Ads &amp; IAP</em> section toggles the banner and opens the simulated IAP shop (Coin Pack, No Ads, Starter Bundle) through the kit's store backend.</li>
+      </ul>
+      <h3>Setup &amp; going live</h3>
+      <ol>
+        <li>Everything works out of the box in the editor with <strong>mock/dummy backends</strong> &mdash; no SDKs required, nothing to configure for the demo.</li>
+        <li>Open <em>Tools &gt; HLK &gt; Open Toolset</em> (or <em>Tools &gt; HLK &gt; Guided Setup</em>) to configure ad units, IAP products, notifications, rate-us and the rest.</li>
+        <li>To go live, install the SDKs you want (e.g. AdMob, Unity Ads, Firebase) &mdash; the kit detects them automatically via scripting defines (<code>HLK_ADMOB</code>, <code>HLK_UNITY_ADS</code>, <code>HLK_FIREBASE</code>, &hellip;) and switches from mock to real backends.</li>
+      </ol>
+      <div class="info"><strong>No SDK binaries ship in this package.</strong> The kit is pure source with optional integrations &mdash; it compiles clean in an empty project and lights up real providers only when you add them.</div>
+      <p>Full kit documentation: <code>Assets/MiniGameTemplates/HyperCasualLiveOpsKit/Documentation/HLK-Documentation.html</code> (also listed under <em>Tools &gt; Mini Game Templates &gt; Welcome &gt; Open Documentation</em>).</p>
+    </section>
+
+    <section id="integrate">
+      <h2>&#10133; Add to your project</h2>
+      <h3>Path A &mdash; use the bundled demo dashboard</h3>
+      <p>Add <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Cards3.unity</code> to your build settings. It auto-discovers every imported game and provides the picker, HUD, boosters, achievements and theming out of the box.</p>
+      <h3>Path B &mdash; embed a single game in your own UI</h3>
+      <pre><code>IMiniGame game = new CaribbeanStudGame();
+game.Mount(hostRect, context);   // your IMiniGameContext implementation
+// ...
+game.Unmount();                  // ALWAYS unmount before destroying the host</code></pre>
+      <h3>Listening to events</h3>
+      <pre><code>ctx.Events.Subscribe(GameEvents.RoundWon,     payload =&gt; { /* celebrate */ });
+ctx.Events.Subscribe(GameEvents.RoundLost,    payload =&gt; { /* retry UI  */ });
+ctx.Events.Subscribe(GameEvents.ScoreChanged, payload =&gt; { /* HUD       */ });</code></pre>
+      <div class="warn"><strong>Always <code>Unmount()</code>.</strong> Games run coroutines and tweens; failing to unmount before destroying the host leaves them running on destroyed transforms.</div>
+    </section>
+
+    <section id="customize">
+      <h2>&#9881; Customizing</h2>
+      <h3>Override default settings</h3>
+      <p>Each game reads a ScriptableObject settings asset (see each game's <em>Configurable settings</em> table above). Create one via <em>Create &gt; Mini Game Templates &gt; Cards 3.0</em>, drop it in <code>Resources/Config/</code>, or mutate <code>&lt;Game&gt;Settings.Default</code> at runtime before mounting.</p>
+      <h3>Boosters: add / remove / rebalance</h3>
+      <ul>
+        <li><strong>Remove:</strong> delete the <code>BoosterDef</code> from the game's spec.</li>
+        <li><strong>Add:</strong> append a <code>BoosterDef</code> <em>and</em> handle its key in the game's booster handler.</li>
+        <li><strong>Grant:</strong> <code>BoosterManager.Add(gameId, key, count)</code>.</li>
+      </ul>
+      <h3>Audio</h3>
+      <p>Games call <code>ctx.Audio.Play(SfxKind.&hellip;)</code>. The bundled <code>ProceduralAudioBus</code> synthesizes all SFX at runtime &mdash; no audio files to manage; swap in your own <code>IAudioBus</code> to use recorded audio.</p>
+    </section>
+
+    <section id="newgames">
+      <h2>&#129520; Adding new games</h2>
+      <ol>
+        <li>Create <code>Assets/MiniGameTemplates/Runtime/Cards3/MyGame/</code>.</li>
+        <li>Add <code>MyGameGame.cs</code> implementing <code>IMiniGame</code>, decorated with <code>[MiniGame("&hellip;", "My Game", Category = MiniGameCategory.Cards3)]</code>.</li>
+        <li>Add <code>MyGameSettings</code> (optional) with a static <code>Default</code> getter.</li>
+        <li>Add the spec files &mdash; <code>MyGameBoosterSpec</code>, <code>MyGameAchievementSpec</code>, <code>MyGameReskinSpec</code>, <code>MyGameTutorialSpec</code> &mdash; all auto-discovered.</li>
+        <li>Done: the dashboard and Studio list your game automatically. No edits to existing files.</li>
+      </ol>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>&#128161; Troubleshooting</h2>
+      <h3>Text is invisible / fonts look broken</h3>
+      <p>Import TMP Essentials: <em>Window &gt; TextMeshPro &gt; Import TMP Essential Resources</em>. The demo UI uses TextMeshPro's default font.</p>
+      <h3>My game doesn't show up in the dashboard</h3>
+      <p>Check it implements <code>IMiniGame</code>, carries the <code>[MiniGame]</code> attribute, and its assembly references <code>MiniGameTemplates.Core</code>.</p>
+      <h3>A booster button does nothing when pressed</h3>
+      <p>The booster's <code>key</code> must exactly match a <code>case</code> in the game's booster handler &mdash; unknown keys refund silently by design.</p>
+      <h3>Tutorials replay every time I press Play in the editor</h3>
+      <p>The "seen" flag is stored per game id in PlayerPrefs; clearing PlayerPrefs resets it. Replay on demand from the cheat rail instead.</p>
+      <h3>Reskin sprites don't apply</h3>
+      <p>Import the art through <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em> (it handles the copy + import settings), then flip the in-game Skin pill to Custom.</p>
+      <h3>Coroutine errors about destroyed RectTransforms when switching games</h3>
+      <p>Call <code>Unmount()</code> before destroying the host. The unmount path stops the game's coroutines and tweens.</p>
+      <h3>Ads say &ldquo;SIMULATED&rdquo; / no real ads show</h3>
+      <p>By design: without an ad SDK installed the kit uses its mock backend, which draws clearly-labelled placeholder ads so every flow is testable. Install a real provider (e.g. AdMob via its package) and the kit switches to it automatically &mdash; see the <a href="#liveops">LiveOps Kit</a> section.</p>
+      <h3>Where do I report a bug?</h3>
+      <p>Email <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> with your Unity version, target platform, the game id (e.g. <code>cards3_caribbean_stud</code>), steps to reproduce, and the console log.</p>
+    </section>
+
+    <section id="support">
+      <h2>&#128236; Support &amp; review</h2>
+      <p><strong>Get in touch:</strong> <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> &mdash; bug reports, feature requests, integration help and game requests for future updates are all welcome. Typical response time is 24&ndash;48 hours.</p>
+      <p><strong>Before contacting</strong>, it helps to: check Troubleshooting above, open the demo scene to verify the game runs there, and copy any Console errors. Include your Unity version, render pipeline, target platform and the game id.</p>
+      <div class="info"><strong>Enjoying the pack?</strong> Reviews on the Asset Store are the biggest help to an indie publisher &mdash; if this pack saved you time, a star rating is hugely appreciated. &#11088;</div>
+    </section>
+
+    <footer>
+      Mini Game Templates &middot; Cards 3.0 Pack &middot; Built for Unity 6000.0.62f1+ &middot;
+      Support: <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,659 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Game Templates &middot; Puzzles 5.0 Pack &mdash; Documentation</title>
+  <style>
+    :root { --bg:#faf9f6; --ink:#232830; --muted:#6b7280; --line:#e4e2d9; --card:#ffffff;
+            --accent:#0e7c66; --accent2:#b3541e; --side:#20263a; --side-ink:#c8cfe8; --code:#f1efe8; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; display:flex; font-family:Segoe UI, Arial, sans-serif; color:var(--ink);
+           background:var(--bg); line-height:1.55; }
+    nav.side { flex:0 0 250px; position:sticky; top:0; height:100vh; overflow-y:auto;
+               background:var(--side); color:var(--side-ink); padding:20px 0 30px; }
+    nav.side .brand { padding:0 20px 14px; font-weight:700; font-size:16px; color:#ffffff;
+                      border-bottom:1px solid #333c58; margin-bottom:10px; }
+    nav.side .brand span { display:block; font-weight:400; font-size:12px; color:#8d97bd; margin-top:2px; }
+    nav.side .group { padding:14px 20px 4px; font-size:11px; text-transform:uppercase;
+                      letter-spacing:.09em; color:#8d97bd; }
+    nav.side a { display:block; padding:4px 20px; color:var(--side-ink); text-decoration:none; font-size:13px; }
+    nav.side a:hover { background:#2b3350; color:#ffffff; }
+    main { flex:1; min-width:0; padding:34px 46px 60px; max-width:940px; }
+    h1 { margin:0 0 6px; font-size:32px; }
+    h2 { margin:36px 0 10px; font-size:22px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+    h3 { margin:20px 0 8px; font-size:15px; }
+    p { margin:0 0 12px; }
+    .lead { color:var(--muted); font-size:15px; }
+    .dim { color:var(--muted); font-size:12px; }
+    .stats { margin:10px 0 4px; }
+    .stats span { display:inline-block; background:var(--card); border:1px solid var(--line);
+                  border-radius:20px; padding:3px 12px; margin:0 6px 6px 0; font-size:12px; color:var(--muted); }
+    code { background:var(--code); border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:12.5px; }
+    pre { background:#272d3a; color:#e6e9f2; border-radius:8px; padding:14px 16px; overflow-x:auto;
+          font-size:12.5px; line-height:1.5; }
+    pre code { background:none; border:none; color:inherit; padding:0; }
+    table { border-collapse:collapse; width:100%; margin:8px 0 14px; background:var(--card); font-size:13px; }
+    th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+    th { background:#f2f0e8; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin:12px 0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:13px 15px; }
+    .card strong { display:block; margin-bottom:3px; }
+    .card span { color:var(--muted); font-size:12.5px; }
+    .info { border-left:4px solid var(--accent); background:#e9f5f1; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    .warn { border-left:4px solid var(--accent2); background:#fdf3e6; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    ol, ul { margin:8px 0 12px 22px; padding:0; }
+    li { margin:5px 0; }
+    .backtop { font-size:12px; margin-top:10px; }
+    a { color:var(--accent); }
+    footer { border-top:1px solid var(--line); margin-top:40px; padding-top:16px; color:var(--muted); font-size:13px; }
+    @media (max-width: 900px) {
+      body { flex-direction:column; }
+      nav.side { position:static; height:auto; width:100%; flex:none; }
+      main { padding:22px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="side">
+    <div class="brand">Mini Game Templates<span>Puzzles 5.0 Pack</span></div>
+    <div class="group">Getting started</div>
+    <a href="#overview">Overview</a>
+    <a href="#how">How it works</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#architecture">Architecture</a>
+    <div class="group">The 10 games</div>
+      <a href="#g-puzzles5_shikaku">Shikaku</a>
+      <a href="#g-puzzles5_hashi">Bridges</a>
+      <a href="#g-puzzles5_hidato">Hidato</a>
+      <a href="#g-puzzles5_suguru">Suguru</a>
+      <a href="#g-puzzles5_star_battle">Star Battle</a>
+      <a href="#g-puzzles5_str8ts">Straights</a>
+      <a href="#g-puzzles5_galaxies">Galaxies</a>
+      <a href="#g-puzzles5_nurikabe">Nurikabe</a>
+      <a href="#g-puzzles5_yin_yang">Yin Yang</a>
+      <a href="#g-puzzles5_magnets">Magnets</a>
+
+    <div class="group">Game systems</div>
+    <a href="#boosters">Boosters</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#reskins">Reskins</a>
+    <a href="#tutorials">Tutorials</a>
+    <a href="#levels">Level scaling</a>
+    <a href="#theme">Light &amp; dark mode</a>
+    <a href="#liveops">LiveOps Kit (bundled)</a>
+    <div class="group">Integration</div>
+    <a href="#integrate">Add to your project</a>
+    <a href="#customize">Customizing</a>
+    <a href="#newgames">Adding new games</a>
+    <div class="group">Help</div>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#support">Support &amp; review</a>
+  </nav>
+  <main>
+    <header id="top">
+      <h1>Mini Game Templates &middot; Puzzles 5.0 Pack</h1>
+      <p class="lead">Logic, tile, number, and spatial puzzle templates with editable difficulty and reusable board/UI systems.</p>
+      <div class="stats">
+        <span>Unity 6000.0.62f1+</span><span>10 games</span><span>20 boosters</span><span>30 achievements</span><span>LiveOps Kit bundled</span>
+      </div>
+    </header>
+
+    <section id="overview">
+      <h2>&#127968; Overview</h2>
+      <p>10 fully playable mini-games, each with boosters, achievements, reskin slots, a first-run tutorial, per-level difficulty scaling and light/dark theming &mdash; all driven by one shared runtime.</p>
+      <div class="grid">
+        <div class="card"><strong>Shikaku</strong><span>Cut the grid into rectangles that match their numbers.</span></div>
+        <div class="card"><strong>Bridges</strong><span>Link the islands with the right number of bridges.</span></div>
+        <div class="card"><strong>Hidato</strong><span>Fill a snaking king-path of consecutive numbers.</span></div>
+        <div class="card"><strong>Suguru</strong><span>Fill each cage 1..size with no equal numbers touching.</span></div>
+        <div class="card"><strong>Star Battle</strong><span>One star per row, column and region — none touching.</span></div>
+        <div class="card"><strong>Straights</strong><span>Fill white compartments with consecutive runs, no repeats.</span></div>
+        <div class="card"><strong>Galaxies</strong><span>Carve symmetric galaxies around every dot.</span></div>
+        <div class="card"><strong>Nurikabe</strong><span>Shade the sea around each numbered island.</span></div>
+        <div class="card"><strong>Yin Yang</strong><span>Two connected colours, no 2x2 all one shade.</span></div>
+        <div class="card"><strong>Magnets</strong><span>Place +/- magnets to match the row and column counts.</span></div>
+
+      </div>
+      <div class="info"><strong>One contract, 10 implementations.</strong> Every game implements <code>IMiniGame</code> and is discovered automatically by reflection &mdash; no scene wiring, no prefab lists.</div>
+      <h3>Shared capabilities</h3>
+      <div class="grid">
+        <div class="card"><strong>&#128165; Boosters</strong><span>Per-game power-ups with persistent counts and refund safety.</span></div>
+        <div class="card"><strong>&#127942; Achievements</strong><span>Progression goals per game, tracked persistently, with coin rewards.</span></div>
+        <div class="card"><strong>&#127912; Reskins</strong><span>Drop in your own art per slot, per game &mdash; no code required.</span></div>
+        <div class="card"><strong>&#127919; Tutorials</strong><span>First-run overlay walkthroughs, defined declaratively per game.</span></div>
+        <div class="card"><strong>&#128200; Level scaling</strong><span>Auto-generated difficulty curves, editable in the Studio.</span></div>
+        <div class="card"><strong>&#127769; Light &amp; dark</strong><span>One toggle re-themes the chrome and every game.</span></div>
+        <div class="card"><strong>&#127873; LiveOps Kit bundled</strong><span>Ads, IAP, haptics, rate-us, notifications and more &mdash; the full HyperCasual LiveOps Kit ships in this pack.</span></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <h2>&#9881; How it works</h2>
+      <p><strong>This is a procedural-UI games template.</strong> Every game builds its own interface and logic in C# at runtime inside the <code>RectTransform</code> you give it &mdash; there are no hand-placed prefabs to wire up. The shipped demo scene is a pre-baked snapshot of that build, so you can inspect the full hierarchy without pressing Play; on Play it rebuilds itself and becomes fully interactive.</p>
+      <h3>The Studio</h3>
+      <p>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> for per-game tuning panels. Settings you edit are saved to ScriptableObject assets under <code>Assets/MiniGameTemplates/Resources/Config/</code> and loaded by the games at runtime.</p>
+      <h3>Customization at a glance</h3>
+      <table>
+        <tr><th>What to change</th><th>Where to find it</th></tr>
+        <tr><td>Game rules / difficulty / dimensions</td><td>Studio, or the game's <code>&lt;Game&gt;Settings</code> asset</td></tr>
+        <tr><td>Per-level difficulty curve</td><td>Studio &gt; game panel &gt; Levels editor</td></tr>
+        <tr><td>Colours / overall look</td><td><code>MiniGameTheme</code> asset, or the in-app DARK/LIGHT toggle</td></tr>
+        <tr><td>Game art (tiles, pieces, backgrounds&hellip;)</td><td>Reskin system &mdash; <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em></td></tr>
+        <tr><td>Boosters offered</td><td>Each game's <code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Deeper layout / behaviour</td><td>The game's <code>&lt;Game&gt;Game.cs</code> build code</td></tr>
+      </table>
+      <div class="warn"><strong>Heads-up:</strong> because the UI is procedural, customization happens through data (settings assets, theme, reskins) rather than dragging things around a scene. The data-driven path covers day-to-day tweaks; source access covers the rest.</div>
+    </section>
+
+    <section id="quickstart">
+      <h2>&#9889; Quick start</h2>
+      <ol>
+        <li>Import <code>MiniGameTemplates-Puzzles5.unitypackage</code>. If Unity offers to import <strong>TMP Essentials</strong>, accept &mdash; the demo UI uses TextMeshPro.</li>
+        <li>Open <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Puzzles5.unity</code>. The full demo is already baked into the scene.</li>
+        <li>Press <strong>Play</strong> &mdash; the dashboard lists every Puzzles 5.0 game; pick, play, and try the boosters and cheat rail.</li>
+        <li>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> and tune any game's settings.</li>
+        <li>(Optional) Open <em>Tools &gt; HLK &gt; Guided Setup</em> to configure the bundled LiveOps kit &mdash; ads, IAP, notifications, rate-us and more (see the <a href="#liveops">LiveOps Kit</a> section).</li>
+        <li>To ship a single game inside your own UI, use the <code>IMiniGame</code> contract:</li>
+      </ol>
+      <pre><code>IMiniGame game = new ShikakuGame();
+game.Mount(hostRect, context);   // context : IMiniGameContext
+// ... later, when done:
+game.Unmount();</code></pre>
+      <div class="info"><strong>Tip:</strong> the demo scene's dashboard is a complete reference implementation of <code>IMiniGameContext</code> (theme, audio, save, events, wallet, score) &mdash; copy it or implement the interface with your own services.</div>
+    </section>
+
+    <section id="architecture">
+      <h2>&#128736; Architecture</h2>
+      <h3>The <code>IMiniGame</code> contract</h3>
+      <pre><code>public interface IMiniGame {
+    string Id { get; }                 // stable snake_case id, e.g. "puzzles5_shikaku"
+    string DisplayName { get; }
+    string Category { get; }
+    string ShortDescription { get; }
+    void Mount(RectTransform host, IMiniGameContext ctx);
+    void Unmount();
+    void NewRound();
+    IEnumerable&lt;CheatAction&gt; GetCheatActions();
+}</code></pre>
+      <h3>Auto-discovery</h3>
+      <table>
+        <tr><th>Registry</th><th>Discovers</th><th>Convention</th></tr>
+        <tr><td><code>MiniGameRegistry</code></td><td><code>IMiniGame</code> classes with a <code>[MiniGame]</code> attribute</td><td>one per game</td></tr>
+        <tr><td>Booster registry</td><td><code>IBoosterSpec</code> implementations</td><td><code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Achievement registry</td><td><code>IAchievementSpec</code> implementations</td><td><code>&lt;Game&gt;AchievementSpec.cs</code></td></tr>
+        <tr><td>Reskin registry</td><td><code>IReskinSpec</code> implementations</td><td><code>&lt;Game&gt;ReskinSpec.cs</code></td></tr>
+        <tr><td>Tutorial registry</td><td><code>ITutorialSpec</code> implementations</td><td><code>&lt;Game&gt;TutorialSpec.cs</code></td></tr>
+      </table>
+      <h3>Per-game folder layout</h3>
+      <pre><code>Assets/MiniGameTemplates/Runtime/Puzzles5/&lt;Game&gt;/
+    &lt;Game&gt;Game.cs             // gameplay + procedural UI
+    &lt;Game&gt;Settings.cs         // ScriptableObject settings (+ static Default)
+    &lt;Game&gt;BoosterSpec.cs      // booster definitions
+    &lt;Game&gt;AchievementSpec.cs  // achievement definitions
+    &lt;Game&gt;ReskinSpec.cs       // reskinnable sprite slots
+    &lt;Game&gt;TutorialSpec.cs     // first-run walkthrough steps</code></pre>
+      <div class="info"><strong>Modular by design.</strong> Delete any single game's folder and the rest keep working. Add a new game by mirroring the layout &mdash; no edits to any other file required.</div>
+      <h3>Runtime flow</h3>
+      <p><code>Mount(host, ctx)</code> &rarr; <code>NewRound()</code> &rarr; player input loop &rarr; <code>RoundWon</code> / <code>RoundLost</code> event &rarr; <code>NewRound()</code> or <code>Unmount()</code></p>
+    </section>
+
+    <section id="g-puzzles5_shikaku">
+      <h2>&#127918; Shikaku</h2>
+      <p class="lead">Cut the grid into rectangles that match their numbers.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Every number owns one rectangle whose area equals it. Tap a number to pick it up.</li>
+        <li>Then tap the opposite corner to draw that rectangle. Fill the whole grid to win.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Assign one cell to its correct rectangle.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Clear every rectangle you have drawn.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Boxed In</strong><br><span class="dim">Divide a Shikaku board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Master Divider</strong><br><span class="dim">Solve 15 Shikaku boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Grand Partition</strong><br><span class="dim">Solve a 7&#215;7 Shikaku board.</span></td><td>7</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>ShikakuDifficulty.Medium</code></td><td>Larger grids yield more rectangles.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_hashi">
+      <h2>&#127918; Bridges</h2>
+      <p class="lead">Link the islands with the right number of bridges.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each island needs exactly its number of bridge ends. Tap two islands to link them.</li>
+        <li>Tap again to add a second bridge or clear it. Bridges never cross; join all islands to win.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Set one bridge to its correct number.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Remove every bridge you have placed.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Bridge Builder</strong><br><span class="dim">Connect an island network.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Chief Engineer</strong><br><span class="dim">Solve 15 Bridges puzzles in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Archipelago</strong><br><span class="dim">Connect a 7-island network.</span></td><td>7</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>island</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>HashiDifficulty.Medium</code></td><td>Harder puzzles pack in more islands.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_hidato">
+      <h2>&#127918; Hidato</h2>
+      <p class="lead">Fill a snaking king-path of consecutive numbers.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Numbers 1..N form one chain where each step is a king move (including diagonals).</li>
+        <li>Tap a blank cell, then a keypad number to fill it. Complete the chain to win.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Fill the selected cell with its correct number.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Erase every number you have entered.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Path Finder</strong><br><span class="dim">Complete a Hidato path.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Trailblazer</strong><br><span class="dim">Solve 15 Hidato boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Long Haul</strong><br><span class="dim">Solve a 6&#215;6 Hidato board.</span></td><td>6</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>HidatoDifficulty.Medium</code></td><td>Larger grids are harder.</td></tr>
+        <tr><td><code>GivenFraction</code></td><td><code>0.42f</code></td><td>&mdash;</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_suguru">
+      <h2>&#127918; Suguru</h2>
+      <p class="lead">Fill each cage 1..size with no equal numbers touching.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each coloured cage of size S holds the numbers 1..S, once each.</li>
+        <li>No two equal numbers may touch, even diagonally. Tap a cell then a keypad number.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Fill the selected cell with its correct number.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Erase every number you have entered.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Caged</strong><br><span class="dim">Solve a Suguru board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Cage Cracker</strong><br><span class="dim">Solve 15 Suguru boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Compartment King</strong><br><span class="dim">Complete 80 cages across all games.</span></td><td>80</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>SuguruDifficulty.Medium</code></td><td>Fewer givens is harder.</td></tr>
+        <tr><td><code>GivenFraction</code></td><td><code>0.32f</code></td><td>&mdash;</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_star_battle">
+      <h2>&#127918; Star Battle</h2>
+      <p class="lead">One star per row, column and region — none touching.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Place one star in every row, every column and every coloured region.</li>
+        <li>Stars may never touch, not even diagonally. Tap a cell to place or remove a star.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Fix one cell to match the solution.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Remove every star you have placed.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>First Light</strong><br><span class="dim">Solve a Star Battle board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Constellation</strong><br><span class="dim">Solve 15 Star Battle boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Galaxy Class</strong><br><span class="dim">Solve a 7&#215;7 Star Battle board.</span></td><td>7</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>StarBattleDifficulty.Medium</code></td><td>Larger grids add more regions.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_str8ts">
+      <h2>&#127918; Straights</h2>
+      <p class="lead">Fill white compartments with consecutive runs, no repeats.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>No number repeats in a row or column. Black cells break the grid into white runs.</li>
+        <li>Each white run must be consecutive numbers in any order. Tap a cell then a keypad number.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Fill the selected white cell with its correct number.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Erase every number you have entered.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Straight Shooter</strong><br><span class="dim">Solve a Straights board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>In A Row</strong><br><span class="dim">Solve 15 Straights boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Full House</strong><br><span class="dim">Solve a 7&#215;7 Straights board.</span></td><td>7</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>Str8tsDifficulty.Medium</code></td><td>Larger grids are harder.</td></tr>
+        <tr><td><code>GivenFraction</code></td><td><code>0.42f</code></td><td>&mdash;</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_galaxies">
+      <h2>&#127918; Galaxies</h2>
+      <p class="lead">Carve symmetric galaxies around every dot.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Every dot is the centre of one galaxy that looks the same after a half-turn.</li>
+        <li>Tap a cell to cycle its galaxy colour. Fill the grid with symmetric galaxies to win.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Assign one cell to its correct galaxy.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Unassign every cell.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Stargazer</strong><br><span class="dim">Solve a Galaxies board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Cosmographer</strong><br><span class="dim">Solve 15 Galaxies boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Deep Field</strong><br><span class="dim">Solve a 6&#215;6 Galaxies board.</span></td><td>6</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>GalaxiesDifficulty.Medium</code></td><td>Larger grids add more galaxies.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_nurikabe">
+      <h2>&#127918; Nurikabe</h2>
+      <p class="lead">Shade the sea around each numbered island.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each number is an island of exactly that many unshaded cells; islands never touch.</li>
+        <li>Shade the rest into one connected sea with no 2x2 block. Tap a cell to shade it.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Fix one cell to match the sea.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Unshade every cell.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Landfall</strong><br><span class="dim">Solve a Nurikabe board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Cartographer</strong><br><span class="dim">Solve 15 Nurikabe boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Open Ocean</strong><br><span class="dim">Solve a 6&#215;6 Nurikabe board.</span></td><td>6</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>NurikabeDifficulty.Medium</code></td><td>Larger grids hold more islands.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_yin_yang">
+      <h2>&#127918; Yin Yang</h2>
+      <p class="lead">Two connected colours, no 2x2 all one shade.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Colour every cell black or white. Each colour must form one connected group.</li>
+        <li>No 2x2 square may be all one colour. Tap a cell to cycle empty, black, white.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Colour one cell to match the solution.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Clear every cell you have coloured.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Balance</strong><br><span class="dim">Solve a Yin Yang board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Harmony</strong><br><span class="dim">Solve 15 Yin Yang boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Perfect Circle</strong><br><span class="dim">Solve a 7&#215;7 Yin Yang board.</span></td><td>7</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cell</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>YinYangDifficulty.Medium</code></td><td>Larger grids are harder.</td></tr>
+        <tr><td><code>GivenFraction</code></td><td><code>0.24f</code></td><td>&mdash;</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-puzzles5_magnets">
+      <h2>&#127918; Magnets</h2>
+      <p class="lead">Place +/- magnets to match the row and column counts.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each domino is a magnet (one +, one -) or blank. Equal poles may never touch.</li>
+        <li>The edge numbers count + and - per row and column. Tap a domino to cycle its poles.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Hint</strong></td><td><code>hint</code></td><td>Set one domino to its correct state.</td></tr>
+        <tr><td><strong>Clear</strong></td><td><code>clear</code></td><td>Reset every domino to blank.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Attraction</strong><br><span class="dim">Solve a Magnets board.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Pole Position</strong><br><span class="dim">Solve 15 Magnets boards in total.</span></td><td>15</td><td>200 coins</td></tr>
+        <tr><td><strong>Full Field</strong><br><span class="dim">Solve a 6&#215;6 Magnets board.</span></td><td>6</td><td>300 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>domino</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>MagnetsDifficulty.Medium</code></td><td>Larger grids pack in more dominoes.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+
+    <section id="boosters">
+      <h2>&#128165; Boosters</h2>
+      <p>Per-game power-ups with persistent counts and refund safety, auto-discovered from each game's <code>&lt;Game&gt;BoosterSpec.cs</code>. The demo dashboard renders them as the bottom booster bar.</p>
+      <h3>Activating a booster</h3>
+      <pre><code>bool OnBoosterActivated(string key) {
+    if (_ended || _busy) return false;   // returning false REFUNDS the charge
+    switch (key) { /* per-key effects */ }
+    return false;                        // unknown key -&gt; refund
+}</code></pre>
+      <div class="info"><strong>Refund safety:</strong> returning <code>false</code> from the handler refunds the booster &mdash; use it whenever the activation can't proceed. Returning <code>true</code> deducts the charge.</div>
+      <p>Award boosters programmatically with <code>BoosterManager.Add(gameId, key, count)</code>.</p>
+      <h3>Full booster catalogue</h3>
+      <table>
+        <tr><th>Game</th><th>Booster keys</th></tr>
+        <tr><td><strong>Shikaku</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Bridges</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Hidato</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Suguru</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Star Battle</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Straights</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Galaxies</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Nurikabe</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Yin Yang</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+        <tr><td><strong>Magnets</strong></td><td><code>hint</code> <code>clear</code></td></tr>
+
+      </table>
+    </section>
+
+    <section id="achievements">
+      <h2>&#127942; Achievements</h2>
+      <p>Progression goals per game, defined in <code>&lt;Game&gt;AchievementSpec.cs</code> and tracked persistently by <code>AchievementManager</code>. Unlocks pop a toast card over the game and auto-credit any coin reward. Each game's own goals are listed in its section above.</p>
+      <p>Reset helpers for testing: <code>AchievementManager.ResetForGame(gameId)</code> and <code>AchievementManager.ResetAll()</code> (also exposed in the demo's cheat rail).</p>
+    </section>
+
+    <section id="reskins">
+      <h2>&#127912; Reskins</h2>
+      <p>Drop in your own art per slot, per game &mdash; no code required. Open <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>, pick a game, and assign an image per slot. Art is copied to <code>Resources/Reskin/&lt;gameId&gt;/&lt;slot&gt;.png</code> and imported as a Sprite automatically. In-game, the Skin pill toggles between Default and Custom art.</p>
+      <h3>Per-game slot list</h3>
+      <table>
+        <tr><th>Game</th><th>Slots</th></tr>
+        <tr><td><strong>Shikaku</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Bridges</strong></td><td><code>island</code> <code>background</code></td></tr>
+        <tr><td><strong>Hidato</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Suguru</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Star Battle</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Straights</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Galaxies</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Nurikabe</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Yin Yang</strong></td><td><code>cell</code> <code>background</code></td></tr>
+        <tr><td><strong>Magnets</strong></td><td><code>domino</code> <code>background</code></td></tr>
+
+      </table>
+      <div class="warn"><strong>Sprite-only.</strong> The reskin system swaps sprites &mdash; layouts, colours and animations stay the same. Until custom art is added the games use clean procedural sprites and the pill shows <code>Skin: &mdash;</code>.</div>
+    </section>
+
+    <section id="tutorials">
+      <h2>&#127919; Tutorials</h2>
+      <p>First-run overlay walkthroughs, defined declaratively in <code>&lt;Game&gt;TutorialSpec.cs</code> as an ordered list of captioned spotlight steps. Each shows once per game's first session and can be replayed from the demo's cheat rail. Reset with <code>TutorialManager.Reset(gameId)</code>.</p>
+    </section>
+
+    <section id="levels">
+      <h2>&#128200; Level scaling</h2>
+      <p>Per-game difficulty progression &mdash; auto-generated out of the box, fully editable in the Studio.</p>
+      <pre><code>int level = LevelManager.GetCurrent(gameId);          // player's current level
+var diff  = LevelManager.GetDifficultyForCurrent(gameId);
+float mult = diff.Get("difficulty", 1f);              // ramp targets / timers / AI</code></pre>
+      <p>The Studio's Levels editor can regenerate a curve (level count, start/end difficulty) or hand-edit individual levels; edits are saved as a <code>LevelSet</code> asset under <code>Resources/Config/Levels/&lt;gameId&gt;.asset</code>. Reset progress with <code>LevelManager.ResetProgress(gameId)</code>.</p>
+    </section>
+
+    <section id="theme">
+      <h2>&#127769; Light &amp; dark mode</h2>
+      <p>One toggle re-themes the whole scene &mdash; chrome and every game. Games read every colour from <code>ctx.Theme</code>, a <code>MiniGameTheme</code> asset that carries both palettes:</p>
+      <pre><code>theme.ApplyMode(light: true);   // swap palettes
+bool isLight = theme.IsLightMode;</code></pre>
+      <p>The demo dashboard's header has a DARK / LIGHT pill; the choice persists between sessions (default: dark). Both palettes are contrast-checked &mdash; panel/text/accent pairings stay readable in either mode.</p>
+      <div class="info"><strong>Tip:</strong> when customizing, read colours from <code>ctx.Theme</code> (<code>Accent</code>, <code>TextPrimary</code>, <code>PanelBackground</code>, &hellip;) rather than hardcoding, and your changes work in both modes.</div>
+    </section>
+
+    <section id="liveops">
+      <h2>&#127873; LiveOps Kit (bundled)</h2>
+      <p>The <strong>full HyperCasual LiveOps Kit</strong> is included in this pack &mdash; no stripping, nothing to buy on top. It provides the production meta-game layer around the games:</p>
+      <div class="grid">
+        <div class="card"><strong>Ads</strong><span>Rewarded, interstitial and banner service with mediation backends (AdMob, LevelPlay, AppLovin, Unity Ads). Runs a safe mock backend until a real SDK is installed.</span></div>
+        <div class="card"><strong>IAP</strong><span>Unity Purchasing integration with catalog, dummy store for testing, and purchase-reward hooks.</span></div>
+        <div class="card"><strong>Haptics</strong><span>Cross-platform vibration service &mdash; already wired to every game's audio events in this demo.</span></div>
+        <div class="card"><strong>Rate Us</strong><span>Native store-review prompts (Android in-app review / iOS SKStoreReviewController) with dummy editor backend.</span></div>
+        <div class="card"><strong>Notifications</strong><span>Local notification scheduling with permission flow (mobile packages activate it).</span></div>
+        <div class="card"><strong>Consent &amp; privacy</strong><span>Google UMP / Apple ATT consent flow with editor-safe dummy backend.</span></div>
+        <div class="card"><strong>Analytics &amp; crash</strong><span>Pluggable analytics (Unity Analytics / Firebase) and crash-reporter hooks.</span></div>
+        <div class="card"><strong>Retention systems</strong><span>Daily rewards, quests, battle pass, energy, offers, shop, unlocks, deep links, sharing, update prompt.</span></div>
+      </div>
+      <h3>How it is hooked up in this demo</h3>
+      <ul>
+        <li><strong>Vibrations:</strong> every game's sound events (taps, wins, errors) fire matching haptics through the kit automatically.</li>
+        <li><strong>Rewarded ad:</strong> winning a round with a coin reward offers a &ldquo;Watch Ad&rdquo; doubler; completing the (mock) ad credits the bonus.</li>
+        <li><strong>Interstitial:</strong> auto-shows after every 3rd round (skipped after a No-Ads purchase).</li>
+        <li><strong>Banner + shop:</strong> the cheat rail's <em>Ads &amp; IAP</em> section toggles the banner and opens the simulated IAP shop (Coin Pack, No Ads, Starter Bundle) through the kit's store backend.</li>
+      </ul>
+      <h3>Setup &amp; going live</h3>
+      <ol>
+        <li>Everything works out of the box in the editor with <strong>mock/dummy backends</strong> &mdash; no SDKs required, nothing to configure for the demo.</li>
+        <li>Open <em>Tools &gt; HLK &gt; Open Toolset</em> (or <em>Tools &gt; HLK &gt; Guided Setup</em>) to configure ad units, IAP products, notifications, rate-us and the rest.</li>
+        <li>To go live, install the SDKs you want (e.g. AdMob, Unity Ads, Firebase) &mdash; the kit detects them automatically via scripting defines (<code>HLK_ADMOB</code>, <code>HLK_UNITY_ADS</code>, <code>HLK_FIREBASE</code>, &hellip;) and switches from mock to real backends.</li>
+      </ol>
+      <div class="info"><strong>No SDK binaries ship in this package.</strong> The kit is pure source with optional integrations &mdash; it compiles clean in an empty project and lights up real providers only when you add them.</div>
+      <p>Full kit documentation: <code>Assets/MiniGameTemplates/HyperCasualLiveOpsKit/Documentation/HLK-Documentation.html</code> (also listed under <em>Tools &gt; Mini Game Templates &gt; Welcome &gt; Open Documentation</em>).</p>
+    </section>
+
+    <section id="integrate">
+      <h2>&#10133; Add to your project</h2>
+      <h3>Path A &mdash; use the bundled demo dashboard</h3>
+      <p>Add <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Puzzles5.unity</code> to your build settings. It auto-discovers every imported game and provides the picker, HUD, boosters, achievements and theming out of the box.</p>
+      <h3>Path B &mdash; embed a single game in your own UI</h3>
+      <pre><code>IMiniGame game = new ShikakuGame();
+game.Mount(hostRect, context);   // your IMiniGameContext implementation
+// ...
+game.Unmount();                  // ALWAYS unmount before destroying the host</code></pre>
+      <h3>Listening to events</h3>
+      <pre><code>ctx.Events.Subscribe(GameEvents.RoundWon,     payload =&gt; { /* celebrate */ });
+ctx.Events.Subscribe(GameEvents.RoundLost,    payload =&gt; { /* retry UI  */ });
+ctx.Events.Subscribe(GameEvents.ScoreChanged, payload =&gt; { /* HUD       */ });</code></pre>
+      <div class="warn"><strong>Always <code>Unmount()</code>.</strong> Games run coroutines and tweens; failing to unmount before destroying the host leaves them running on destroyed transforms.</div>
+    </section>
+
+    <section id="customize">
+      <h2>&#9881; Customizing</h2>
+      <h3>Override default settings</h3>
+      <p>Each game reads a ScriptableObject settings asset (see each game's <em>Configurable settings</em> table above). Create one via <em>Create &gt; Mini Game Templates &gt; Puzzles 5.0</em>, drop it in <code>Resources/Config/</code>, or mutate <code>&lt;Game&gt;Settings.Default</code> at runtime before mounting.</p>
+      <h3>Boosters: add / remove / rebalance</h3>
+      <ul>
+        <li><strong>Remove:</strong> delete the <code>BoosterDef</code> from the game's spec.</li>
+        <li><strong>Add:</strong> append a <code>BoosterDef</code> <em>and</em> handle its key in the game's booster handler.</li>
+        <li><strong>Grant:</strong> <code>BoosterManager.Add(gameId, key, count)</code>.</li>
+      </ul>
+      <h3>Audio</h3>
+      <p>Games call <code>ctx.Audio.Play(SfxKind.&hellip;)</code>. The bundled <code>ProceduralAudioBus</code> synthesizes all SFX at runtime &mdash; no audio files to manage; swap in your own <code>IAudioBus</code> to use recorded audio.</p>
+    </section>
+
+    <section id="newgames">
+      <h2>&#129520; Adding new games</h2>
+      <ol>
+        <li>Create <code>Assets/MiniGameTemplates/Runtime/Puzzles5/MyGame/</code>.</li>
+        <li>Add <code>MyGameGame.cs</code> implementing <code>IMiniGame</code>, decorated with <code>[MiniGame("&hellip;", "My Game", Category = MiniGameCategory.Puzzles5)]</code>.</li>
+        <li>Add <code>MyGameSettings</code> (optional) with a static <code>Default</code> getter.</li>
+        <li>Add the spec files &mdash; <code>MyGameBoosterSpec</code>, <code>MyGameAchievementSpec</code>, <code>MyGameReskinSpec</code>, <code>MyGameTutorialSpec</code> &mdash; all auto-discovered.</li>
+        <li>Done: the dashboard and Studio list your game automatically. No edits to existing files.</li>
+      </ol>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>&#128161; Troubleshooting</h2>
+      <h3>Text is invisible / fonts look broken</h3>
+      <p>Import TMP Essentials: <em>Window &gt; TextMeshPro &gt; Import TMP Essential Resources</em>. The demo UI uses TextMeshPro's default font.</p>
+      <h3>My game doesn't show up in the dashboard</h3>
+      <p>Check it implements <code>IMiniGame</code>, carries the <code>[MiniGame]</code> attribute, and its assembly references <code>MiniGameTemplates.Core</code>.</p>
+      <h3>A booster button does nothing when pressed</h3>
+      <p>The booster's <code>key</code> must exactly match a <code>case</code> in the game's booster handler &mdash; unknown keys refund silently by design.</p>
+      <h3>Tutorials replay every time I press Play in the editor</h3>
+      <p>The "seen" flag is stored per game id in PlayerPrefs; clearing PlayerPrefs resets it. Replay on demand from the cheat rail instead.</p>
+      <h3>Reskin sprites don't apply</h3>
+      <p>Import the art through <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em> (it handles the copy + import settings), then flip the in-game Skin pill to Custom.</p>
+      <h3>Coroutine errors about destroyed RectTransforms when switching games</h3>
+      <p>Call <code>Unmount()</code> before destroying the host. The unmount path stops the game's coroutines and tweens.</p>
+      <h3>Ads say &ldquo;SIMULATED&rdquo; / no real ads show</h3>
+      <p>By design: without an ad SDK installed the kit uses its mock backend, which draws clearly-labelled placeholder ads so every flow is testable. Install a real provider (e.g. AdMob via its package) and the kit switches to it automatically &mdash; see the <a href="#liveops">LiveOps Kit</a> section.</p>
+      <h3>Where do I report a bug?</h3>
+      <p>Email <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> with your Unity version, target platform, the game id (e.g. <code>puzzles5_shikaku</code>), steps to reproduce, and the console log.</p>
+    </section>
+
+    <section id="support">
+      <h2>&#128236; Support &amp; review</h2>
+      <p><strong>Get in touch:</strong> <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> &mdash; bug reports, feature requests, integration help and game requests for future updates are all welcome. Typical response time is 24&ndash;48 hours.</p>
+      <p><strong>Before contacting</strong>, it helps to: check Troubleshooting above, open the demo scene to verify the game runs there, and copy any Console errors. Include your Unity version, render pipeline, target platform and the game id.</p>
+      <div class="info"><strong>Enjoying the pack?</strong> Reviews on the Asset Store are the biggest help to an indie publisher &mdash; if this pack saved you time, a star rating is hugely appreciated. &#11088;</div>
+    </section>
+
+    <footer>
+      Mini Game Templates &middot; Puzzles 5.0 Pack &middot; Built for Unity 6000.0.62f1+ &middot;
+      Support: <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>
+    </footer>
+  </main>
+</body>
+</html>

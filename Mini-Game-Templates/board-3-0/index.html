@@ -1,0 +1,664 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Game Templates &middot; Board 3.0 Pack &mdash; Documentation</title>
+  <style>
+    :root { --bg:#faf9f6; --ink:#232830; --muted:#6b7280; --line:#e4e2d9; --card:#ffffff;
+            --accent:#0e7c66; --accent2:#b3541e; --side:#20263a; --side-ink:#c8cfe8; --code:#f1efe8; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; display:flex; font-family:Segoe UI, Arial, sans-serif; color:var(--ink);
+           background:var(--bg); line-height:1.55; }
+    nav.side { flex:0 0 250px; position:sticky; top:0; height:100vh; overflow-y:auto;
+               background:var(--side); color:var(--side-ink); padding:20px 0 30px; }
+    nav.side .brand { padding:0 20px 14px; font-weight:700; font-size:16px; color:#ffffff;
+                      border-bottom:1px solid #333c58; margin-bottom:10px; }
+    nav.side .brand span { display:block; font-weight:400; font-size:12px; color:#8d97bd; margin-top:2px; }
+    nav.side .group { padding:14px 20px 4px; font-size:11px; text-transform:uppercase;
+                      letter-spacing:.09em; color:#8d97bd; }
+    nav.side a { display:block; padding:4px 20px; color:var(--side-ink); text-decoration:none; font-size:13px; }
+    nav.side a:hover { background:#2b3350; color:#ffffff; }
+    main { flex:1; min-width:0; padding:34px 46px 60px; max-width:940px; }
+    h1 { margin:0 0 6px; font-size:32px; }
+    h2 { margin:36px 0 10px; font-size:22px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+    h3 { margin:20px 0 8px; font-size:15px; }
+    p { margin:0 0 12px; }
+    .lead { color:var(--muted); font-size:15px; }
+    .dim { color:var(--muted); font-size:12px; }
+    .stats { margin:10px 0 4px; }
+    .stats span { display:inline-block; background:var(--card); border:1px solid var(--line);
+                  border-radius:20px; padding:3px 12px; margin:0 6px 6px 0; font-size:12px; color:var(--muted); }
+    code { background:var(--code); border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:12.5px; }
+    pre { background:#272d3a; color:#e6e9f2; border-radius:8px; padding:14px 16px; overflow-x:auto;
+          font-size:12.5px; line-height:1.5; }
+    pre code { background:none; border:none; color:inherit; padding:0; }
+    table { border-collapse:collapse; width:100%; margin:8px 0 14px; background:var(--card); font-size:13px; }
+    th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+    th { background:#f2f0e8; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin:12px 0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:13px 15px; }
+    .card strong { display:block; margin-bottom:3px; }
+    .card span { color:var(--muted); font-size:12.5px; }
+    .info { border-left:4px solid var(--accent); background:#e9f5f1; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    .warn { border-left:4px solid var(--accent2); background:#fdf3e6; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    ol, ul { margin:8px 0 12px 22px; padding:0; }
+    li { margin:5px 0; }
+    .backtop { font-size:12px; margin-top:10px; }
+    a { color:var(--accent); }
+    footer { border-top:1px solid var(--line); margin-top:40px; padding-top:16px; color:var(--muted); font-size:13px; }
+    @media (max-width: 900px) {
+      body { flex-direction:column; }
+      nav.side { position:static; height:auto; width:100%; flex:none; }
+      main { padding:22px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="side">
+    <div class="brand">Mini Game Templates<span>Board 3.0 Pack</span></div>
+    <div class="group">Getting started</div>
+    <a href="#overview">Overview</a>
+    <a href="#how">How it works</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#architecture">Architecture</a>
+    <div class="group">The 10 games</div>
+      <a href="#g-board3_breakthrough">Breakthrough</a>
+      <a href="#g-board3_clobber">Clobber</a>
+      <a href="#g-board3_konane">Konane</a>
+      <a href="#g-board3_amazons">Amazons</a>
+      <a href="#g-board3_lines_of_action">Lines of Action</a>
+      <a href="#g-board3_order_chaos">Order and Chaos</a>
+      <a href="#g-board3_ultimate_ttt">Ultimate Tic-Tac-Toe</a>
+      <a href="#g-board3_hexapawn">Hexapawn</a>
+      <a href="#g-board3_three_morris">Three Men&#39;s Morris</a>
+      <a href="#g-board3_brandub">Brandub</a>
+
+    <div class="group">Game systems</div>
+    <a href="#boosters">Boosters</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#reskins">Reskins</a>
+    <a href="#tutorials">Tutorials</a>
+    <a href="#levels">Level scaling</a>
+    <a href="#theme">Light &amp; dark mode</a>
+    <a href="#liveops">LiveOps Kit (bundled)</a>
+    <div class="group">Integration</div>
+    <a href="#integrate">Add to your project</a>
+    <a href="#customize">Customizing</a>
+    <a href="#newgames">Adding new games</a>
+    <div class="group">Help</div>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#support">Support &amp; review</a>
+  </nav>
+  <main>
+    <header id="top">
+      <h1>Mini Game Templates &middot; Board 3.0 Pack</h1>
+      <p class="lead">Classic and abstract board-game templates with local AI/rule logic, turn flow, and configurable play settings.</p>
+      <div class="stats">
+        <span>Unity 6000.0.62f1+</span><span>10 games</span><span>20 boosters</span><span>30 achievements</span><span>LiveOps Kit bundled</span>
+      </div>
+    </header>
+
+    <section id="overview">
+      <h2>&#127968; Overview</h2>
+      <p>10 fully playable mini-games, each with boosters, achievements, reskin slots, a first-run tutorial, per-level difficulty scaling and light/dark theming &mdash; all driven by one shared runtime.</p>
+      <div class="grid">
+        <div class="card"><strong>Breakthrough</strong><span>Push a pawn to the far row before the AI does.</span></div>
+        <div class="card"><strong>Clobber</strong><span>Clobber adjacent enemy stones; the last to move wins.</span></div>
+        <div class="card"><strong>Konane</strong><span>Jump and remove enemy stones; out of moves loses.</span></div>
+        <div class="card"><strong>Amazons</strong><span>Move a queen, shoot an arrow; trap the AI to win.</span></div>
+        <div class="card"><strong>Lines of Action</strong><span>Connect all your pieces into one group before the AI.</span></div>
+        <div class="card"><strong>Order and Chaos</strong><span>Make five in a row as Order before Chaos fills the board.</span></div>
+        <div class="card"><strong>Ultimate Tic-Tac-Toe</strong><span>Win three mini boards in a row in nested tic-tac-toe.</span></div>
+        <div class="card"><strong>Hexapawn</strong><span>Race three pawns to the far row against a perfect AI.</span></div>
+        <div class="card"><strong>Three Men&#39;s Morris</strong><span>Place three, then slide to make a mill of three.</span></div>
+        <div class="card"><strong>Brandub</strong><span>Escort the King to a corner before the attackers close in.</span></div>
+
+      </div>
+      <div class="info"><strong>One contract, 10 implementations.</strong> Every game implements <code>IMiniGame</code> and is discovered automatically by reflection &mdash; no scene wiring, no prefab lists.</div>
+      <h3>Shared capabilities</h3>
+      <div class="grid">
+        <div class="card"><strong>&#128165; Boosters</strong><span>Per-game power-ups with persistent counts and refund safety.</span></div>
+        <div class="card"><strong>&#127942; Achievements</strong><span>Progression goals per game, tracked persistently, with coin rewards.</span></div>
+        <div class="card"><strong>&#127912; Reskins</strong><span>Drop in your own art per slot, per game &mdash; no code required.</span></div>
+        <div class="card"><strong>&#127919; Tutorials</strong><span>First-run overlay walkthroughs, defined declaratively per game.</span></div>
+        <div class="card"><strong>&#128200; Level scaling</strong><span>Auto-generated difficulty curves, editable in the Studio.</span></div>
+        <div class="card"><strong>&#127769; Light &amp; dark</strong><span>One toggle re-themes the chrome and every game.</span></div>
+        <div class="card"><strong>&#127873; LiveOps Kit bundled</strong><span>Ads, IAP, haptics, rate-us, notifications and more &mdash; the full HyperCasual LiveOps Kit ships in this pack.</span></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <h2>&#9881; How it works</h2>
+      <p><strong>This is a procedural-UI games template.</strong> Every game builds its own interface and logic in C# at runtime inside the <code>RectTransform</code> you give it &mdash; there are no hand-placed prefabs to wire up. The shipped demo scene is a pre-baked snapshot of that build, so you can inspect the full hierarchy without pressing Play; on Play it rebuilds itself and becomes fully interactive.</p>
+      <h3>The Studio</h3>
+      <p>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> for per-game tuning panels. Settings you edit are saved to ScriptableObject assets under <code>Assets/MiniGameTemplates/Resources/Config/</code> and loaded by the games at runtime.</p>
+      <h3>Customization at a glance</h3>
+      <table>
+        <tr><th>What to change</th><th>Where to find it</th></tr>
+        <tr><td>Game rules / difficulty / dimensions</td><td>Studio, or the game's <code>&lt;Game&gt;Settings</code> asset</td></tr>
+        <tr><td>Per-level difficulty curve</td><td>Studio &gt; game panel &gt; Levels editor</td></tr>
+        <tr><td>Colours / overall look</td><td><code>MiniGameTheme</code> asset, or the in-app DARK/LIGHT toggle</td></tr>
+        <tr><td>Game art (tiles, pieces, backgrounds&hellip;)</td><td>Reskin system &mdash; <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em></td></tr>
+        <tr><td>Boosters offered</td><td>Each game's <code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Deeper layout / behaviour</td><td>The game's <code>&lt;Game&gt;Game.cs</code> build code</td></tr>
+      </table>
+      <div class="warn"><strong>Heads-up:</strong> because the UI is procedural, customization happens through data (settings assets, theme, reskins) rather than dragging things around a scene. The data-driven path covers day-to-day tweaks; source access covers the rest.</div>
+    </section>
+
+    <section id="quickstart">
+      <h2>&#9889; Quick start</h2>
+      <ol>
+        <li>Import <code>MiniGameTemplates-Board3.unitypackage</code>. If Unity offers to import <strong>TMP Essentials</strong>, accept &mdash; the demo UI uses TextMeshPro.</li>
+        <li>Open <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Board3.unity</code>. The full demo is already baked into the scene.</li>
+        <li>Press <strong>Play</strong> &mdash; the dashboard lists every Board 3.0 game; pick, play, and try the boosters and cheat rail.</li>
+        <li>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> and tune any game's settings.</li>
+        <li>(Optional) Open <em>Tools &gt; HLK &gt; Guided Setup</em> to configure the bundled LiveOps kit &mdash; ads, IAP, notifications, rate-us and more (see the <a href="#liveops">LiveOps Kit</a> section).</li>
+        <li>To ship a single game inside your own UI, use the <code>IMiniGame</code> contract:</li>
+      </ol>
+      <pre><code>IMiniGame game = new BreakthroughGame();
+game.Mount(hostRect, context);   // context : IMiniGameContext
+// ... later, when done:
+game.Unmount();</code></pre>
+      <div class="info"><strong>Tip:</strong> the demo scene's dashboard is a complete reference implementation of <code>IMiniGameContext</code> (theme, audio, save, events, wallet, score) &mdash; copy it or implement the interface with your own services.</div>
+    </section>
+
+    <section id="architecture">
+      <h2>&#128736; Architecture</h2>
+      <h3>The <code>IMiniGame</code> contract</h3>
+      <pre><code>public interface IMiniGame {
+    string Id { get; }                 // stable snake_case id, e.g. "board3_breakthrough"
+    string DisplayName { get; }
+    string Category { get; }
+    string ShortDescription { get; }
+    void Mount(RectTransform host, IMiniGameContext ctx);
+    void Unmount();
+    void NewRound();
+    IEnumerable&lt;CheatAction&gt; GetCheatActions();
+}</code></pre>
+      <h3>Auto-discovery</h3>
+      <table>
+        <tr><th>Registry</th><th>Discovers</th><th>Convention</th></tr>
+        <tr><td><code>MiniGameRegistry</code></td><td><code>IMiniGame</code> classes with a <code>[MiniGame]</code> attribute</td><td>one per game</td></tr>
+        <tr><td>Booster registry</td><td><code>IBoosterSpec</code> implementations</td><td><code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Achievement registry</td><td><code>IAchievementSpec</code> implementations</td><td><code>&lt;Game&gt;AchievementSpec.cs</code></td></tr>
+        <tr><td>Reskin registry</td><td><code>IReskinSpec</code> implementations</td><td><code>&lt;Game&gt;ReskinSpec.cs</code></td></tr>
+        <tr><td>Tutorial registry</td><td><code>ITutorialSpec</code> implementations</td><td><code>&lt;Game&gt;TutorialSpec.cs</code></td></tr>
+      </table>
+      <h3>Per-game folder layout</h3>
+      <pre><code>Assets/MiniGameTemplates/Runtime/Board3/&lt;Game&gt;/
+    &lt;Game&gt;Game.cs             // gameplay + procedural UI
+    &lt;Game&gt;Settings.cs         // ScriptableObject settings (+ static Default)
+    &lt;Game&gt;BoosterSpec.cs      // booster definitions
+    &lt;Game&gt;AchievementSpec.cs  // achievement definitions
+    &lt;Game&gt;ReskinSpec.cs       // reskinnable sprite slots
+    &lt;Game&gt;TutorialSpec.cs     // first-run walkthrough steps</code></pre>
+      <div class="info"><strong>Modular by design.</strong> Delete any single game's folder and the rest keep working. Add a new game by mirroring the layout &mdash; no edits to any other file required.</div>
+      <h3>Runtime flow</h3>
+      <p><code>Mount(host, ctx)</code> &rarr; <code>NewRound()</code> &rarr; player input loop &rarr; <code>RoundWon</code> / <code>RoundLost</code> event &rarr; <code>NewRound()</code> or <code>Unmount()</code></p>
+    </section>
+
+    <section id="g-board3_breakthrough">
+      <h2>&#127918; Breakthrough</h2>
+      <p class="lead">Push a pawn to the far row before the AI does.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap a ▲ pawn, then a highlighted square. Pawns step forward straight or diagonally, but capture only diagonally.</li>
+        <li>Reach the far (top) row — or capture every enemy pawn — to win before the AI breaks through.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight a strong move for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Breakthrough!</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Vanguard</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>BTDifficulty.Medium</code></td><td>How deeply the AI searches when choosing a move.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_clobber">
+      <h2>&#127918; Clobber</h2>
+      <p class="lead">Clobber adjacent enemy stones; the last to move wins.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap one of your ▲ stones, then tap a highlighted neighbouring ● to clobber it and take its square.</li>
+        <li>Every move is a capture. The player who runs out of legal moves first loses — so be the last to move!</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight a strong clobber for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Last One Standing</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Clobber King</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>ClobberDifficulty.Medium</code></td><td>How deeply the AI searches when choosing a move.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_konane">
+      <h2>&#127918; Konane</h2>
+      <p class="lead">Jump and remove enemy stones; out of moves loses.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap one of your ▲ stones, then a highlighted square. You jump straight over an adjacent ● into the empty space, removing it.</li>
+        <li>Only jumps are allowed. The first player with no legal jump loses, so keep your options open.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Jump</strong></td><td><code>hint</code></td><td>Highlight a strong jump for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Aloha Victory</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Konane Master</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>KonaneDifficulty.Medium</code></td><td>How deeply the AI searches when choosing a move.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_amazons">
+      <h2>&#127918; Amazons</h2>
+      <p class="lead">Move a queen, shoot an arrow; trap the AI to win.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap a ▲ amazon, then a square to move it like a queen. Then tap again to shoot an arrow (+), burning that square out of play.</li>
+        <li>Arrows and amazons block movement. Wall the AI in so it can&#39;t move — the last player able to move wins.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight a strong move and arrow for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Cornered</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Queen of Arrows</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>AmazonsDifficulty.Medium</code></td><td>How strongly the AI weighs mobility and how much it samples.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_lines_of_action">
+      <h2>&#127918; Lines of Action</h2>
+      <p class="lead">Connect all your pieces into one group before the AI.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap a ▲ piece to see its moves. It slides in a straight line exactly as many squares as there are pieces on that whole line.</li>
+        <li>You can leap your own pieces (not enemies) and capture on landing. Connect all your pieces into one group — touching edges or corners — to win.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight a strong move toward connecting up.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>All Connected</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Master of Lines</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>LOADifficulty.Medium</code></td><td>How deeply the AI searches when choosing a move.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_order_chaos">
+      <h2>&#127918; Order and Chaos</h2>
+      <p class="lead">Make five in a row as Order before Chaos fills the board.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>You are Order. Pick X or O with the buttons up top, then tap an empty square to place it.</li>
+        <li>Make five of the same symbol in a row — any direction — to win. The AI (Chaos) tries to spoil your lines and fill the board.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Spot</strong></td><td><code>hint</code></td><td>Pick a symbol and highlight a strong square for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last placement and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Bringing Order</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Master of Order</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>OCDifficulty.Medium</code></td><td>How sharply Chaos (the AI) blocks your lines.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_ultimate_ttt">
+      <h2>&#127918; Ultimate Tic-Tac-Toe</h2>
+      <p class="lead">Win three mini boards in a row in nested tic-tac-toe.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Play X in the highlighted mini board. The cell you pick sends the AI to the matching board next turn.</li>
+        <li>Win a mini board with three in a row. Win three mini boards in a row — across, down, or diagonally — to win the whole game.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Cell</strong></td><td><code>hint</code></td><td>Highlight a strong cell for you to play.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Nested Victory</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Grandmaster of Grids</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>UTTTDifficulty.Medium</code></td><td>How carefully the AI plays and avoids gifting you boards.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (X) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_hexapawn">
+      <h2>&#127918; Hexapawn</h2>
+      <p class="lead">Race three pawns to the far row against a perfect AI.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Tap a ▲ pawn, then a highlighted square. Pawns step forward into an empty square or capture one square diagonally forward.</li>
+        <li>Win by reaching the far row, capturing all enemy pawns, or leaving the AI with no move. The AI plays perfectly — try Easy first.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight the optimal move for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Beat the Machine</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Pawn Prodigy</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>HexDifficulty.Medium</code></td><td>Easy lets the AI blunder; Medium and Hard play perfect minimax.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_three_morris">
+      <h2>&#127918; Three Men&#39;s Morris</h2>
+      <p class="lead">Place three, then slide to make a mill of three.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>First, tap empty points to place your three ▲ stones (the AI places three ● too).</li>
+        <li>Then tap a stone and slide it along a line to a connected empty point. Line up three in a row to win.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight a strong placement or slide for you.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>First Mill</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>Mill Master</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>TMMDifficulty.Medium</code></td><td>How deeply the AI searches; Hard plays effectively perfectly.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (▲) move first; otherwise the AI opens.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-board3_brandub">
+      <h2>&#127918; Brandub</h2>
+      <p class="lead">Escort the King to a corner before the attackers close in.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>You defend the King (K) and four ▲ guards. Tap a piece, then a highlighted square — pieces slide straight like a rook.</li>
+        <li>Sandwich an enemy ● between two of yours to capture it. Walk the King to any corner to win before the attackers surround it.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Best Move</strong></td><td><code>hint</code></td><td>Highlight a strong defender move toward escape.</td></tr>
+        <tr><td><strong>Undo</strong></td><td><code>undo</code></td><td>Take back your last move and the AI&#39;s reply.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Royal Escape</strong><br><span class="dim">Win your first game.</span></td><td>1</td><td>&mdash;</td></tr>
+        <tr><td><strong>King&#39;s Champion</strong><br><span class="dim">Win 10 games.</span></td><td>10</td><td>300 coins</td></tr>
+        <tr><td><strong>No Take-Backs</strong><br><span class="dim">Win a game without using Undo.</span></td><td>1</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>board</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>BrandubDifficulty.Medium</code></td><td>How sharply the attacker AI hunts the King.</td></tr>
+        <tr><td><code>PlayerStarts</code></td><td><code>true</code></td><td>If true, you (the defenders) move first; otherwise the attackers open.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+
+    <section id="boosters">
+      <h2>&#128165; Boosters</h2>
+      <p>Per-game power-ups with persistent counts and refund safety, auto-discovered from each game's <code>&lt;Game&gt;BoosterSpec.cs</code>. The demo dashboard renders them as the bottom booster bar.</p>
+      <h3>Activating a booster</h3>
+      <pre><code>bool OnBoosterActivated(string key) {
+    if (_ended || _busy) return false;   // returning false REFUNDS the charge
+    switch (key) { /* per-key effects */ }
+    return false;                        // unknown key -&gt; refund
+}</code></pre>
+      <div class="info"><strong>Refund safety:</strong> returning <code>false</code> from the handler refunds the booster &mdash; use it whenever the activation can't proceed. Returning <code>true</code> deducts the charge.</div>
+      <p>Award boosters programmatically with <code>BoosterManager.Add(gameId, key, count)</code>.</p>
+      <h3>Full booster catalogue</h3>
+      <table>
+        <tr><th>Game</th><th>Booster keys</th></tr>
+        <tr><td><strong>Breakthrough</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Clobber</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Konane</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Amazons</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Lines of Action</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Order and Chaos</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Ultimate Tic-Tac-Toe</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Hexapawn</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Three Men&#39;s Morris</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+        <tr><td><strong>Brandub</strong></td><td><code>hint</code> <code>undo</code></td></tr>
+
+      </table>
+    </section>
+
+    <section id="achievements">
+      <h2>&#127942; Achievements</h2>
+      <p>Progression goals per game, defined in <code>&lt;Game&gt;AchievementSpec.cs</code> and tracked persistently by <code>AchievementManager</code>. Unlocks pop a toast card over the game and auto-credit any coin reward. Each game's own goals are listed in its section above.</p>
+      <p>Reset helpers for testing: <code>AchievementManager.ResetForGame(gameId)</code> and <code>AchievementManager.ResetAll()</code> (also exposed in the demo's cheat rail).</p>
+    </section>
+
+    <section id="reskins">
+      <h2>&#127912; Reskins</h2>
+      <p>Drop in your own art per slot, per game &mdash; no code required. Open <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>, pick a game, and assign an image per slot. Art is copied to <code>Resources/Reskin/&lt;gameId&gt;/&lt;slot&gt;.png</code> and imported as a Sprite automatically. In-game, the Skin pill toggles between Default and Custom art.</p>
+      <h3>Per-game slot list</h3>
+      <table>
+        <tr><th>Game</th><th>Slots</th></tr>
+        <tr><td><strong>Breakthrough</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Clobber</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Konane</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Amazons</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Lines of Action</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Order and Chaos</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Ultimate Tic-Tac-Toe</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Hexapawn</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Three Men&#39;s Morris</strong></td><td><code>board</code> <code>background</code></td></tr>
+        <tr><td><strong>Brandub</strong></td><td><code>board</code> <code>background</code></td></tr>
+
+      </table>
+      <div class="warn"><strong>Sprite-only.</strong> The reskin system swaps sprites &mdash; layouts, colours and animations stay the same. Until custom art is added the games use clean procedural sprites and the pill shows <code>Skin: &mdash;</code>.</div>
+    </section>
+
+    <section id="tutorials">
+      <h2>&#127919; Tutorials</h2>
+      <p>First-run overlay walkthroughs, defined declaratively in <code>&lt;Game&gt;TutorialSpec.cs</code> as an ordered list of captioned spotlight steps. Each shows once per game's first session and can be replayed from the demo's cheat rail. Reset with <code>TutorialManager.Reset(gameId)</code>.</p>
+    </section>
+
+    <section id="levels">
+      <h2>&#128200; Level scaling</h2>
+      <p>Per-game difficulty progression &mdash; auto-generated out of the box, fully editable in the Studio.</p>
+      <pre><code>int level = LevelManager.GetCurrent(gameId);          // player's current level
+var diff  = LevelManager.GetDifficultyForCurrent(gameId);
+float mult = diff.Get("difficulty", 1f);              // ramp targets / timers / AI</code></pre>
+      <p>The Studio's Levels editor can regenerate a curve (level count, start/end difficulty) or hand-edit individual levels; edits are saved as a <code>LevelSet</code> asset under <code>Resources/Config/Levels/&lt;gameId&gt;.asset</code>. Reset progress with <code>LevelManager.ResetProgress(gameId)</code>.</p>
+    </section>
+
+    <section id="theme">
+      <h2>&#127769; Light &amp; dark mode</h2>
+      <p>One toggle re-themes the whole scene &mdash; chrome and every game. Games read every colour from <code>ctx.Theme</code>, a <code>MiniGameTheme</code> asset that carries both palettes:</p>
+      <pre><code>theme.ApplyMode(light: true);   // swap palettes
+bool isLight = theme.IsLightMode;</code></pre>
+      <p>The demo dashboard's header has a DARK / LIGHT pill; the choice persists between sessions (default: dark). Both palettes are contrast-checked &mdash; panel/text/accent pairings stay readable in either mode.</p>
+      <div class="info"><strong>Tip:</strong> when customizing, read colours from <code>ctx.Theme</code> (<code>Accent</code>, <code>TextPrimary</code>, <code>PanelBackground</code>, &hellip;) rather than hardcoding, and your changes work in both modes.</div>
+    </section>
+
+    <section id="liveops">
+      <h2>&#127873; LiveOps Kit (bundled)</h2>
+      <p>The <strong>full HyperCasual LiveOps Kit</strong> is included in this pack &mdash; no stripping, nothing to buy on top. It provides the production meta-game layer around the games:</p>
+      <div class="grid">
+        <div class="card"><strong>Ads</strong><span>Rewarded, interstitial and banner service with mediation backends (AdMob, LevelPlay, AppLovin, Unity Ads). Runs a safe mock backend until a real SDK is installed.</span></div>
+        <div class="card"><strong>IAP</strong><span>Unity Purchasing integration with catalog, dummy store for testing, and purchase-reward hooks.</span></div>
+        <div class="card"><strong>Haptics</strong><span>Cross-platform vibration service &mdash; already wired to every game's audio events in this demo.</span></div>
+        <div class="card"><strong>Rate Us</strong><span>Native store-review prompts (Android in-app review / iOS SKStoreReviewController) with dummy editor backend.</span></div>
+        <div class="card"><strong>Notifications</strong><span>Local notification scheduling with permission flow (mobile packages activate it).</span></div>
+        <div class="card"><strong>Consent &amp; privacy</strong><span>Google UMP / Apple ATT consent flow with editor-safe dummy backend.</span></div>
+        <div class="card"><strong>Analytics &amp; crash</strong><span>Pluggable analytics (Unity Analytics / Firebase) and crash-reporter hooks.</span></div>
+        <div class="card"><strong>Retention systems</strong><span>Daily rewards, quests, battle pass, energy, offers, shop, unlocks, deep links, sharing, update prompt.</span></div>
+      </div>
+      <h3>How it is hooked up in this demo</h3>
+      <ul>
+        <li><strong>Vibrations:</strong> every game's sound events (taps, wins, errors) fire matching haptics through the kit automatically.</li>
+        <li><strong>Rewarded ad:</strong> winning a round with a coin reward offers a &ldquo;Watch Ad&rdquo; doubler; completing the (mock) ad credits the bonus.</li>
+        <li><strong>Interstitial:</strong> auto-shows after every 3rd round (skipped after a No-Ads purchase).</li>
+        <li><strong>Banner + shop:</strong> the cheat rail's <em>Ads &amp; IAP</em> section toggles the banner and opens the simulated IAP shop (Coin Pack, No Ads, Starter Bundle) through the kit's store backend.</li>
+      </ul>
+      <h3>Setup &amp; going live</h3>
+      <ol>
+        <li>Everything works out of the box in the editor with <strong>mock/dummy backends</strong> &mdash; no SDKs required, nothing to configure for the demo.</li>
+        <li>Open <em>Tools &gt; HLK &gt; Open Toolset</em> (or <em>Tools &gt; HLK &gt; Guided Setup</em>) to configure ad units, IAP products, notifications, rate-us and the rest.</li>
+        <li>To go live, install the SDKs you want (e.g. AdMob, Unity Ads, Firebase) &mdash; the kit detects them automatically via scripting defines (<code>HLK_ADMOB</code>, <code>HLK_UNITY_ADS</code>, <code>HLK_FIREBASE</code>, &hellip;) and switches from mock to real backends.</li>
+      </ol>
+      <div class="info"><strong>No SDK binaries ship in this package.</strong> The kit is pure source with optional integrations &mdash; it compiles clean in an empty project and lights up real providers only when you add them.</div>
+      <p>Full kit documentation: <code>Assets/MiniGameTemplates/HyperCasualLiveOpsKit/Documentation/HLK-Documentation.html</code> (also listed under <em>Tools &gt; Mini Game Templates &gt; Welcome &gt; Open Documentation</em>).</p>
+    </section>
+
+    <section id="integrate">
+      <h2>&#10133; Add to your project</h2>
+      <h3>Path A &mdash; use the bundled demo dashboard</h3>
+      <p>Add <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Board3.unity</code> to your build settings. It auto-discovers every imported game and provides the picker, HUD, boosters, achievements and theming out of the box.</p>
+      <h3>Path B &mdash; embed a single game in your own UI</h3>
+      <pre><code>IMiniGame game = new BreakthroughGame();
+game.Mount(hostRect, context);   // your IMiniGameContext implementation
+// ...
+game.Unmount();                  // ALWAYS unmount before destroying the host</code></pre>
+      <h3>Listening to events</h3>
+      <pre><code>ctx.Events.Subscribe(GameEvents.RoundWon,     payload =&gt; { /* celebrate */ });
+ctx.Events.Subscribe(GameEvents.RoundLost,    payload =&gt; { /* retry UI  */ });
+ctx.Events.Subscribe(GameEvents.ScoreChanged, payload =&gt; { /* HUD       */ });</code></pre>
+      <div class="warn"><strong>Always <code>Unmount()</code>.</strong> Games run coroutines and tweens; failing to unmount before destroying the host leaves them running on destroyed transforms.</div>
+    </section>
+
+    <section id="customize">
+      <h2>&#9881; Customizing</h2>
+      <h3>Override default settings</h3>
+      <p>Each game reads a ScriptableObject settings asset (see each game's <em>Configurable settings</em> table above). Create one via <em>Create &gt; Mini Game Templates &gt; Board 3.0</em>, drop it in <code>Resources/Config/</code>, or mutate <code>&lt;Game&gt;Settings.Default</code> at runtime before mounting.</p>
+      <h3>Boosters: add / remove / rebalance</h3>
+      <ul>
+        <li><strong>Remove:</strong> delete the <code>BoosterDef</code> from the game's spec.</li>
+        <li><strong>Add:</strong> append a <code>BoosterDef</code> <em>and</em> handle its key in the game's booster handler.</li>
+        <li><strong>Grant:</strong> <code>BoosterManager.Add(gameId, key, count)</code>.</li>
+      </ul>
+      <h3>Audio</h3>
+      <p>Games call <code>ctx.Audio.Play(SfxKind.&hellip;)</code>. The bundled <code>ProceduralAudioBus</code> synthesizes all SFX at runtime &mdash; no audio files to manage; swap in your own <code>IAudioBus</code> to use recorded audio.</p>
+    </section>
+
+    <section id="newgames">
+      <h2>&#129520; Adding new games</h2>
+      <ol>
+        <li>Create <code>Assets/MiniGameTemplates/Runtime/Board3/MyGame/</code>.</li>
+        <li>Add <code>MyGameGame.cs</code> implementing <code>IMiniGame</code>, decorated with <code>[MiniGame("&hellip;", "My Game", Category = MiniGameCategory.Board3)]</code>.</li>
+        <li>Add <code>MyGameSettings</code> (optional) with a static <code>Default</code> getter.</li>
+        <li>Add the spec files &mdash; <code>MyGameBoosterSpec</code>, <code>MyGameAchievementSpec</code>, <code>MyGameReskinSpec</code>, <code>MyGameTutorialSpec</code> &mdash; all auto-discovered.</li>
+        <li>Done: the dashboard and Studio list your game automatically. No edits to existing files.</li>
+      </ol>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>&#128161; Troubleshooting</h2>
+      <h3>Text is invisible / fonts look broken</h3>
+      <p>Import TMP Essentials: <em>Window &gt; TextMeshPro &gt; Import TMP Essential Resources</em>. The demo UI uses TextMeshPro's default font.</p>
+      <h3>My game doesn't show up in the dashboard</h3>
+      <p>Check it implements <code>IMiniGame</code>, carries the <code>[MiniGame]</code> attribute, and its assembly references <code>MiniGameTemplates.Core</code>.</p>
+      <h3>A booster button does nothing when pressed</h3>
+      <p>The booster's <code>key</code> must exactly match a <code>case</code> in the game's booster handler &mdash; unknown keys refund silently by design.</p>
+      <h3>Tutorials replay every time I press Play in the editor</h3>
+      <p>The "seen" flag is stored per game id in PlayerPrefs; clearing PlayerPrefs resets it. Replay on demand from the cheat rail instead.</p>
+      <h3>Reskin sprites don't apply</h3>
+      <p>Import the art through <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em> (it handles the copy + import settings), then flip the in-game Skin pill to Custom.</p>
+      <h3>Coroutine errors about destroyed RectTransforms when switching games</h3>
+      <p>Call <code>Unmount()</code> before destroying the host. The unmount path stops the game's coroutines and tweens.</p>
+      <h3>Ads say &ldquo;SIMULATED&rdquo; / no real ads show</h3>
+      <p>By design: without an ad SDK installed the kit uses its mock backend, which draws clearly-labelled placeholder ads so every flow is testable. Install a real provider (e.g. AdMob via its package) and the kit switches to it automatically &mdash; see the <a href="#liveops">LiveOps Kit</a> section.</p>
+      <h3>Where do I report a bug?</h3>
+      <p>Email <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> with your Unity version, target platform, the game id (e.g. <code>board3_breakthrough</code>), steps to reproduce, and the console log.</p>
+    </section>
+
+    <section id="support">
+      <h2>&#128236; Support &amp; review</h2>
+      <p><strong>Get in touch:</strong> <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> &mdash; bug reports, feature requests, integration help and game requests for future updates are all welcome. Typical response time is 24&ndash;48 hours.</p>
+      <p><strong>Before contacting</strong>, it helps to: check Troubleshooting above, open the demo scene to verify the game runs there, and copy any Console errors. Include your Unity version, render pipeline, target platform and the game id.</p>
+      <div class="info"><strong>Enjoying the pack?</strong> Reviews on the Asset Store are the biggest help to an indie publisher &mdash; if this pack saved you time, a star rating is hugely appreciated. &#11088;</div>
+    </section>
+
+    <footer>
+      Mini Game Templates &middot; Board 3.0 Pack &middot; Built for Unity 6000.0.62f1+ &middot;
+      Support: <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>
+    </footer>
+  </main>
+</body>
+</html>

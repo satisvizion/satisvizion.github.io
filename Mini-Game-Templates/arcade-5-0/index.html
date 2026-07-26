@@ -1,0 +1,655 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mini Game Templates &middot; Arcade 5.0 Pack &mdash; Documentation</title>
+  <style>
+    :root { --bg:#faf9f6; --ink:#232830; --muted:#6b7280; --line:#e4e2d9; --card:#ffffff;
+            --accent:#0e7c66; --accent2:#b3541e; --side:#20263a; --side-ink:#c8cfe8; --code:#f1efe8; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; display:flex; font-family:Segoe UI, Arial, sans-serif; color:var(--ink);
+           background:var(--bg); line-height:1.55; }
+    nav.side { flex:0 0 250px; position:sticky; top:0; height:100vh; overflow-y:auto;
+               background:var(--side); color:var(--side-ink); padding:20px 0 30px; }
+    nav.side .brand { padding:0 20px 14px; font-weight:700; font-size:16px; color:#ffffff;
+                      border-bottom:1px solid #333c58; margin-bottom:10px; }
+    nav.side .brand span { display:block; font-weight:400; font-size:12px; color:#8d97bd; margin-top:2px; }
+    nav.side .group { padding:14px 20px 4px; font-size:11px; text-transform:uppercase;
+                      letter-spacing:.09em; color:#8d97bd; }
+    nav.side a { display:block; padding:4px 20px; color:var(--side-ink); text-decoration:none; font-size:13px; }
+    nav.side a:hover { background:#2b3350; color:#ffffff; }
+    main { flex:1; min-width:0; padding:34px 46px 60px; max-width:940px; }
+    h1 { margin:0 0 6px; font-size:32px; }
+    h2 { margin:36px 0 10px; font-size:22px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+    h3 { margin:20px 0 8px; font-size:15px; }
+    p { margin:0 0 12px; }
+    .lead { color:var(--muted); font-size:15px; }
+    .dim { color:var(--muted); font-size:12px; }
+    .stats { margin:10px 0 4px; }
+    .stats span { display:inline-block; background:var(--card); border:1px solid var(--line);
+                  border-radius:20px; padding:3px 12px; margin:0 6px 6px 0; font-size:12px; color:var(--muted); }
+    code { background:var(--code); border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:12.5px; }
+    pre { background:#272d3a; color:#e6e9f2; border-radius:8px; padding:14px 16px; overflow-x:auto;
+          font-size:12.5px; line-height:1.5; }
+    pre code { background:none; border:none; color:inherit; padding:0; }
+    table { border-collapse:collapse; width:100%; margin:8px 0 14px; background:var(--card); font-size:13px; }
+    th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; }
+    th { background:#f2f0e8; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; margin:12px 0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:13px 15px; }
+    .card strong { display:block; margin-bottom:3px; }
+    .card span { color:var(--muted); font-size:12.5px; }
+    .info { border-left:4px solid var(--accent); background:#e9f5f1; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    .warn { border-left:4px solid var(--accent2); background:#fdf3e6; padding:11px 14px; margin:12px 0; border-radius:0 6px 6px 0; }
+    ol, ul { margin:8px 0 12px 22px; padding:0; }
+    li { margin:5px 0; }
+    .backtop { font-size:12px; margin-top:10px; }
+    a { color:var(--accent); }
+    footer { border-top:1px solid var(--line); margin-top:40px; padding-top:16px; color:var(--muted); font-size:13px; }
+    @media (max-width: 900px) {
+      body { flex-direction:column; }
+      nav.side { position:static; height:auto; width:100%; flex:none; }
+      main { padding:22px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="side">
+    <div class="brand">Mini Game Templates<span>Arcade 5.0 Pack</span></div>
+    <div class="group">Getting started</div>
+    <a href="#overview">Overview</a>
+    <a href="#how">How it works</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#architecture">Architecture</a>
+    <div class="group">The 10 games</div>
+      <a href="#g-arcade5_wall_dodge">Wall Dodge</a>
+      <a href="#g-arcade5_laser_maze">Laser Maze</a>
+      <a href="#g-arcade5_asteroid_field">Asteroid Field</a>
+      <a href="#g-arcade5_rocket_climb">Rocket Climb</a>
+      <a href="#g-arcade5_gem_miner">Gem Miner</a>
+      <a href="#g-arcade5_reflex_runner">Reflex Runner</a>
+      <a href="#g-arcade5_star_turret">Star Turret</a>
+      <a href="#g-arcade5_paddle_wall">Paddle Wall</a>
+      <a href="#g-arcade5_lane_switch">Lane Switch</a>
+      <a href="#g-arcade5_meteor_shield">Meteor Shield</a>
+
+    <div class="group">Game systems</div>
+    <a href="#boosters">Boosters</a>
+    <a href="#achievements">Achievements</a>
+    <a href="#reskins">Reskins</a>
+    <a href="#tutorials">Tutorials</a>
+    <a href="#levels">Level scaling</a>
+    <a href="#theme">Light &amp; dark mode</a>
+    <a href="#liveops">LiveOps Kit (bundled)</a>
+    <div class="group">Integration</div>
+    <a href="#integrate">Add to your project</a>
+    <a href="#customize">Customizing</a>
+    <a href="#newgames">Adding new games</a>
+    <div class="group">Help</div>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#support">Support &amp; review</a>
+  </nav>
+  <main>
+    <header id="top">
+      <h1>Mini Game Templates &middot; Arcade 5.0 Pack</h1>
+      <p class="lead">Fast-action arcade templates with procedural visuals, mobile-friendly controls, scoring, and progression hooks.</p>
+      <div class="stats">
+        <span>Unity 6000.0.62f1+</span><span>10 games</span><span>20 boosters</span><span>30 achievements</span><span>LiveOps Kit bundled</span>
+      </div>
+    </header>
+
+    <section id="overview">
+      <h2>&#127968; Overview</h2>
+      <p>10 fully playable mini-games, each with boosters, achievements, reskin slots, a first-run tutorial, per-level difficulty scaling and light/dark theming &mdash; all driven by one shared runtime.</p>
+      <div class="grid">
+        <div class="card"><strong>Wall Dodge</strong><span>Switch lanes to slip through the gap in each scrolling wall.</span></div>
+        <div class="card"><strong>Laser Maze</strong><span>Slip your dot past blinking laser beams to reach the exit.</span></div>
+        <div class="card"><strong>Asteroid Field</strong><span>Steer between drifting asteroids and collect the stars.</span></div>
+        <div class="card"><strong>Rocket Climb</strong><span>Hold THRUST to fly the rocket through the gap in each scrolling wall.</span></div>
+        <div class="card"><strong>Gem Miner</strong><span>Catch falling gems with your cart and dodge the rocks.</span></div>
+        <div class="card"><strong>Reflex Runner</strong><span>Tap JUMP to hop your auto-runner over the incoming obstacles.</span></div>
+        <div class="card"><strong>Star Turret</strong><span>Swivel the turret and fire on the descending invaders.</span></div>
+        <div class="card"><strong>Paddle Wall</strong><span>Bounce the ball off your paddle to break the wall of bricks.</span></div>
+        <div class="card"><strong>Lane Switch</strong><span>Hop lanes so you meet each coloured gate in its matching lane.</span></div>
+        <div class="card"><strong>Meteor Shield</strong><span>Spin the orbiting shield to block meteors before they hit the base.</span></div>
+
+      </div>
+      <div class="info"><strong>One contract, 10 implementations.</strong> Every game implements <code>IMiniGame</code> and is discovered automatically by reflection &mdash; no scene wiring, no prefab lists.</div>
+      <h3>Shared capabilities</h3>
+      <div class="grid">
+        <div class="card"><strong>&#128165; Boosters</strong><span>Per-game power-ups with persistent counts and refund safety.</span></div>
+        <div class="card"><strong>&#127942; Achievements</strong><span>Progression goals per game, tracked persistently, with coin rewards.</span></div>
+        <div class="card"><strong>&#127912; Reskins</strong><span>Drop in your own art per slot, per game &mdash; no code required.</span></div>
+        <div class="card"><strong>&#127919; Tutorials</strong><span>First-run overlay walkthroughs, defined declaratively per game.</span></div>
+        <div class="card"><strong>&#128200; Level scaling</strong><span>Auto-generated difficulty curves, editable in the Studio.</span></div>
+        <div class="card"><strong>&#127769; Light &amp; dark</strong><span>One toggle re-themes the chrome and every game.</span></div>
+        <div class="card"><strong>&#127873; LiveOps Kit bundled</strong><span>Ads, IAP, haptics, rate-us, notifications and more &mdash; the full HyperCasual LiveOps Kit ships in this pack.</span></div>
+      </div>
+    </section>
+
+    <section id="how">
+      <h2>&#9881; How it works</h2>
+      <p><strong>This is a procedural-UI games template.</strong> Every game builds its own interface and logic in C# at runtime inside the <code>RectTransform</code> you give it &mdash; there are no hand-placed prefabs to wire up. The shipped demo scene is a pre-baked snapshot of that build, so you can inspect the full hierarchy without pressing Play; on Play it rebuilds itself and becomes fully interactive.</p>
+      <h3>The Studio</h3>
+      <p>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> for per-game tuning panels. Settings you edit are saved to ScriptableObject assets under <code>Assets/MiniGameTemplates/Resources/Config/</code> and loaded by the games at runtime.</p>
+      <h3>Customization at a glance</h3>
+      <table>
+        <tr><th>What to change</th><th>Where to find it</th></tr>
+        <tr><td>Game rules / difficulty / dimensions</td><td>Studio, or the game's <code>&lt;Game&gt;Settings</code> asset</td></tr>
+        <tr><td>Per-level difficulty curve</td><td>Studio &gt; game panel &gt; Levels editor</td></tr>
+        <tr><td>Colours / overall look</td><td><code>MiniGameTheme</code> asset, or the in-app DARK/LIGHT toggle</td></tr>
+        <tr><td>Game art (tiles, pieces, backgrounds&hellip;)</td><td>Reskin system &mdash; <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em></td></tr>
+        <tr><td>Boosters offered</td><td>Each game's <code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Deeper layout / behaviour</td><td>The game's <code>&lt;Game&gt;Game.cs</code> build code</td></tr>
+      </table>
+      <div class="warn"><strong>Heads-up:</strong> because the UI is procedural, customization happens through data (settings assets, theme, reskins) rather than dragging things around a scene. The data-driven path covers day-to-day tweaks; source access covers the rest.</div>
+    </section>
+
+    <section id="quickstart">
+      <h2>&#9889; Quick start</h2>
+      <ol>
+        <li>Import <code>MiniGameTemplates-Arcade5.unitypackage</code>. If Unity offers to import <strong>TMP Essentials</strong>, accept &mdash; the demo UI uses TextMeshPro.</li>
+        <li>Open <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Arcade5.unity</code>. The full demo is already baked into the scene.</li>
+        <li>Press <strong>Play</strong> &mdash; the dashboard lists every Arcade 5.0 game; pick, play, and try the boosters and cheat rail.</li>
+        <li>Open <em>Tools &gt; Mini Game Templates &gt; Studio</em> and tune any game's settings.</li>
+        <li>(Optional) Open <em>Tools &gt; HLK &gt; Guided Setup</em> to configure the bundled LiveOps kit &mdash; ads, IAP, notifications, rate-us and more (see the <a href="#liveops">LiveOps Kit</a> section).</li>
+        <li>To ship a single game inside your own UI, use the <code>IMiniGame</code> contract:</li>
+      </ol>
+      <pre><code>IMiniGame game = new WallDodgeGame();
+game.Mount(hostRect, context);   // context : IMiniGameContext
+// ... later, when done:
+game.Unmount();</code></pre>
+      <div class="info"><strong>Tip:</strong> the demo scene's dashboard is a complete reference implementation of <code>IMiniGameContext</code> (theme, audio, save, events, wallet, score) &mdash; copy it or implement the interface with your own services.</div>
+    </section>
+
+    <section id="architecture">
+      <h2>&#128736; Architecture</h2>
+      <h3>The <code>IMiniGame</code> contract</h3>
+      <pre><code>public interface IMiniGame {
+    string Id { get; }                 // stable snake_case id, e.g. "arcade5_wall_dodge"
+    string DisplayName { get; }
+    string Category { get; }
+    string ShortDescription { get; }
+    void Mount(RectTransform host, IMiniGameContext ctx);
+    void Unmount();
+    void NewRound();
+    IEnumerable&lt;CheatAction&gt; GetCheatActions();
+}</code></pre>
+      <h3>Auto-discovery</h3>
+      <table>
+        <tr><th>Registry</th><th>Discovers</th><th>Convention</th></tr>
+        <tr><td><code>MiniGameRegistry</code></td><td><code>IMiniGame</code> classes with a <code>[MiniGame]</code> attribute</td><td>one per game</td></tr>
+        <tr><td>Booster registry</td><td><code>IBoosterSpec</code> implementations</td><td><code>&lt;Game&gt;BoosterSpec.cs</code></td></tr>
+        <tr><td>Achievement registry</td><td><code>IAchievementSpec</code> implementations</td><td><code>&lt;Game&gt;AchievementSpec.cs</code></td></tr>
+        <tr><td>Reskin registry</td><td><code>IReskinSpec</code> implementations</td><td><code>&lt;Game&gt;ReskinSpec.cs</code></td></tr>
+        <tr><td>Tutorial registry</td><td><code>ITutorialSpec</code> implementations</td><td><code>&lt;Game&gt;TutorialSpec.cs</code></td></tr>
+      </table>
+      <h3>Per-game folder layout</h3>
+      <pre><code>Assets/MiniGameTemplates/Runtime/Arcade5/&lt;Game&gt;/
+    &lt;Game&gt;Game.cs             // gameplay + procedural UI
+    &lt;Game&gt;Settings.cs         // ScriptableObject settings (+ static Default)
+    &lt;Game&gt;BoosterSpec.cs      // booster definitions
+    &lt;Game&gt;AchievementSpec.cs  // achievement definitions
+    &lt;Game&gt;ReskinSpec.cs       // reskinnable sprite slots
+    &lt;Game&gt;TutorialSpec.cs     // first-run walkthrough steps</code></pre>
+      <div class="info"><strong>Modular by design.</strong> Delete any single game's folder and the rest keep working. Add a new game by mirroring the layout &mdash; no edits to any other file required.</div>
+      <h3>Runtime flow</h3>
+      <p><code>Mount(host, ctx)</code> &rarr; <code>NewRound()</code> &rarr; player input loop &rarr; <code>RoundWon</code> / <code>RoundLost</code> event &rarr; <code>NewRound()</code> or <code>Unmount()</code></p>
+    </section>
+
+    <section id="g-arcade5_wall_dodge">
+      <h2>&#127918; Wall Dodge</h2>
+      <p class="lead">Switch lanes to slip through the gap in each scrolling wall.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Walls scroll down with a single gap. Tap LEFT / RIGHT to move your dot into the open lane.</li>
+        <li>Clip a wall and the run ends. Each wall you slip through is a point, and they only get faster.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Shield</strong></td><td><code>shield</code></td><td>Bank a charge that soaks up the next wall you clip.</td></tr>
+        <tr><td><strong>Slow Walls</strong></td><td><code>slow</code></td><td>Slow the scrolling walls right down for a few seconds.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Gap Finder</strong><br><span class="dim">Clear 25 walls in one run.</span></td><td>25</td><td>&mdash;</td></tr>
+        <tr><td><strong>Threadneedle</strong><br><span class="dim">Clear 60 walls in one run.</span></td><td>60</td><td>250 coins</td></tr>
+        <tr><td><strong>Wall Street</strong><br><span class="dim">Clear 500 walls in total.</span></td><td>500</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>player</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>WallDodgeDifficulty.Medium</code></td><td>Scroll speed and how fast new walls arrive.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_laser_maze">
+      <h2>&#127918; Laser Maze</h2>
+      <p class="lead">Slip your dot past blinking laser beams to reach the exit.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold a direction button to glide your dot, or tap to nudge it one step.</li>
+        <li>Beams blink red when lethal. Cross while they are dark and reach the green exit. Three hits ends the run.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Freeze Beams</strong></td><td><code>freeze</code></td><td>Switch every laser off for a few seconds.</td></tr>
+        <tr><td><strong>Phase</strong></td><td><code>phase</code></td><td>Pass through beams unharmed for a short window.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Beam Walker</strong><br><span class="dim">Reach the exit 5 times in one run.</span></td><td>5</td><td>&mdash;</td></tr>
+        <tr><td><strong>Untouchable</strong><br><span class="dim">Reach the exit 12 times in one run.</span></td><td>12</td><td>250 coins</td></tr>
+        <tr><td><strong>Maze Runner</strong><br><span class="dim">Reach the exit 100 times in total.</span></td><td>100</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>player</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>LaserMazeDifficulty.Medium</code></td><td>Beam count and how fast the lasers blink.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_asteroid_field">
+      <h2>&#127918; Asteroid Field</h2>
+      <p class="lead">Steer between drifting asteroids and collect the stars.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold the arrows to fly your ship, or tap to nudge. Grab the golden stars for points.</li>
+        <li>Grey asteroids drift across the field and it grows denser over time. One collision ends the run.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Shield</strong></td><td><code>shield</code></td><td>Shrug off asteroid hits for a few seconds.</td></tr>
+        <tr><td><strong>Star Magnet</strong></td><td><code>magnet</code></td><td>Pull nearby stars straight to your ship.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Stargazer</strong><br><span class="dim">Collect 10 stars in one run.</span></td><td>10</td><td>&mdash;</td></tr>
+        <tr><td><strong>Constellation</strong><br><span class="dim">Collect 25 stars in one run.</span></td><td>25</td><td>250 coins</td></tr>
+        <tr><td><strong>Cosmic Hoard</strong><br><span class="dim">Collect 300 stars in total.</span></td><td>300</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>ship</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>AsteroidFieldDifficulty.Medium</code></td><td>Starting rock count and how fast the asteroids drift.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_rocket_climb">
+      <h2>&#127918; Rocket Climb</h2>
+      <p class="lead">Hold THRUST to fly the rocket through the gap in each scrolling wall.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold THRUST to burn upward; release to drift down under gravity.</li>
+        <li>Line the rocket up with the gap in each scrolling wall. Clip a wall or hit the floor and the run ends.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Heat Shield</strong></td><td><code>shield</code></td><td>Bank a charge that absorbs the next wall or floor hit.</td></tr>
+        <tr><td><strong>Slow Walls</strong></td><td><code>slow</code></td><td>Slow the scrolling walls for a few seconds.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Liftoff</strong><br><span class="dim">Climb through 8 gaps in one run.</span></td><td>8</td><td>&mdash;</td></tr>
+        <tr><td><strong>Into Orbit</strong><br><span class="dim">Climb through 20 gaps in one run.</span></td><td>20</td><td>250 coins</td></tr>
+        <tr><td><strong>Escape Velocity</strong><br><span class="dim">Climb through 300 gaps in total.</span></td><td>300</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>rocket</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>RocketClimbDifficulty.Medium</code></td><td>Wall speed, gap size and spacing.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_gem_miner">
+      <h2>&#127918; Gem Miner</h2>
+      <p class="lead">Catch falling gems with your cart and dodge the rocks.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold LEFT / RIGHT to roll the cart, or tap to nudge it. Catch the teal gems for points.</li>
+        <li>Catch a grey rock and you lose a life. Three lives, and the drops rain down faster over time.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Wide Cart</strong></td><td><code>wide</code></td><td>Widen the cart so gems are easier to catch.</td></tr>
+        <tr><td><strong>Gem Magnet</strong></td><td><code>magnet</code></td><td>Draw falling gems toward the cart for a few seconds.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Prospector</strong><br><span class="dim">Catch 15 gems in one run.</span></td><td>15</td><td>&mdash;</td></tr>
+        <tr><td><strong>Motherlode</strong><br><span class="dim">Catch 40 gems in one run.</span></td><td>40</td><td>250 coins</td></tr>
+        <tr><td><strong>Deep Vein</strong><br><span class="dim">Catch 400 gems in total.</span></td><td>400</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>cart</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>GemMinerDifficulty.Medium</code></td><td>Fall speed and how often rocks fall instead of gems.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_reflex_runner">
+      <h2>&#127918; Reflex Runner</h2>
+      <p class="lead">Tap JUMP to hop your auto-runner over the incoming obstacles.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Your runner sprints on its own. Tap JUMP to hop over the red obstacles rushing in.</li>
+        <li>The jump follows an arc, so time it. Clip an obstacle and you lose a life; the track keeps speeding up.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Slow Track</strong></td><td><code>slow</code></td><td>Slow the incoming obstacles for a few seconds.</td></tr>
+        <tr><td><strong>Big Hops</strong></td><td><code>hops</code></td><td>Jump higher and longer for a short window.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Warmed Up</strong><br><span class="dim">Cover 300 metres in one run.</span></td><td>300</td><td>&mdash;</td></tr>
+        <tr><td><strong>Marathoner</strong><br><span class="dim">Cover 800 metres in one run.</span></td><td>800</td><td>250 coins</td></tr>
+        <tr><td><strong>Long Hauler</strong><br><span class="dim">Cover 8000 metres in total.</span></td><td>8000</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>runner</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>ReflexRunnerDifficulty.Medium</code></td><td>Run speed and how tightly the obstacles are spaced.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_star_turret">
+      <h2>&#127918; Star Turret</h2>
+      <p class="lead">Swivel the turret and fire on the descending invaders.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold LEFT / RIGHT to swivel the turret and tap FIRE to shoot along your aim.</li>
+        <li>Invaders drift down from the top. Blast them before they cross the red line — each one that lands costs a life.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Rapid Fire</strong></td><td><code>rapid</code></td><td>Fire bolts far faster for a few seconds.</td></tr>
+        <tr><td><strong>Freeze Wave</strong></td><td><code>freeze</code></td><td>Freeze the descending invaders in place briefly.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Gunner</strong><br><span class="dim">Destroy 15 invaders in one run.</span></td><td>15</td><td>&mdash;</td></tr>
+        <tr><td><strong>Ace</strong><br><span class="dim">Destroy 40 invaders in one run.</span></td><td>40</td><td>250 coins</td></tr>
+        <tr><td><strong>Star Defender</strong><br><span class="dim">Destroy 500 invaders in total.</span></td><td>500</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>turret</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>StarTurretDifficulty.Medium</code></td><td>Invader descent speed and turret fire rate.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_paddle_wall">
+      <h2>&#127918; Paddle Wall</h2>
+      <p class="lead">Bounce the ball off your paddle to break the wall of bricks.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold LEFT / RIGHT to slide the paddle and keep the ball from falling past it.</li>
+        <li>The ball breaks bricks up top for points. Miss it and you lose a life; clear the wall for a faster one.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Wide Paddle</strong></td><td><code>wide</code></td><td>Stretch the paddle wider for several seconds.</td></tr>
+        <tr><td><strong>Slow Ball</strong></td><td><code>slow</code></td><td>Slow the ball down so it is easier to track.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Wall Buster</strong><br><span class="dim">Break 30 bricks in one run.</span></td><td>30</td><td>&mdash;</td></tr>
+        <tr><td><strong>Demolition</strong><br><span class="dim">Break 80 bricks in one run.</span></td><td>80</td><td>250 coins</td></tr>
+        <tr><td><strong>Bricklayer</strong><br><span class="dim">Break 600 bricks in total.</span></td><td>600</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>paddle</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>PaddleWallDifficulty.Medium</code></td><td>Ball speed and how many brick rows the wall has.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_lane_switch">
+      <h2>&#127918; Lane Switch</h2>
+      <p class="lead">Hop lanes so you meet each coloured gate in its matching lane.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Each gate opens in only one coloured lane. Tap LEFT / RIGHT to hop into the matching lane in time.</li>
+        <li>Meet a gate in the wrong lane and you lose a life. Every gate you clear is a point, and the track speeds up.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Shield</strong></td><td><code>shield</code></td><td>Bank a charge that soaks up the next wrong-lane gate.</td></tr>
+        <tr><td><strong>Slow Track</strong></td><td><code>slow</code></td><td>Slow the gates so you have longer to line up the colour.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>Colour Coded</strong><br><span class="dim">Clear 20 gates in one run.</span></td><td>20</td><td>&mdash;</td></tr>
+        <tr><td><strong>Quick Change</strong><br><span class="dim">Clear 50 gates in one run.</span></td><td>50</td><td>250 coins</td></tr>
+        <tr><td><strong>Lane Master</strong><br><span class="dim">Clear 500 gates in total.</span></td><td>500</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>player</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>LaneSwitchDifficulty.Medium</code></td><td>Track speed and how tightly the gates arrive.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+    <section id="g-arcade5_meteor_shield">
+      <h2>&#127918; Meteor Shield</h2>
+      <p class="lead">Spin the orbiting shield to block meteors before they hit the base.</p>
+      <h3>How to play</h3>
+      <ol>
+        <li>Hold SPIN LEFT / RIGHT to orbit your shield around the base and meet each meteor head-on.</li>
+        <li>Meteors close in from every direction. Block them for points; any that reach the base cost a life.</li>
+      </ol>
+      <h3>Boosters</h3>
+      <table><tr><th>Booster</th><th>Key</th><th>Effect</th></tr>
+        <tr><td><strong>Wide Shield</strong></td><td><code>wide</code></td><td>Broaden the shield arc so it covers more of the orbit.</td></tr>
+        <tr><td><strong>Slow Storm</strong></td><td><code>slow</code></td><td>Slow the incoming meteors for a few seconds.</td></tr>
+      </table>
+      <h3>Achievements</h3>
+      <table><tr><th>Achievement</th><th>Goal</th><th>Reward</th></tr>
+        <tr><td><strong>First Watch</strong><br><span class="dim">Block 20 meteors in one run.</span></td><td>20</td><td>&mdash;</td></tr>
+        <tr><td><strong>Bulwark</strong><br><span class="dim">Block 50 meteors in one run.</span></td><td>50</td><td>250 coins</td></tr>
+        <tr><td><strong>Planetary Defence</strong><br><span class="dim">Block 600 meteors in total.</span></td><td>600</td><td>200 coins</td></tr>
+      </table>
+      <h3>Reskin slots</h3>
+      <p><code>shield</code> <code>background</code> &mdash; drop art per slot via <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>.</p>
+      <h3>Configurable settings</h3>
+      <table><tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+        <tr><td><code>Difficulty</code></td><td><code>MeteorShieldDifficulty.Medium</code></td><td>Meteor closing speed and how quickly the barrage builds.</td></tr>
+      </table>
+      <p class="backtop"><a href="#top">&uarr; Back to top</a></p>
+    </section>
+
+    <section id="boosters">
+      <h2>&#128165; Boosters</h2>
+      <p>Per-game power-ups with persistent counts and refund safety, auto-discovered from each game's <code>&lt;Game&gt;BoosterSpec.cs</code>. The demo dashboard renders them as the bottom booster bar.</p>
+      <h3>Activating a booster</h3>
+      <pre><code>bool OnBoosterActivated(string key) {
+    if (_ended || _busy) return false;   // returning false REFUNDS the charge
+    switch (key) { /* per-key effects */ }
+    return false;                        // unknown key -&gt; refund
+}</code></pre>
+      <div class="info"><strong>Refund safety:</strong> returning <code>false</code> from the handler refunds the booster &mdash; use it whenever the activation can't proceed. Returning <code>true</code> deducts the charge.</div>
+      <p>Award boosters programmatically with <code>BoosterManager.Add(gameId, key, count)</code>.</p>
+      <h3>Full booster catalogue</h3>
+      <table>
+        <tr><th>Game</th><th>Booster keys</th></tr>
+        <tr><td><strong>Wall Dodge</strong></td><td><code>shield</code> <code>slow</code></td></tr>
+        <tr><td><strong>Laser Maze</strong></td><td><code>freeze</code> <code>phase</code></td></tr>
+        <tr><td><strong>Asteroid Field</strong></td><td><code>shield</code> <code>magnet</code></td></tr>
+        <tr><td><strong>Rocket Climb</strong></td><td><code>shield</code> <code>slow</code></td></tr>
+        <tr><td><strong>Gem Miner</strong></td><td><code>wide</code> <code>magnet</code></td></tr>
+        <tr><td><strong>Reflex Runner</strong></td><td><code>slow</code> <code>hops</code></td></tr>
+        <tr><td><strong>Star Turret</strong></td><td><code>rapid</code> <code>freeze</code></td></tr>
+        <tr><td><strong>Paddle Wall</strong></td><td><code>wide</code> <code>slow</code></td></tr>
+        <tr><td><strong>Lane Switch</strong></td><td><code>shield</code> <code>slow</code></td></tr>
+        <tr><td><strong>Meteor Shield</strong></td><td><code>wide</code> <code>slow</code></td></tr>
+
+      </table>
+    </section>
+
+    <section id="achievements">
+      <h2>&#127942; Achievements</h2>
+      <p>Progression goals per game, defined in <code>&lt;Game&gt;AchievementSpec.cs</code> and tracked persistently by <code>AchievementManager</code>. Unlocks pop a toast card over the game and auto-credit any coin reward. Each game's own goals are listed in its section above.</p>
+      <p>Reset helpers for testing: <code>AchievementManager.ResetForGame(gameId)</code> and <code>AchievementManager.ResetAll()</code> (also exposed in the demo's cheat rail).</p>
+    </section>
+
+    <section id="reskins">
+      <h2>&#127912; Reskins</h2>
+      <p>Drop in your own art per slot, per game &mdash; no code required. Open <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em>, pick a game, and assign an image per slot. Art is copied to <code>Resources/Reskin/&lt;gameId&gt;/&lt;slot&gt;.png</code> and imported as a Sprite automatically. In-game, the Skin pill toggles between Default and Custom art.</p>
+      <h3>Per-game slot list</h3>
+      <table>
+        <tr><th>Game</th><th>Slots</th></tr>
+        <tr><td><strong>Wall Dodge</strong></td><td><code>player</code> <code>background</code></td></tr>
+        <tr><td><strong>Laser Maze</strong></td><td><code>player</code> <code>background</code></td></tr>
+        <tr><td><strong>Asteroid Field</strong></td><td><code>ship</code> <code>background</code></td></tr>
+        <tr><td><strong>Rocket Climb</strong></td><td><code>rocket</code> <code>background</code></td></tr>
+        <tr><td><strong>Gem Miner</strong></td><td><code>cart</code> <code>background</code></td></tr>
+        <tr><td><strong>Reflex Runner</strong></td><td><code>runner</code> <code>background</code></td></tr>
+        <tr><td><strong>Star Turret</strong></td><td><code>turret</code> <code>background</code></td></tr>
+        <tr><td><strong>Paddle Wall</strong></td><td><code>paddle</code> <code>background</code></td></tr>
+        <tr><td><strong>Lane Switch</strong></td><td><code>player</code> <code>background</code></td></tr>
+        <tr><td><strong>Meteor Shield</strong></td><td><code>shield</code> <code>background</code></td></tr>
+
+      </table>
+      <div class="warn"><strong>Sprite-only.</strong> The reskin system swaps sprites &mdash; layouts, colours and animations stay the same. Until custom art is added the games use clean procedural sprites and the pill shows <code>Skin: &mdash;</code>.</div>
+    </section>
+
+    <section id="tutorials">
+      <h2>&#127919; Tutorials</h2>
+      <p>First-run overlay walkthroughs, defined declaratively in <code>&lt;Game&gt;TutorialSpec.cs</code> as an ordered list of captioned spotlight steps. Each shows once per game's first session and can be replayed from the demo's cheat rail. Reset with <code>TutorialManager.Reset(gameId)</code>.</p>
+    </section>
+
+    <section id="levels">
+      <h2>&#128200; Level scaling</h2>
+      <p>Per-game difficulty progression &mdash; auto-generated out of the box, fully editable in the Studio.</p>
+      <pre><code>int level = LevelManager.GetCurrent(gameId);          // player's current level
+var diff  = LevelManager.GetDifficultyForCurrent(gameId);
+float mult = diff.Get("difficulty", 1f);              // ramp targets / timers / AI</code></pre>
+      <p>The Studio's Levels editor can regenerate a curve (level count, start/end difficulty) or hand-edit individual levels; edits are saved as a <code>LevelSet</code> asset under <code>Resources/Config/Levels/&lt;gameId&gt;.asset</code>. Reset progress with <code>LevelManager.ResetProgress(gameId)</code>.</p>
+    </section>
+
+    <section id="theme">
+      <h2>&#127769; Light &amp; dark mode</h2>
+      <p>One toggle re-themes the whole scene &mdash; chrome and every game. Games read every colour from <code>ctx.Theme</code>, a <code>MiniGameTheme</code> asset that carries both palettes:</p>
+      <pre><code>theme.ApplyMode(light: true);   // swap palettes
+bool isLight = theme.IsLightMode;</code></pre>
+      <p>The demo dashboard's header has a DARK / LIGHT pill; the choice persists between sessions (default: dark). Both palettes are contrast-checked &mdash; panel/text/accent pairings stay readable in either mode.</p>
+      <div class="info"><strong>Tip:</strong> when customizing, read colours from <code>ctx.Theme</code> (<code>Accent</code>, <code>TextPrimary</code>, <code>PanelBackground</code>, &hellip;) rather than hardcoding, and your changes work in both modes.</div>
+    </section>
+
+    <section id="liveops">
+      <h2>&#127873; LiveOps Kit (bundled)</h2>
+      <p>The <strong>full HyperCasual LiveOps Kit</strong> is included in this pack &mdash; no stripping, nothing to buy on top. It provides the production meta-game layer around the games:</p>
+      <div class="grid">
+        <div class="card"><strong>Ads</strong><span>Rewarded, interstitial and banner service with mediation backends (AdMob, LevelPlay, AppLovin, Unity Ads). Runs a safe mock backend until a real SDK is installed.</span></div>
+        <div class="card"><strong>IAP</strong><span>Unity Purchasing integration with catalog, dummy store for testing, and purchase-reward hooks.</span></div>
+        <div class="card"><strong>Haptics</strong><span>Cross-platform vibration service &mdash; already wired to every game's audio events in this demo.</span></div>
+        <div class="card"><strong>Rate Us</strong><span>Native store-review prompts (Android in-app review / iOS SKStoreReviewController) with dummy editor backend.</span></div>
+        <div class="card"><strong>Notifications</strong><span>Local notification scheduling with permission flow (mobile packages activate it).</span></div>
+        <div class="card"><strong>Consent &amp; privacy</strong><span>Google UMP / Apple ATT consent flow with editor-safe dummy backend.</span></div>
+        <div class="card"><strong>Analytics &amp; crash</strong><span>Pluggable analytics (Unity Analytics / Firebase) and crash-reporter hooks.</span></div>
+        <div class="card"><strong>Retention systems</strong><span>Daily rewards, quests, battle pass, energy, offers, shop, unlocks, deep links, sharing, update prompt.</span></div>
+      </div>
+      <h3>How it is hooked up in this demo</h3>
+      <ul>
+        <li><strong>Vibrations:</strong> every game's sound events (taps, wins, errors) fire matching haptics through the kit automatically.</li>
+        <li><strong>Rewarded ad:</strong> winning a round with a coin reward offers a &ldquo;Watch Ad&rdquo; doubler; completing the (mock) ad credits the bonus.</li>
+        <li><strong>Interstitial:</strong> auto-shows after every 3rd round (skipped after a No-Ads purchase).</li>
+        <li><strong>Banner + shop:</strong> the cheat rail's <em>Ads &amp; IAP</em> section toggles the banner and opens the simulated IAP shop (Coin Pack, No Ads, Starter Bundle) through the kit's store backend.</li>
+      </ul>
+      <h3>Setup &amp; going live</h3>
+      <ol>
+        <li>Everything works out of the box in the editor with <strong>mock/dummy backends</strong> &mdash; no SDKs required, nothing to configure for the demo.</li>
+        <li>Open <em>Tools &gt; HLK &gt; Open Toolset</em> (or <em>Tools &gt; HLK &gt; Guided Setup</em>) to configure ad units, IAP products, notifications, rate-us and the rest.</li>
+        <li>To go live, install the SDKs you want (e.g. AdMob, Unity Ads, Firebase) &mdash; the kit detects them automatically via scripting defines (<code>HLK_ADMOB</code>, <code>HLK_UNITY_ADS</code>, <code>HLK_FIREBASE</code>, &hellip;) and switches from mock to real backends.</li>
+      </ol>
+      <div class="info"><strong>No SDK binaries ship in this package.</strong> The kit is pure source with optional integrations &mdash; it compiles clean in an empty project and lights up real providers only when you add them.</div>
+      <p>Full kit documentation: <code>Assets/MiniGameTemplates/HyperCasualLiveOpsKit/Documentation/HLK-Documentation.html</code> (also listed under <em>Tools &gt; Mini Game Templates &gt; Welcome &gt; Open Documentation</em>).</p>
+    </section>
+
+    <section id="integrate">
+      <h2>&#10133; Add to your project</h2>
+      <h3>Path A &mdash; use the bundled demo dashboard</h3>
+      <p>Add <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Arcade5.unity</code> to your build settings. It auto-discovers every imported game and provides the picker, HUD, boosters, achievements and theming out of the box.</p>
+      <h3>Path B &mdash; embed a single game in your own UI</h3>
+      <pre><code>IMiniGame game = new WallDodgeGame();
+game.Mount(hostRect, context);   // your IMiniGameContext implementation
+// ...
+game.Unmount();                  // ALWAYS unmount before destroying the host</code></pre>
+      <h3>Listening to events</h3>
+      <pre><code>ctx.Events.Subscribe(GameEvents.RoundWon,     payload =&gt; { /* celebrate */ });
+ctx.Events.Subscribe(GameEvents.RoundLost,    payload =&gt; { /* retry UI  */ });
+ctx.Events.Subscribe(GameEvents.ScoreChanged, payload =&gt; { /* HUD       */ });</code></pre>
+      <div class="warn"><strong>Always <code>Unmount()</code>.</strong> Games run coroutines and tweens; failing to unmount before destroying the host leaves them running on destroyed transforms.</div>
+    </section>
+
+    <section id="customize">
+      <h2>&#9881; Customizing</h2>
+      <h3>Override default settings</h3>
+      <p>Each game reads a ScriptableObject settings asset (see each game's <em>Configurable settings</em> table above). Create one via <em>Create &gt; Mini Game Templates &gt; Arcade 5.0</em>, drop it in <code>Resources/Config/</code>, or mutate <code>&lt;Game&gt;Settings.Default</code> at runtime before mounting.</p>
+      <h3>Boosters: add / remove / rebalance</h3>
+      <ul>
+        <li><strong>Remove:</strong> delete the <code>BoosterDef</code> from the game's spec.</li>
+        <li><strong>Add:</strong> append a <code>BoosterDef</code> <em>and</em> handle its key in the game's booster handler.</li>
+        <li><strong>Grant:</strong> <code>BoosterManager.Add(gameId, key, count)</code>.</li>
+      </ul>
+      <h3>Audio</h3>
+      <p>Games call <code>ctx.Audio.Play(SfxKind.&hellip;)</code>. The bundled <code>ProceduralAudioBus</code> synthesizes all SFX at runtime &mdash; no audio files to manage; swap in your own <code>IAudioBus</code> to use recorded audio.</p>
+    </section>
+
+    <section id="newgames">
+      <h2>&#129520; Adding new games</h2>
+      <ol>
+        <li>Create <code>Assets/MiniGameTemplates/Runtime/Arcade5/MyGame/</code>.</li>
+        <li>Add <code>MyGameGame.cs</code> implementing <code>IMiniGame</code>, decorated with <code>[MiniGame("&hellip;", "My Game", Category = MiniGameCategory.Arcade5)]</code>.</li>
+        <li>Add <code>MyGameSettings</code> (optional) with a static <code>Default</code> getter.</li>
+        <li>Add the spec files &mdash; <code>MyGameBoosterSpec</code>, <code>MyGameAchievementSpec</code>, <code>MyGameReskinSpec</code>, <code>MyGameTutorialSpec</code> &mdash; all auto-discovered.</li>
+        <li>Done: the dashboard and Studio list your game automatically. No edits to existing files.</li>
+      </ol>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>&#128161; Troubleshooting</h2>
+      <h3>Text is invisible / fonts look broken</h3>
+      <p>Import TMP Essentials: <em>Window &gt; TextMeshPro &gt; Import TMP Essential Resources</em>. The demo UI uses TextMeshPro's default font.</p>
+      <h3>My game doesn't show up in the dashboard</h3>
+      <p>Check it implements <code>IMiniGame</code>, carries the <code>[MiniGame]</code> attribute, and its assembly references <code>MiniGameTemplates.Core</code>.</p>
+      <h3>A booster button does nothing when pressed</h3>
+      <p>The booster's <code>key</code> must exactly match a <code>case</code> in the game's booster handler &mdash; unknown keys refund silently by design.</p>
+      <h3>Tutorials replay every time I press Play in the editor</h3>
+      <p>The "seen" flag is stored per game id in PlayerPrefs; clearing PlayerPrefs resets it. Replay on demand from the cheat rail instead.</p>
+      <h3>Reskin sprites don't apply</h3>
+      <p>Import the art through <em>Tools &gt; Mini Game Templates &gt; Reskin Editor</em> (it handles the copy + import settings), then flip the in-game Skin pill to Custom.</p>
+      <h3>Coroutine errors about destroyed RectTransforms when switching games</h3>
+      <p>Call <code>Unmount()</code> before destroying the host. The unmount path stops the game's coroutines and tweens.</p>
+      <h3>Ads say &ldquo;SIMULATED&rdquo; / no real ads show</h3>
+      <p>By design: without an ad SDK installed the kit uses its mock backend, which draws clearly-labelled placeholder ads so every flow is testable. Install a real provider (e.g. AdMob via its package) and the kit switches to it automatically &mdash; see the <a href="#liveops">LiveOps Kit</a> section.</p>
+      <h3>Where do I report a bug?</h3>
+      <p>Email <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> with your Unity version, target platform, the game id (e.g. <code>arcade5_wall_dodge</code>), steps to reproduce, and the console log.</p>
+    </section>
+
+    <section id="support">
+      <h2>&#128236; Support &amp; review</h2>
+      <p><strong>Get in touch:</strong> <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a> &mdash; bug reports, feature requests, integration help and game requests for future updates are all welcome. Typical response time is 24&ndash;48 hours.</p>
+      <p><strong>Before contacting</strong>, it helps to: check Troubleshooting above, open the demo scene to verify the game runs there, and copy any Console errors. Include your Unity version, render pipeline, target platform and the game id.</p>
+      <div class="info"><strong>Enjoying the pack?</strong> Reviews on the Asset Store are the biggest help to an indie publisher &mdash; if this pack saved you time, a star rating is hugely appreciated. &#11088;</div>
+    </section>
+
+    <footer>
+      Mini Game Templates &middot; Arcade 5.0 Pack &middot; Built for Unity 6000.0.62f1+ &middot;
+      Support: <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>
+    </footer>
+  </main>
+</body>
+</html>
