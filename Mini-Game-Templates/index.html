@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Game Templates - Documentation</title>
+<style>
+:root {
+  --bg: #0e0f14;
+  --panel: #161821;
+  --panel-2: #1d202b;
+  --ink: #eef1f8;
+  --muted: #9aa3b8;
+  --line: #2a2f3e;
+  --accent: #7c5cff;
+  --accent-2: #20c7b4;
+  --accent-3: #ffb84d;
+  --danger: #ff657a;
+  --code: #10131a;
+  --shadow: 0 18px 48px rgba(0,0,0,.28);
+  --radius: 12px;
+  --sidebar: 284px;
+  --header: 64px;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header) + 18px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.65;
+  font-size: 15px;
+}
+a { color: #9d8cff; text-decoration: none; }
+a:hover { color: #c1b7ff; }
+code, pre { font-family: "Cascadia Code", "JetBrains Mono", Consolas, monospace; }
+code {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 6px;
+  padding: 1px 6px;
+  color: #e8defe;
+}
+pre {
+  overflow-x: auto;
+  background: var(--code);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: #d7def0;
+}
+.kw { color: #b69cff; }
+.str { color: #8fe7d6; }
+.cm { color: #7d8799; }
+.fn { color: #ffd17a; }
+.tp { color: #8cc8ff; }
+.num { color: #ff9fb0; }
+.topbar {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  background: rgba(14,15,20,.88);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: white;
+}
+.search {
+  flex: 1;
+  max-width: 430px;
+  margin-left: auto;
+}
+.search input {
+  width: 100%;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  outline: 0;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: #d9def0;
+  background: rgba(255,255,255,.05);
+  font-size: 12px;
+}
+.menu {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.sidebar {
+  position: fixed;
+  z-index: 18;
+  top: var(--header);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar);
+  padding: 20px 0;
+  overflow: auto;
+  background: #11131a;
+  border-right: 1px solid var(--line);
+}
+.nav-title {
+  padding: 12px 24px 5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .1em;
+  font-weight: 800;
+}
+.sidebar a {
+  display: block;
+  padding: 8px 24px;
+  border-left: 2px solid transparent;
+  color: var(--muted);
+  font-size: 14px;
+}
+.sidebar a.active,
+.sidebar a:hover {
+  color: var(--ink);
+  background: rgba(124,92,255,.12);
+  border-left-color: var(--accent);
+}
+main {
+  margin-left: var(--sidebar);
+  padding: calc(var(--header) + 28px) 36px 52px;
+  max-width: 1240px;
+}
+.hero {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 38px;
+  background:
+    linear-gradient(135deg, rgba(124,92,255,.34), rgba(32,199,180,.16)),
+    linear-gradient(180deg, #181b25, #10121a);
+  box-shadow: var(--shadow);
+}
+h1 {
+  margin: 0 0 10px;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.04;
+  letter-spacing: 0;
+}
+h2 {
+  margin: 42px 0 12px;
+  font-size: 28px;
+  letter-spacing: 0;
+}
+h3 {
+  margin: 24px 0 8px;
+  font-size: 18px;
+}
+p { margin: 0 0 14px; }
+.lead {
+  max-width: 900px;
+  color: #d9dff1;
+  font-size: 18px;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.card,
+.callout,
+details {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.card h3,
+.callout h3 { margin-top: 0; }
+.muted { color: var(--muted); }
+.callout {
+  border-color: rgba(32,199,180,.35);
+  background: linear-gradient(180deg, rgba(32,199,180,.10), rgba(255,255,255,.03));
+}
+.warn {
+  border-color: rgba(255,184,77,.42);
+  background: linear-gradient(180deg, rgba(255,184,77,.12), rgba(255,255,255,.03));
+}
+.steps {
+  counter-reset: step;
+  display: grid;
+  gap: 12px;
+}
+.step {
+  position: relative;
+  padding: 16px 16px 16px 56px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.step:before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  font-weight: 800;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+th, td {
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 12px;
+  vertical-align: top;
+}
+th { color: white; background: var(--panel-2); }
+tr:last-child td { border-bottom: 0; }
+details { margin: 10px 0; }
+summary { cursor: pointer; font-weight: 700; }
+.support-card {
+  text-align: center;
+  max-width: 760px;
+  margin: 20px auto;
+  background: linear-gradient(145deg, rgba(124,92,255,.22), rgba(32,199,180,.10));
+}
+.mail-button {
+  display: inline-flex;
+  margin: 10px 0 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  font-weight: 800;
+}
+.footer {
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  text-align: center;
+}
+@media (max-width: 920px) {
+  .menu { display: inline-flex; }
+  .search { display: none; }
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform .2s ease;
+  }
+  .sidebar.open { transform: translateX(0); }
+  main {
+    margin-left: 0;
+    padding: calc(var(--header) + 20px) 18px 40px;
+  }
+  .grid,
+  .grid.two { grid-template-columns: 1fr; }
+  .hero { padding: 26px; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="menu" id="menuButton" aria-label="Toggle navigation">Menu</button>
+  <div class="brand"><span class="brand-mark">MG</span><span>Mini Game Templates</span></div>
+  <div class="search"><input id="search" type="search" placeholder="Search docs (Ctrl-K)"></div>
+  <span class="badge">Unity 6000.0+</span>
+</header>
+
+<nav class="sidebar" id="sidebar">
+  <div class="nav-title">Start</div>
+  <a href="#overview">Overview</a>
+  <a href="#requirements">Requirements</a>
+  <a href="#installation">Installation</a>
+  <a href="#quick-start">Quick Start</a>
+  <div class="nav-title">Workflows</div>
+  <a href="#editor-tools">Editor Tools / No-Code</a>
+  <a href="#showcase">Demo Showcase</a>
+  <a href="#runtime-api">Scripting API</a>
+  <a href="#liveops">HyperCasual LiveOps Kit</a>
+  <div class="nav-title">Reference</div>
+  <a href="#layout">Folder Layout</a>
+  <a href="#validation">Validation</a>
+  <a href="#troubleshooting">Troubleshooting</a>
+  <a href="#faq">FAQ</a>
+  <a href="#support">Support</a>
+  <a href="#notices">Third-Party Notices</a>
+</nav>
+
+<main>
+  <section class="hero" id="overview">
+    <h1>Mini Game Templates</h1>
+    <p class="lead">A modular Unity asset for building mini-game collections. The package includes reusable runtime services, category packs, a no-code Studio window, a showcase scene, and the bundled HyperCasual LiveOps Kit backend for ads, IAP, haptics, and mobile game services.</p>
+    <div class="tags">
+      <span class="badge">No-code Studio</span>
+      <span class="badge">Code-first API</span>
+      <span class="badge">Bundled LiveOps backend</span>
+      <span class="badge">Separate category assemblies</span>
+      <span class="badge">Self-contained HTML docs</span>
+    </div>
+  </section>
+
+  <section id="requirements">
+    <h2>Requirements</h2>
+    <div class="grid">
+      <div class="card"><h3>Unity</h3><p>Verified in this project with Unity <code>6000.0.62f1</code>. The package metadata for the bundled LiveOps kit targets <code>6000.0</code>.</p></div>
+      <div class="card"><h3>Packages</h3><p>Core UI uses Unity UI and TextMeshPro. Optional integrations such as Unity IAP, Google Mobile Ads, Firebase, Mobile Notifications, and analytics are installed only when your project needs them.</p></div>
+      <div class="card"><h3>Platforms</h3><p>The templates are authored for Unity mobile and desktop editor workflows. Native mobile features remain behind explicit settings and scripting defines.</p></div>
+    </div>
+  </section>
+
+  <section id="installation">
+    <h2>Installation</h2>
+    <div class="steps">
+      <div class="step"><strong>Import the asset folder.</strong><br>The shipped root is <code>Assets/MiniGameTemplates</code>. Do not import ProjectSettings as part of the asset package.</div>
+      <div class="step"><strong>Open the Studio.</strong><br>Use <code>Tools &gt; Mini Game Templates &gt; Studio</code>. The first import also opens a welcome window once, unless it is dismissed.</div>
+      <div class="step"><strong>Open the showcase scene.</strong><br>Use the Studio or Welcome button to open <code>Assets/MiniGameTemplates/Demo/MiniGameTemplates_Dashboard.unity</code>.</div>
+      <div class="step"><strong>Press Play.</strong><br>Select a category and game from the dashboard. The demo wires shared theme, wallet, ads, IAP, and haptics services through the bundled backend.</div>
+    </div>
+  </section>
+
+  <section id="quick-start">
+    <h2>Quick Start</h2>
+    <div class="callout">
+      <h3>Buyer click-through path</h3>
+      <p>Open <code>Tools &gt; Mini Game Templates &gt; Studio</code>, edit the Theme or Word List tab, open the showcase scene, press Play, and pick a game. No scripting is required for the demo workflow.</p>
+    </div>
+    <pre><code><span class="cm">// Optional code-first launch path</span>
+<span class="kw">using</span> MiniGameTemplates.Core;
+
+<span class="tp">MiniGameDescriptor</span> descriptor = MiniGameRegistry.Find(<span class="str">"casual_match3"</span>);
+<span class="tp">IMiniGame</span> game = descriptor.Create();
+game.Mount(context);</code></pre>
+  </section>
+
+  <section id="editor-tools">
+    <h2>Editor Tools / No-Code</h2>
+    <p>The primary no-code surface is the Studio window. It is additive to the runtime API: code-driven users can still construct games directly, while non-coders can configure common settings through serialized assets and editor buttons.</p>
+    <div class="grid two">
+      <div class="card">
+        <h3>Studio Window</h3>
+        <p>Menu: <code>Tools &gt; Mini Game Templates &gt; Studio</code></p>
+        <p>Tabs include Overview, Theme, Word List, per-category game tabs, Achievements, and About. Category tabs are discovered from installed category providers, so removing a category folder also removes its tab.</p>
+      </div>
+      <div class="card">
+        <h3>Welcome Window</h3>
+        <p>Menu: <code>Tools &gt; Mini Game Templates &gt; Welcome</code></p>
+        <p>Shows once on first import, is guarded in batch mode, and provides buttons for Documentation, Showcase Scene, and Studio.</p>
+      </div>
+      <div class="card">
+        <h3>LiveOps Toolset</h3>
+        <p>Menu: <code>Tools &gt; HLK &gt; Open Toolset</code></p>
+        <p>Use this for ads, IAP, haptics, notifications, game services, remote config, consent, and other backend setup. The documentation button resolves back to this file.</p>
+      </div>
+      <div class="card">
+        <h3>Saved Config Assets</h3>
+        <p>Common config is stored under <code>Assets/MiniGameTemplates/Resources/Config</code> so runtime demos and builds can load the same assets edited in the Studio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="showcase">
+    <h2>Demo Showcase</h2>
+    <p>The dashboard scene demonstrates the complete flow: category discovery, game mounting, shared HUD, rewards, wallet updates, ads placements, IAP product requests, and haptic feedback.</p>
+    <table>
+      <tr><th>Area</th><th>What it demonstrates</th></tr>
+      <tr><td>Category rail</td><td>Installed game packs are grouped by category and rendered from registry metadata.</td></tr>
+      <tr><td>Game host</td><td>Each selected game mounts into the shared runtime context and uses common services.</td></tr>
+      <tr><td>Rewards</td><td>Coin rewards and score events flow through the demo wallet and event bus.</td></tr>
+      <tr><td>LiveOps bridge</td><td>Rewarded/interstitial/banner ad calls, IAP product IDs, and haptics are routed to HyperCasual LiveOps Kit services.</td></tr>
+    </table>
+  </section>
+
+  <section id="runtime-api">
+    <h2>Scripting API</h2>
+    <p>The runtime API is centered around descriptors, contexts, and services. The registry discovers games declared with Mini Game Templates metadata and exposes a stable creation path.</p>
+    <pre><code><span class="kw">public interface</span> <span class="tp">IMiniGame</span>
+{
+    <span class="kw">void</span> Mount(<span class="tp">IMiniGameContext</span> context);
+    <span class="kw">void</span> Unmount();
+}
+
+<span class="kw">public interface</span> <span class="tp">IMiniGameContext</span>
+{
+    <span class="tp">RectTransform</span> Host { <span class="kw">get</span>; }
+    <span class="tp">MiniGameTheme</span> Theme { <span class="kw">get</span>; }
+    <span class="tp">IWallet</span> Wallet { <span class="kw">get</span>; }
+    <span class="tp">IAudioBus</span> Audio { <span class="kw">get</span>; }
+}</code></pre>
+    <div class="grid two">
+      <div class="card"><h3>Code-first users</h3><p>Use <code>MiniGameRegistry</code>, <code>IMiniGame</code>, and <code>IMiniGameContext</code> directly when building custom launchers or embedding one template inside another game.</p></div>
+      <div class="card"><h3>No-code users</h3><p>Use the Studio to edit theme and level assets, then run the demo dashboard or copy the demo wiring into your own scene.</p></div>
+    </div>
+  </section>
+
+  <section id="liveops">
+    <h2>HyperCasual LiveOps Kit</h2>
+    <p>The backend is bundled at <code>Assets/MiniGameTemplates/HyperCasualLiveOpsKit</code>. It provides in-engine fallbacks by default and enables vendor SDK backends only when their packages and scripting defines are present.</p>
+    <table>
+      <tr><th>Module</th><th>Default behavior</th><th>Native/vendor path</th></tr>
+      <tr><td>Ads</td><td>Safe no-op or simulated flow for editor demos.</td><td>Google Mobile Ads and mediation backends through explicit defines.</td></tr>
+      <tr><td>IAP</td><td>Local/dummy purchase flow for editor testing.</td><td>Unity IAP 5 StoreController backend when Unity Purchasing is installed and enabled.</td></tr>
+      <tr><td>Haptics</td><td>Editor-safe fallback.</td><td>Android/iOS native haptics where available.</td></tr>
+      <tr><td>Services</td><td>Local settings, local save, simulated remote/live features.</td><td>Firebase, Unity Gaming Services, platform services, and other SDKs per module.</td></tr>
+    </table>
+    <details>
+      <summary>Product IDs used in the showcase</summary>
+      <p>The demo requests sample products such as <code>mgt.coins.1000</code>, <code>mgt.noads.lifetime</code>, and <code>mgt.starter.bundle</code>. Replace them with your store IDs before shipping a game.</p>
+    </details>
+  </section>
+
+  <section id="layout">
+    <h2>Folder Layout</h2>
+    <pre><code>Assets/MiniGameTemplates/
+  Core/                         Shared runtime contracts and services
+  Demo/                         Showcase scene and demo dashboard
+  Documentation/Documentation.html
+  Editor/                       Studio, welcome window, CI helpers
+  HyperCasualLiveOpsKit/         Bundled backend
+  Resources/Config/              Runtime-loadable config assets
+  Runtime/&lt;Category&gt;/            Category game packs and per-category editor providers</code></pre>
+    <p>The shipped documentation policy is intentionally simple: <code>Documentation.html</code> is the only customer-facing document in the asset root.</p>
+  </section>
+
+  <section id="validation">
+    <h2>Validation</h2>
+    <div class="grid">
+      <div class="card"><h3>Compile</h3><p>Headless Unity compile passed on July 9, 2026 with zero errors and zero warnings after the rename and backend switch.</p></div>
+      <div class="card"><h3>Compliance sweeps</h3><p>Run static scans for old branding, stray documentation, test leaks, ProjectSettings export contamination, embedded Unity packages, and legacy render/input hazards before packaging.</p></div>
+      <div class="card"><h3>Human editor pass</h3><p>Before submission, open Unity interactively and verify the Welcome window, Studio tabs, documentation button, showcase scene, and LiveOps toolset render correctly.</p></div>
+    </div>
+    <pre><code><span class="cm"># Project-local headless compile helper</span>
+powershell -NoProfile -ExecutionPolicy Bypass -File AgentTools/compile.ps1</code></pre>
+  </section>
+
+  <section id="troubleshooting">
+    <h2>Troubleshooting</h2>
+    <details open>
+      <summary>The documentation button says the file is missing.</summary>
+      <p>Confirm that <code>Assets/MiniGameTemplates/Documentation/Documentation.html</code> exists. If you moved the asset root, keep the same internal folder structure or update the editor helper paths.</p>
+    </details>
+    <details>
+      <summary>Ads or IAP do not call a native SDK.</summary>
+      <p>Install the required vendor package, then enable the matching HLK scripting define in the LiveOps toolset. Until then, the package intentionally uses editor-safe fallback backends.</p>
+    </details>
+    <details>
+      <summary>The dashboard shows no category tabs.</summary>
+      <p>Check that at least one category provider assembly is present under <code>Runtime/&lt;Category&gt;/Editor</code> and that Unity compiled without errors.</p>
+    </details>
+    <details>
+      <summary>A word game has too few words.</summary>
+      <p>Open the Studio Word List tab, assign a text asset or paste words inline, then click Rebuild Index.</p>
+    </details>
+  </section>
+
+  <section id="faq">
+    <h2>FAQ</h2>
+    <details>
+      <summary>Can I remove categories I do not need?</summary>
+      <p>Yes. Category packs live in their own assemblies. The main Studio discovers installed providers and hides missing category tabs.</p>
+    </details>
+    <details>
+      <summary>Does the asset change my ProjectSettings?</summary>
+      <p>The asset should be exported without ProjectSettings. Some runtime settings such as frame rate and sleep timeout can be applied by LiveOps settings in play mode or builds when you configure them.</p>
+    </details>
+    <details>
+      <summary>Does the package send network traffic by default?</summary>
+      <p>No network-capable LiveOps features are configured by default. Vendor SDKs and remote endpoints become active only after you install and configure them.</p>
+    </details>
+  </section>
+
+  <section id="support">
+    <h2>Support</h2>
+    <div class="support-card card">
+      <h3>Get in Touch</h3>
+      <p>For setup questions, import issues, or reproducible bugs, email support with the details listed below.</p>
+      <a class="mail-button" href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>
+      <p class="muted">We typically respond within 24-48 hours.</p>
+    </div>
+    <div class="grid two">
+      <div class="card">
+        <h3>Before contacting</h3>
+        <p>Run a clean compile, check the Console, and confirm whether the issue happens in the showcase scene, your own scene, or both.</p>
+      </div>
+      <div class="card">
+        <h3>Helpful info to include</h3>
+        <p>Unity version, platform, render pipeline, package version, game id, exact steps, Console errors, and whether optional SDKs are installed.</p>
+      </div>
+    </div>
+    <div class="callout warn">
+      <h3>Review note</h3>
+      <p>If you are preparing for Asset Store submission, export only <code>Assets/MiniGameTemplates</code>, inspect the package for ProjectSettings entries, and import it into a clean project before uploading.</p>
+    </div>
+  </section>
+
+  <section id="notices">
+    <h2>Third-Party Notices</h2>
+    <p>The package is source-based and does not embed Unity-owned package source. Optional vendor SDKs are installed by you through Unity Package Manager or vendor installers.</p>
+    <div class="card">
+      <h3>Robert Penner easing equations</h3>
+      <p>The standard easing curve constants and curve shapes used by <code>HyperCasualLiveOpsKit/Runtime/Core/Easing.cs</code> trace back to Robert Penner's easing equations.</p>
+      <p>Terms: open source under the BSD License. Copyright (c) 2001 Robert Penner. Redistributions of source code must retain the copyright notice, conditions, and disclaimer. Redistributions in binary form must reproduce the same notice, conditions, and disclaimer in documentation and/or other materials provided with the distribution. Neither the author name nor contributor names may be used to endorse or promote derived products without prior written permission.</p>
+      <p class="muted">The material is provided as-is, without express or implied warranties, including merchantability or fitness for a particular purpose. The copyright owner and contributors are not liable for direct, indirect, incidental, special, exemplary, or consequential damages arising from use.</p>
+    </div>
+  </section>
+
+  <div class="footer">
+    <p>Mini Game Templates Documentation</p>
+    <p>Support: satisvizion@gmail.com</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  const sidebar = document.getElementById('sidebar');
+  const menuButton = document.getElementById('menuButton');
+  const search = document.getElementById('search');
+  const links = Array.from(document.querySelectorAll('.sidebar a'));
+  const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+  menuButton.addEventListener('click', () => sidebar.classList.toggle('open'));
+  document.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      search && search.focus();
+    }
+  });
+
+  if (search) {
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      links.forEach(link => {
+        const target = document.querySelector(link.getAttribute('href'));
+        const text = ((target && target.innerText) || link.innerText).toLowerCase();
+        link.style.display = !q || text.indexOf(q) >= 0 ? '' : 'none';
+      });
+    });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+    });
+  }, { rootMargin: '-35% 0px -58% 0px', threshold: 0.01 });
+
+  sections.forEach(section => observer.observe(section));
+})();
+</script>
+</body>
+</html>
