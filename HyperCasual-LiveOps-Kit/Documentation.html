@@ -1,0 +1,2685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HyperCasual LiveOps Kit — Developer Documentation</title>
+<style>
+:root {
+  --sheet: #f4f6f7;
+  --card: #ffffff;
+  --ink: #22303c;
+  --ink-soft: #5b6b7a;
+  --ink-faint: #8b98a5;
+  --rule: #dde3e8;
+  --leaf: #0e8f63;
+  --leaf-deep: #0a6b4a;
+  --leaf-wash: #e3f4ec;
+  --sun: #d97e06;
+  --sun-wash: #fdf1de;
+  --night: #1b2530;
+  --night-2: #243140;
+  --night-ink: #cfd9e2;
+  --night-dim: #7e8ea0;
+  --rail-w: 296px;
+  --crown-h: 58px;
+  --bend-lg: 8px;
+  --bend-sm: 4px;
+  --body-face: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono-face: "Cascadia Code", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body-face);
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ── Top strip ─────────────────────────────────────────── */
+.crown {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--crown-h);
+  background: var(--night);
+  border-bottom: 3px solid var(--leaf);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 22px;
+  z-index: 60;
+}
+.crown-mark {
+  width: 30px; height: 30px;
+  border-radius: var(--bend-sm);
+  background: linear-gradient(150deg, var(--leaf) 0%, var(--leaf-deep) 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: grid; place-items: center;
+  letter-spacing: .5px;
+}
+.crown-name {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: .2px;
+}
+.crown-name em { font-style: normal; color: var(--leaf); }
+.crown-rev {
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--night-ink);
+  background: var(--night-2);
+  border: 1px solid #33445a;
+  border-radius: 999px;
+  padding: 3px 12px;
+  white-space: nowrap;
+}
+
+/* ── Left rail ─────────────────────────────────────────── */
+.rail {
+  position: fixed;
+  top: var(--crown-h);
+  left: 0;
+  bottom: 0;
+  width: var(--rail-w);
+  background: var(--night);
+  overflow-y: auto;
+  padding: 16px 0 40px;
+  scrollbar-width: thin;
+  scrollbar-color: #3a4a5e var(--night);
+}
+.rail::-webkit-scrollbar { width: 8px; }
+.rail::-webkit-scrollbar-thumb { background: #3a4a5e; border-radius: 4px; }
+
+.rail-seek {
+  padding: 0 16px 14px;
+}
+.rail-seek input {
+  width: 100%;
+  background: var(--night-2);
+  border: 1px solid #33445a;
+  border-radius: var(--bend-sm);
+  color: var(--night-ink);
+  font-family: var(--body-face);
+  font-size: 13.5px;
+  padding: 8px 11px;
+  outline: none;
+}
+.rail-seek input:focus { border-color: var(--leaf); }
+.rail-seek input::placeholder { color: var(--night-dim); }
+
+.rail-group { margin-bottom: 6px; }
+.rail-group-name {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .13em;
+  color: var(--night-dim);
+  padding: 12px 20px 5px;
+}
+.rail-link {
+  display: block;
+  color: var(--night-ink);
+  text-decoration: none;
+  font-size: 13.5px;
+  padding: 5px 20px 5px 24px;
+  border-left: 3px solid transparent;
+  transition: background .12s, border-color .12s;
+}
+.rail-link:hover { background: var(--night-2); }
+.rail-link.lit {
+  border-left-color: var(--sun);
+  background: var(--night-2);
+  color: #fff;
+}
+.rail-none {
+  display: none;
+  color: var(--night-dim);
+  font-size: 13px;
+  padding: 10px 20px;
+}
+
+/* ── Page column ───────────────────────────────────────── */
+.page {
+  margin-left: var(--rail-w);
+  padding: calc(var(--crown-h) + 30px) 42px 30px;
+  max-width: 1040px;
+}
+
+.module {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--bend-lg);
+  padding: 30px 34px;
+  margin-bottom: 26px;
+  scroll-margin-top: calc(var(--crown-h) + 18px);
+}
+
+.module h2 {
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.module .crumb {
+  color: var(--leaf);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .11em;
+  margin-bottom: 2px;
+}
+.module h3 {
+  font-size: 16.5px;
+  font-weight: 650;
+  margin: 24px 0 8px;
+  color: var(--ink);
+}
+.module p { margin: 10px 0; color: var(--ink); }
+.module ul, .module ol { margin: 10px 0 10px 24px; }
+.module li { margin: 4px 0; }
+.module a { color: var(--leaf-deep); }
+
+/* ── Masthead ──────────────────────────────────────────── */
+.masthead {
+  background: linear-gradient(135deg, var(--night) 0%, #253a33 60%, var(--leaf-deep) 100%);
+  border: none;
+  color: #eef4f1;
+}
+.masthead h2 { color: #fff; font-size: 28px; }
+.masthead p { color: #cfe0d8; max-width: 72ch; }
+.stat-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.stat-pill {
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  padding: 5px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+}
+.stat-pill b { color: #ffd489; font-weight: 700; }
+
+/* ── Tables ────────────────────────────────────────────── */
+.spec-table, .fix-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13.5px;
+}
+.spec-table th, .fix-table th {
+  text-align: left;
+  background: var(--leaf-wash);
+  color: var(--leaf-deep);
+  font-weight: 700;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+}
+.spec-table td, .fix-table td {
+  padding: 7px 12px;
+  border: 1px solid var(--rule);
+  vertical-align: top;
+}
+.spec-table tr:nth-child(even) td { background: #fafcfb; }
+.fix-table th { background: var(--sun-wash); color: #8a5104; }
+
+/* ── Code panes ────────────────────────────────────────── */
+.code-pane {
+  background: var(--night);
+  color: #d8e2ea;
+  font-family: var(--mono-face);
+  font-size: 13px;
+  line-height: 1.6;
+  border-radius: var(--bend-sm);
+  padding: 15px 18px;
+  overflow-x: auto;
+  margin: 12px 0;
+  white-space: pre;
+}
+code {
+  font-family: var(--mono-face);
+  font-size: .92em;
+  background: #eceff2;
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: #274156;
+}
+.code-pane code { background: none; padding: 0; color: inherit; }
+
+/* ── Hints ─────────────────────────────────────────────── */
+.hint, .warn-hint {
+  border-radius: var(--bend-sm);
+  padding: 11px 15px;
+  margin: 12px 0;
+  font-size: 13.5px;
+}
+.hint { background: var(--leaf-wash); border-left: 4px solid var(--leaf); }
+.warn-hint { background: var(--sun-wash); border-left: 4px solid var(--sun); }
+
+/* ── Chips ─────────────────────────────────────────────── */
+.define-chip {
+  font-family: var(--mono-face);
+  font-size: 12px;
+  background: var(--night);
+  color: #ffd489;
+  border-radius: 3px;
+  padding: 1px 7px;
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+.basement {
+  margin-left: var(--rail-w);
+  max-width: 1040px;
+  padding: 8px 42px 42px;
+  color: var(--ink-faint);
+  font-size: 13px;
+  text-align: center;
+}
+.basement a { color: var(--leaf-deep); }
+
+@media (max-width: 900px) {
+  .rail { display: none; }
+  .page, .basement { margin-left: 0; padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="crown">
+  <div class="crown-mark">HLK</div>
+  <div class="crown-name">HyperCasual <em>LiveOps Kit</em> — Developer Documentation</div>
+  <div class="crown-rev">v2.0.0 &middot; Unity 6+</div>
+</header>
+
+<nav class="rail" id="railNav">
+  <div class="rail-seek">
+    <input type="text" id="seekBox" placeholder="Filter sections&hellip;" autocomplete="off">
+  </div>
+  <div class="rail-none" id="seekEmpty">No section matches.</div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">Getting Started</div>
+    <a class="rail-link" href="#about-the-kit">About the Kit</a>
+    <a class="rail-link" href="#getting-started">Getting Started</a>
+    <a class="rail-link" href="#game-setup-assistant">Game Setup Assistant</a>
+    <a class="rail-link" href="#starter-menu-customization">Starter Menu &amp; Levels</a>
+    <a class="rail-link" href="#portable-export">Portable Export</a>
+    <a class="rail-link" href="#architecture-overview">Architecture Overview</a>
+    <a class="rail-link" href="#service-registry">Service Registry</a>
+    <a class="rail-link" href="#configuration-assets">Configuration Assets</a>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">Core Infrastructure</div>
+    <a class="rail-link" href="#save-system">Save System</a>
+    <a class="rail-link" href="#scene-flow">Scene Flow &amp; Timing</a>
+    <a class="rail-link" href="#audio-engine">Audio Engine</a>
+    <a class="rail-link" href="#haptic-feedback">Haptic Feedback</a>
+    <a class="rail-link" href="#virtual-economy">Virtual Economy</a>
+    <a class="rail-link" href="#currency-icon-setup">Currency Icon Setup</a>
+    <a class="rail-link" href="#portable-power-ups">Portable Power-Ups</a>
+    <a class="rail-link" href="#localization-tables">Localization</a>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">Monetization</div>
+    <a class="rail-link" href="#in-app-purchases">In-App Purchases</a>
+    <a class="rail-link" href="#purchases-pro">Purchases Pro</a>
+    <a class="rail-link" href="#ads-mediation">Ads &amp; Mediation</a>
+    <a class="rail-link" href="#ads-pro-ad-free">Ads Pro &amp; Ad-Free</a>
+    <a class="rail-link" href="#shop-cosmetics">Shop &amp; Cosmetics</a>
+    <a class="rail-link" href="#timed-offers">Timed Offers</a>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">LiveOps &amp; Engagement</div>
+    <a class="rail-link" href="#daily-rewards">Daily Rewards</a>
+    <a class="rail-link" href="#reward-wheel">Reward Wheel</a>
+    <a class="rail-link" href="#chest-slot-minigames">Chest &amp; Slot Minigames</a>
+    <a class="rail-link" href="#quest-goals">Quests</a>
+    <a class="rail-link" href="#battle-pass">Battle Pass</a>
+    <a class="rail-link" href="#energy-system">Energy System</a>
+    <a class="rail-link" href="#content-gating">Content Gating</a>
+    <a class="rail-link" href="#rate-us-prompts">Rate-Us Prompts</a>
+    <a class="rail-link" href="#local-notifications">Local Notifications</a>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">Platform Services</div>
+    <a class="rail-link" href="#game-services">Game Services</a>
+    <a class="rail-link" href="#cloud-save">Cloud Save</a>
+    <a class="rail-link" href="#consent-privacy">Consent &amp; Privacy</a>
+    <a class="rail-link" href="#push-messaging">Push Messaging</a>
+    <a class="rail-link" href="#social-sharing">Social Sharing</a>
+    <a class="rail-link" href="#in-app-webview">In-App Web View</a>
+    <a class="rail-link" href="#deep-links">Deep Links</a>
+    <a class="rail-link" href="#remote-config">Remote Config</a>
+    <a class="rail-link" href="#app-updates">App Updates</a>
+    <a class="rail-link" href="#attribution-tracking">Attribution</a>
+    <a class="rail-link" href="#crash-reporting">Crash Reporting</a>
+    <a class="rail-link" href="#native-dialogs">Native Dialogs</a>
+    <a class="rail-link" href="#runtime-permissions">Runtime Permissions</a>
+    <a class="rail-link" href="#analytics-pipeline">Analytics Pipeline</a>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">UI &amp; Feedback</div>
+    <a class="rail-link" href="#popup-stack">Popup Stack</a>
+    <a class="rail-link" href="#toast-messages">Toast Messages</a>
+    <a class="rail-link" href="#ui-widgets">UI Widgets</a>
+  </div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">Tooling &amp; Debug</div>
+    <a class="rail-link" href="#toolset-window">Toolset Window</a>
+    <a class="rail-link" href="#cheat-console">Cheat Console</a>
+    <a class="rail-link" href="#scripting-defines">Scripting Defines</a>
+    <a class="rail-link" href="#faq-troubleshooting">Troubleshooting</a>
+    <a class="rail-link" href="#release-notes">Release Notes</a>
+    <a class="rail-link" href="#licenses-notices">Licenses &amp; Notices</a>
+    <a class="rail-link" href="#contact-support">Support</a>
+  </div>
+</nav>
+
+<main class="page">
+
+<section class="module masthead" id="about-the-kit">
+  <h2>HyperCasual LiveOps Kit</h2>
+  <p>A source-only toolkit that covers the service layer of a mobile game so your team can stay focused
+  on gameplay. Persistence, monetization, LiveOps retention loops, platform integrations, and UI feedback
+  all arrive as decoupled modules that boot themselves, run with zero third-party SDKs installed, and
+  swap to real vendor backends the moment you opt in.</p>
+  <p>Every module follows the same recipe: a plain-C# service, an interface where a backend can vary,
+  a settings section edited from one editor window, and an in-engine stand-in backend so the whole kit
+  works in the editor from the first minute.</p>
+  <div class="stat-row">
+    <span class="stat-pill">Unity <b>6+</b></span>
+    <span class="stat-pill"><b>32</b> Modules</span>
+    <span class="stat-pill"><b>460+</b> Runtime Scripts</span>
+    <span class="stat-pill">BiRP / URP / HDRP</span>
+  </div>
+</section>
+
+<section class="module" id="game-setup-assistant">
+  <div class="crumb">Getting Started</div>
+  <h2>Game Setup Assistant</h2>
+  <p><strong>Tools &gt; HLK &gt; Game Setup Assistant</strong> is the recommended starting point for a new
+  developer. It edits the real runtime assets directly; it is not a demo or a second configuration copy.
+  Use it for game content and balancing. Use <strong>Advanced Toolset</strong> for SDK providers, store
+  credentials, AdMob IDs, consent, platform defines, and production checks.</p>
+
+  <table>
+    <thead><tr><th>Assistant page</th><th>What a developer changes there</th><th>Runtime source of truth</th></tr></thead>
+    <tbody>
+      <tr><td>Game &amp; Levels</td><td>Menu/game scenes, visible and initially unlocked levels, win coins, multipliers, progress gifts, currency art</td><td><code>StarterMenuConfig.asset</code></td></tr>
+      <tr><td>Minigames</td><td>Wheel slices, slot symbols/payouts, chest drops, per-game cooldowns, chest keys</td><td><code>HLKSettings.Minigames</code> + <code>StarterMenuConfig.asset</code></td></tr>
+      <tr><td>Goals</td><td>Daily/weekly/event goals and permanent achievements, targets, events, rewards</td><td><code>QuestCatalog</code> + <code>QuestDefinition</code> assets</td></tr>
+      <tr><td>Daily Gifts</td><td>Ordered streak days, reward amounts, special days, grace policy, rewarded doubling</td><td><code>StarterGiftSchedule</code> + <code>HLKSettings.StarterGifts</code></td></tr>
+      <tr><td>Economy &amp; LiveOps</td><td>IAP products, soft-currency/cosmetic shop items, unlock conditions, offers, battle pass, energy, leaderboard and achievement IDs</td><td>Referenced catalog/config assets</td></tr>
+      <tr><td>Services</td><td>Ads, haptics, audio, native UI, sharing, rate-us, notifications, analytics, localization, cloud save, privacy, runtime options</td><td>Common sections of <code>HLKSettings.asset</code></td></tr>
+      <tr><td>Validate</td><td>Scenes, data references, duplicate IDs, icons, build order, documentation, export boundary</td><td>Read-only project checks</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Recommended first setup</h3>
+  <ol>
+    <li>Open the assistant and click <strong>Apply Missing Presets</strong>. It fills empty references only
+    and never replaces an assigned asset.</li>
+    <li>On <strong>Game &amp; Levels</strong>, enter the menu and gameplay scene names and tune the initial
+    level range. Click <strong>Add Both to Build Settings</strong>; the menu becomes build index 0.</li>
+    <li>Edit minigame, goal, daily-gift, shop, and battle-pass assets inline. Use the <strong>Ping</strong>
+    button whenever you want the normal Inspector or want to duplicate an asset.</li>
+    <li>Open <strong>Validate</strong> and clear red items. Yellow items are recommendations or production
+    integrations that may intentionally remain simulated during development.</li>
+  </ol>
+
+  <div class="hint"><strong>Safe authoring.</strong> Creating a goal from the assistant first makes an
+  editable catalog under <code>Assets/HyperCasualLiveOpsKit/GameSetup/</code>. This keeps the shipped preset
+  intact and gives the game its own portable data asset.</div>
+
+  <h3>Advanced module coverage</h3>
+  <p>The Services page also shows the boundary between designer-safe fields and provider-heavy setup.
+  Ads Pro, IAP Pro, app updates, attribution, crash reporting, deep links, permissions, push messaging,
+  remote config, and web views remain in the <strong>Advanced Toolset</strong>. They are not omitted:
+  the assistant links to their full configuration pages and its automated coverage test verifies that
+  every public <code>HLKSettings</code> section belongs to exactly one of these two surfaces.</p>
+
+  <h3>Useful editor and CI entry points</h3>
+  <ul>
+    <li><strong>Tools &gt; HLK &gt; Validate Game Setup</strong> opens the assistant directly on its
+    validation report.</li>
+    <li><strong>Tools &gt; HLK &gt; Open Combined Documentation</strong> opens this file from Unity.</li>
+    <li>Automated builds can run
+    <code>-executeMethod HLK.StarterMenu.Editor.HLKGameSetupValidator.ValidateForCi</code>. The command
+    logs every finding and fails the process only for blocking errors; recommendations remain warnings.</li>
+  </ul>
+</section>
+
+<section class="module" id="starter-menu-customization">
+  <div class="crumb">Getting Started</div>
+  <h2>Starter Menu &amp; Level Customization</h2>
+  <p>The reusable portrait menu lives in
+  <code>StarterMenu/Scenes/HLK_MainMenu.unity</code>. Its game destination is configured by name rather
+  than a direct scene reference, which makes the package easy to move between projects.</p>
+
+  <h3>Levels</h3>
+  <ul>
+    <li><code>VisibleLevelCount</code> controls the number of generated choices.</li>
+    <li><code>AvailableLevelCount</code> is the fresh-install unlock count. Save data then owns progression.</li>
+    <li>The level panel's DEV menu switches between horizontal cards, a 3×3 grid, infinite vertical
+    scroll, and the centered vertical-road selector. These are presentation layouts over the same level data.</li>
+    <li><code>WinCoinReward</code> feeds the animated win panel and wallet fly-out. Currency particles
+    terminate on the matching coin or diamond icon.</li>
+  </ul>
+
+  <h3>Minigames</h3>
+  <p>Cooldowns are authored in minutes and stored as UTC completion timestamps, so closing the app does
+  not reset them. A value of <code>0</code> disables that minigame's cooldown. The Mystery Chest key count
+  is clamped to the nine board cells.</p>
+  <table>
+    <thead><tr><th>Minigame</th><th>Main data</th><th>Starter session rule</th></tr></thead>
+    <tbody>
+      <tr><td>Lucky Wheel</td><td>Slice label, weight, currency/item reward</td><td>One spin, optional rewarded multiplier</td></tr>
+      <tr><td>Slots</td><td>Symbols and combination payouts</td><td>Three spins plus one rewarded-ad spin</td></tr>
+      <tr><td>Mystery Chests</td><td>Weighted tiers and coin/diamond drops</td><td>One key opens one of nine hidden chests</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Goals, achievements, and gameplay events</h3>
+  <p>A <code>QuestDefinition.Kind</code> decides where the item appears: <code>Permanent</code> is an
+  achievement; <code>Daily</code>, <code>Weekly</code>, and <code>Event</code> are goals. Its ID is the
+  persistence key—keep it stable after release. Event names are exact, case-sensitive strings.</p>
+  <pre><code>// Count one completion for definitions listening to "level_complete".
+var props = new Dictionary&lt;string, object&gt; {
+    { "level", currentLevel },
+    { "stars", earnedStars }
+};
+AnalyticsBus.Emit("level_complete", props);
+
+// To sum a value, choose EventPropertySum and set PropertyName to "amount".
+AnalyticsBus.Emit("currency_earned",
+    new Dictionary&lt;string, object&gt; { { "amount", 50 } });</code></pre>
+  <p>The Achievements DEV panel is for QA progress/claim manipulation only. Do not use DEV actions as
+  production progression logic.</p>
+
+  <h3>Shop, cosmetics, and reusable unlock rules</h3>
+  <p>The Economy &amp; LiveOps page can create the default Resources-loaded
+  <code>ShopCatalog</code>, add <code>ShopItem</code> assets, and edit both inline. Shop items support
+  coin/gem prices, consumable or permanent ownership, IAP/rewarded-ad entitlement sources,
+  prerequisite items, free-claim cooldowns, and swappable cosmetic effects.</p>
+  <p>The same page creates level, currency, cooldown, flag, and composite
+  <code>UnlockCondition</code> assets. Assign a condition to an <code>UnlockGate</code> on the content
+  being gated. Conditions only evaluate availability; explicitly consume/spend the requirement from
+  game logic when that is part of your design.</p>
+
+  <h3>Daily gifts</h3>
+  <p>Index 0 in the schedule is Day 1. Each entry can grant coins, gems, or an item and can be marked
+  special for highlighted presentation. <code>GraceDays</code> controls missed-day tolerance.
+  <code>LoopAfterLastDay</code> repeats the last authored reward; disable it for a finite calendar.
+  The optional HTTP time probe reads a trusted Date header to make simple device-clock cheating harder.</p>
+
+  <h3>UI and art replacement</h3>
+  <p>Currency, shop, minigame, leaderboard, chest, and battle-pass artwork is stored below
+  <code>StarterMenu/Art</code> and <code>StarterMenu/Resources/HLK/StarterMenuArt</code>.
+  Power-up artwork is intentionally kept with its portable module under <code>PowerUps/Art</code>. Preserve transparent
+  padding when replacing icons, use Sprite (2D and UI), and keep background art on an aspect-cover component
+  so portrait devices do not stretch it. Decorative images must have Raycast Target disabled.</p>
+</section>
+
+<section class="module" id="portable-export">
+  <div class="crumb">Getting Started</div>
+  <h2>Using the Backend in Another Game</h2>
+  <p>The kit is intentionally portable. Export the following folder as the reusable backend and menu:</p>
+  <pre><code>Assets/HyperCasualLiveOpsKit</code></pre>
+  <p>Third-party SDK source and binaries belong outside that folder:</p>
+  <pre><code>Assets/__DO_NOT_PUBLISH_VENDOR_SDKS</code></pre>
+  <p>When importing into a new project:</p>
+  <ol>
+    <li>Import the HLK folder and let Unity compile using simulated backends.</li>
+    <li>For a power-up-only integration, copy the complete <code>PowerUps</code> folder, open
+    <strong>Tools &gt; HLK &gt; Power-Ups &gt; Setup &amp; Catalog</strong>, and provide a small
+    <code>IPowerUpEffectHandler</code> adapter for each game-specific effect.</li>
+    <li>Open <strong>Game Setup Assistant</strong>, apply missing presets, and change both scene names.</li>
+    <li>Duplicate/tune the catalogs in <code>GameSetup</code>, then connect your gameplay events.</li>
+    <li>Only after the game-facing validation passes, import the vendor SDKs you need into the excluded
+    folder and configure their matching Advanced Toolset tabs.</li>
+    <li>Use test ads and fake/sandbox purchases until store console products and privacy flows are ready.</li>
+  </ol>
+  <div class="warn-hint"><strong>Before publishing:</strong> remove DEV access from release UI, disable
+  on-device fake purchases, switch AdMob from test to production IDs, complete consent/privacy setup, and
+  make a signed internal-track build. Never click live ads while testing your own app.</div>
+</section>
+
+<section class="module" id="getting-started">
+  <div class="crumb">Getting Started</div>
+  <h2>Getting Started</h2>
+  <p><strong>Requirements:</strong> Unity <code>6000.0+</code>, TextMeshPro (<code>com.unity.textmeshpro</code>)
+  and uGUI (<code>com.unity.ugui</code>). UPM installs pull these in automatically; a raw
+  <code>.unitypackage</code> import expects both packages to already be present in the project.</p>
+  <p>From import to a running showcase in about five minutes:</p>
+  <ol>
+    <li><strong>Import the package.</strong> Only the toolkit's own files are added — no registries,
+    no manifest edits, no binaries. Everything compiles immediately because each module defaults to a
+    self-contained in-engine backend.</li>
+    <li><strong>Open the demo.</strong> Load <code>Assets/HyperCasualLiveOpsKit/Demo/HLK_Showcase.unity</code>
+    and press Play. The dashboard exercises nearly every module live: earn coins, spin the wheel, trigger toasts,
+    simulate purchases, and more. (Content Gating / Unlocks is setup-only — it has no demo panel.)</li>
+    <li><strong>Open Game Setup Assistant.</strong> Go to
+    <strong>Tools &gt; HLK &gt; Game Setup Assistant</strong> for levels, minigames, achievements, goals,
+    daily gifts, shop data, battle pass, and validation. Open its <strong>Advanced Toolset</strong> only
+    when configuring provider SDKs or platform services.</li>
+    <li><strong>Generate starter data.</strong> Trigger <strong>Tools &gt; HLK &gt; Generate Starter Config
+    Assets</strong> — it creates ready-made preset assets (IAP catalog, wheel slices, chest tiers, quest catalog,
+    battle pass season, and the rest) under <code>Assets/HyperCasualLiveOpsKit/Presets/</code>, pre-wired
+    into <code>HLKSettings</code>.</li>
+    <li><strong>Go native when ready.</strong> Out of the box the modules run in their safe
+    <em>Dummy / Simulated / In-Engine</em> modes so the project builds and plays with no SDKs. To get real
+    native behaviour <em>on device</em>, switch each module's mode on its Toolset tab — see
+    <a href="#native-on-device">Real native features on device</a> below for exactly what each one costs
+    (several need only a mode change and no account at all).</li>
+  </ol>
+
+  <div class="hint" id="native-on-device"><strong>Real native features on device.</strong>
+  This is the most common surprise: with the shipped defaults, most modules <em>simulate</em> the native
+  action on a phone (log it, copy to the clipboard, or auto-grant) rather than performing it — that is by
+  design, so a fresh import needs no SDKs, permissions, or accounts. Switch each module's mode on its Toolset
+  tab to turn on the real thing. What each costs:</div>
+  <table>
+    <thead><tr><th>Module</th><th>Set on the Toolset</th><th>Also needs</th></tr></thead>
+    <tbody>
+      <tr><td>Haptics</td><td>Mode → <code>Production</code> <em>(now the default)</em></td><td>Nothing — real Vibrator / CoreHaptics is built in</td></tr>
+      <tr><td>Native UI (alerts, action sheets, toasts)</td><td>Mode → <code>Native</code></td><td>Nothing on Android; iOS needs the <code>HLK_NATIVE_UI</code> define</td></tr>
+      <tr><td>Sharing</td><td>Mode → <code>Native</code></td><td>The <code>HLK_NATIVE_SHARE</code> define — the share bridge is bundled, no SDK</td></tr>
+      <tr><td>Permissions</td><td>Already <code>Auto</code> — real OS prompts on device</td><td>Nothing — the <code>&lt;uses-permission&gt;</code> entries are injected from the usage-description fields you fill in</td></tr>
+      <tr><td>Local Notifications</td><td>Mode → <code>Production</code></td><td>Install <code>com.unity.mobile.notifications</code> (free Unity package — no account). The <code>HLK_MOBILE_NOTIFICATIONS</code> define switches on automatically once it resolves, and the package adds the <code>POST_NOTIFICATIONS</code> permission for Android 13+ itself.</td></tr>
+      <tr><td>Deep Links</td><td>Add your scheme(s) to <code>CustomSchemes</code> (and hosts to <code>UniversalLinkHosts</code>)</td><td>Nothing for custom schemes — the launcher <code>&lt;intent-filter&gt;</code> is injected into the manifest at build time. Universal / App Links additionally need an <code>assetlinks.json</code> hosted on your domain.</td></tr>
+      <tr><td>Ads, IAP, Push, Game&nbsp;Services, Cloud&nbsp;Save, Attribution, Remote&nbsp;Config, App&nbsp;Update, Rate&nbsp;Us, Crash&nbsp;Reporter</td><td>Mode → its live value + the vendor <a href="#scripting-defines">define</a></td><td>The vendor SDK <em>and</em> a real account/console (AdMob, Google Play, Firebase, AppsFlyer, …)</td></tr>
+    </tbody>
+  </table>
+  <div class="hint"><strong>No bootstrap scene needed.</strong> Services register themselves through
+  <code>RuntimeInitializeOnLoadMethod</code> hooks before your first scene wakes up, in the editor and in
+  builds alike.</div>
+</section>
+
+<section class="module" id="architecture-overview">
+  <div class="crumb">Getting Started</div>
+  <h2>Architecture Overview</h2>
+  <p>The kit is organized as independent modules under <code>Runtime/</code>, each with the same internal
+  shape. Understanding the shape once means you understand every module:</p>
+  <ul>
+    <li><strong>Service</strong> — a plain C# class holding the logic (e.g. <code>SaveService</code>,
+    <code>AdService</code>, <code>QuestService</code>). Testable without a scene.</li>
+    <li><strong>Interface</strong> — the seam consumers depend on where behavior can vary
+    (e.g. <code>IAudioService</code>, <code>IGameServices</code>).</li>
+    <li><strong>Backend + factory</strong> — platform or vendor adapters behind the interface. A
+    <code>*BackendFactory</code> picks one from the configured mode and the compiled defines; a dummy or
+    simulated backend always exists, so nothing breaks without SDKs.</li>
+    <li><strong>Bootstrap</strong> — a static class with a <code>RuntimeInitializeOnLoadMethod</code> hook
+    that builds the service from settings and registers it in the <a href="#service-registry">service
+    registry</a>.</li>
+    <li><strong>Settings section</strong> — a serializable block inside <code>HLKSettings</code>, drawn by
+    the matching Toolset tab.</li>
+  </ul>
+  <h3>The persistent host</h3>
+  <p><code>MonoHost</code> is a hidden, scene-surviving MonoBehaviour created before the first scene loads.
+  It runs coroutines for headless services (<code>MonoHost.Run</code>), exposes per-frame events, and —
+  critically — provides <code>MonoHost.Post(Action)</code> so background SDK callbacks can hand work back
+  to the main thread.</p>
+  <h3>Threading rules</h3>
+  <div class="warn-hint">
+    <strong>Stay on the main thread.</strong> The service registry, all Unity object access, and every
+    service API in this kit are designed for main-thread use. When a vendor SDK calls you back from a
+    worker thread, wrap the reaction in <code>MonoHost.Post(() =&gt; ...)</code> before touching services,
+    scenes, or UI. Async methods in the kit (cloud save, consent, updates) already marshal their engine
+    work back for you — your continuation code should still assume main-thread context and avoid blocking
+    with <code>.Wait()</code> or <code>.Result</code>, which can deadlock the frame.
+  </div>
+  <h3>Results instead of exceptions</h3>
+  <p>Fallible operations return <code>HlkResult</code> / <code>HlkResult&lt;T&gt;</code> — a success flag
+  plus a structured <code>HlkError</code> — rather than throwing across module boundaries. Check
+  <code>result.Success</code>, or use <code>ValueOr(fallback)</code> / <code>TryGet(out value)</code> on the
+  generic form.</p>
+</section>
+
+<section class="module" id="service-registry">
+  <div class="crumb">Getting Started</div>
+  <h2>Service Registry</h2>
+  <p><code>HLK.Core.Services</code> is a minimal type-keyed locator. Modules register one shared instance
+  per capability at bootstrap (usually keyed by interface); game code resolves it anywhere without wiring
+  references through the scene.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Audio;
+
+// Throwing lookup — use when the service must exist.
+var sfx = Services.Resolve&lt;IAudioService&gt;();
+sfx.Play(new SoundId("ui_click"));
+
+// Soft lookup — use for optional capabilities.
+if (Services.TryResolve(out IHapticService haptics))
+    haptics.Play(HapticPatterns.LightTap());</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Register&lt;T&gt;(impl)</code></td><td>Store (or replace) the implementation for capability <code>T</code>. Registering by interface is the recommended pattern.</td></tr>
+    <tr><td><code>Resolve&lt;T&gt;()</code></td><td>Fetch the implementation; throws <code>InvalidOperationException</code> when nothing is registered.</td></tr>
+    <tr><td><code>TryResolve&lt;T&gt;(out impl)</code></td><td>Non-throwing fetch; returns <code>false</code> with default when absent.</td></tr>
+    <tr><td><code>IsRegistered&lt;T&gt;()</code></td><td>Query without resolving.</td></tr>
+    <tr><td><code>Unregister&lt;T&gt;()</code> / <code>Clear()</code></td><td>Remove one registration / drop everything (mainly for tests).</td></tr>
+    <tr><td><code>Count</code></td><td>Number of live registrations.</td></tr>
+  </table>
+  <p>Registration keys you can rely on after boot include <code>SaveService</code>, <code>IFlowService</code>,
+  <code>IAudioService</code>, <code>IHapticService</code>, <code>IWallet</code>, <code>IAPBridge</code>,
+  <code>AdService</code>, <code>IShopService</code>, <code>IOffersService</code>, <code>StarterGiftService</code>,
+  <code>WheelService</code>, <code>IQuestService</code>, <code>IBattlePassService</code>, <code>IEnergyService</code>,
+  <code>IGameServices</code>, <code>CloudSaveService</code>, <code>IConsentService</code>, <code>IPushService</code>,
+  <code>SharingService</code>, <code>WebViewService</code>, <code>IDeepLinkService</code>, <code>IRemoteConfig</code>,
+  <code>IAppUpdateService</code>, <code>IAttributionService</code>, <code>CrashReporterService</code>,
+  <code>INotificationService</code>, <code>IRateUsService</code>, <code>IPermissionsService</code>,
+  <code>IPopupService</code>, <code>IToastService</code>, <code>ILocalizationService</code>,
+  <code>IEntitlements</code>, <code>ITimeSource</code>, and <code>ICheatService</code>.</p>
+</section>
+
+<section class="module" id="configuration-assets">
+  <div class="crumb">Getting Started</div>
+  <h2>Configuration Assets</h2>
+  <p>All module configuration funnels into a single ScriptableObject, <code>HLKSettings</code>, which must
+  live at <code>Assets/HyperCasualLiveOpsKit/Resources/HLK/HLKSettings.asset</code> to be found at runtime
+  (<code>Resources</code> path <code>HLK/HLKSettings</code>). Access it in code through
+  <code>HLKSettings.Instance</code> — if the asset is missing, a transient, fully-defaulted instance is
+  served so nothing null-refs.</p>
+  <div class="code-pane">using HLK.Core;
+
+var settings = HLKSettings.Instance;
+int fps      = settings.General.TargetFrameRate;   // default 60
+bool verbose = settings.General.VerboseLogging;    // default false</div>
+  <h3>Sections</h3>
+  <p>One serializable section per module: <code>Ads</code>, <code>AdsPro</code>, <code>Analytics</code>,
+  <code>AppUpdate</code>, <code>Attribution</code>, <code>Audio</code>, <code>BattlePass</code>,
+  <code>CloudSave</code>, <code>Consent</code>, <code>CrashReporter</code>, <code>DeepLinks</code>,
+  <code>Energy</code>, <code>GameServices</code>, <code>General</code>, <code>Haptics</code>, <code>IAP</code>,
+  <code>IAPPro</code>, <code>Localization</code>, <code>Minigames</code>, <code>NativeUI</code>,
+  <code>Notifications</code>, <code>Offers</code>, <code>Permissions</code>, <code>Push</code>,
+  <code>Quests</code>, <code>RateUs</code>, <code>RemoteConfig</code>, <code>Sharing</code>,
+  <code>WebView</code>, and <code>StarterGifts</code>.</p>
+  <h3>Preset assets</h3>
+  <p>Data-heavy modules reference standalone ScriptableObjects. The generator at
+  <strong>Tools &gt; HLK &gt; Generate Starter Config Assets</strong> creates a working set under
+  <code>Assets/HyperCasualLiveOpsKit/Presets/</code> and assigns each into the right settings slot:</p>
+  <table class="spec-table">
+    <tr><th>Preset asset</th><th>Feeds</th></tr>
+    <tr><td><code>IAPCatalogPreset.asset</code></td><td><code>IAP.CatalogAsset</code></td></tr>
+    <tr><td><code>WheelSlicesPreset.asset</code></td><td><code>Minigames.WheelDatabase</code></td></tr>
+    <tr><td><code>SlotMachinePreset.asset</code></td><td><code>Minigames.SlotsConfig</code></td></tr>
+    <tr><td><code>ChestPreset.asset</code></td><td><code>Minigames.ChestsConfig</code></td></tr>
+    <tr><td><code>StarterGiftsPreset.asset</code></td><td><code>StarterGifts.Schedule</code></td></tr>
+    <tr><td><code>QuestCatalogPreset.asset</code></td><td><code>Quests.Catalog</code></td></tr>
+    <tr><td><code>BattlePassPreset.asset</code></td><td><code>BattlePass.Config</code></td></tr>
+    <tr><td><code>EnergyPreset.asset</code></td><td><code>Energy.Config</code></td></tr>
+    <tr><td><code>OfferCatalogPreset.asset</code></td><td><code>Offers.Catalog</code></td></tr>
+    <tr><td><code>Localization/</code> tables</td><td><code>Localization.TableSet</code></td></tr>
+  </table>
+  <div class="hint"><strong>General tab.</strong> Project-wide knobs (<code>TargetFrameRate</code>,
+  <code>NeverSleep</code>, <code>VerboseLogging</code>) live in the General section and are applied by
+  <code>ServiceBootstrap</code> before the first scene. Edit them on the <strong>General</strong> tab of the
+  Toolset.</div>
+</section>
+
+<section class="module" id="save-system">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Save System</h2>
+  <p>A versioned, migration-aware persistence layer built around one consolidated record. Game state lives
+  in a single <code>SaveBlob</code> (currency balances, owned items, streak data, string flags) that is
+  serialized as JSON through a pluggable <code>ISaveBackend</code> — <code>PlayerPrefsSaveBackend</code> by
+  default.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Save;
+
+var save = Services.Resolve&lt;SaveService&gt;();
+
+// Mutate the in-memory blob, then schedule a debounced write.
+var blob = save.Current;
+blob.SetCurrency("Coins", 500);
+blob.SetFlag("tutorial_done", "1");
+save.RequestSave();          // coalesced; flushes ~1 s later
+
+save.FlushNow();             // synchronous write for critical moments</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Current</code></td><td>The live <code>SaveBlob</code>; loaded lazily on first access.</td></tr>
+    <tr><td><code>Load()</code> / <code>Peek()</code></td><td>Read from the backend (Peek does not adopt the result).</td></tr>
+    <tr><td><code>RequestSave()</code></td><td>Debounced write — multiple calls in the window collapse into one flush (default window: <code>DefaultDebounceSeconds = 1.0f</code>).</td></tr>
+    <tr><td><code>FlushNow()</code></td><td>Immediate write; returns an <code>HlkResult</code>.</td></tr>
+    <tr><td><code>DeleteAll()</code></td><td>Wipe stored data.</td></tr>
+    <tr><td><code>Migrate(json)</code></td><td>Run the migration chain over a raw stored payload.</td></tr>
+    <tr><td><code>Loaded</code> / <code>Saved</code></td><td>Events after a load resolves / a flush succeeds.</td></tr>
+    <tr><td><code>AttachLifecycle()</code></td><td>Hook pause/quit so unsaved changes auto-flush.</td></tr>
+  </table>
+  <h3>Schema versioning</h3>
+  <p>The current schema version is <code>SaveSchema.Current = 2</code>. Older payloads pass through
+  <code>SaveMigrator</code>, which chains <code>ISaveMigration</code> steps
+  (<code>Migration_V0_to_V1</code>, <code>Migration_V1_to_V2</code>) until the record is current. Add your
+  own step when you change the blob's shape.</p>
+  <p>Storage keys are namespaced under the <code>HLK_</code> prefix — the blob itself sits at
+  <code>HLK_SAVE_V1</code> with a schema marker alongside it.</p>
+</section>
+
+<section class="module" id="scene-flow">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Scene Flow &amp; Timing</h2>
+  <p>Scene navigation with a built-in fade, plus the small timing primitives the rest of the kit leans on:
+  serializable cooldowns, swappable clocks, and a lightweight tween helper.</p>
+  <h3>Faded scene loads</h3>
+  <div class="code-pane">using HLK.Core;
+using HLK.Flow;
+
+var flow = Services.Resolve&lt;IFlowService&gt;();
+
+// By name, build index, or SceneReference; optional FadeConfig + LoadSceneMode.
+await flow.LoadSceneAsync("Level_02");
+await flow.FadeToBlackAsync();     // fade only, no load
+await flow.FadeFromBlackAsync();</div>
+  <p><code>SceneFadeService</code> implements <code>IFlowService</code>, raises
+  <code>TransitionStarted</code> / <code>TransitionCompleted</code>, and reports
+  <code>IsTransitioning</code> while a fade-load-fade sequence runs. A <code>SceneReference</code> field
+  gives designers a drag-and-drop scene picker that survives renames.</p>
+  <h3>Cooldowns</h3>
+  <div class="code-pane">var cd = new Cooldown(durationSeconds: 3600);
+cd.Stamp(time);                       // start now (ITimeSource)
+if (cd.IsReady(time)) { /* claim */ }
+float t = cd.Progress01(time);        // 0..1 for radial fills
+string s = cd.Serialize();            // persist; restore via FromSerialized</div>
+  <h3>Time sources</h3>
+  <p><code>ITimeSource</code> abstracts "what time is it" so reward logic can resist device-clock cheating.
+  <code>LocalTimeSource</code> uses the device clock; <code>ServerTimeSource</code> anchors to a remote
+  clock. <code>TimeSourceFactory</code> registers the configured one as the shared <code>ITimeSource</code>.</p>
+  <h3>Tweens</h3>
+  <p><code>TweenRunner</code> (in <code>HLK.Core</code>) animates floats, vectors, transforms, and
+  <code>CanvasGroup</code> alpha on the persistent host. The <code>Easing</code> library covers the
+  standard curve families — Sine, Quad, Cubic, Quart, Quint, Expo, Circ, plus Back, Elastic, and Bounce —
+  each with in / out / in-out variants selected via <code>EaseType</code>.</p>
+  <div class="hint">Settings pointer: startup frame-rate and sleep behavior belong to the
+  <strong>General</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="audio-engine">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Audio Engine</h2>
+  <p>Pooled one-shot SFX and crossfading music behind a tiny interface. Designers author a
+  <code>SoundBank</code> asset — named entries with a clip, category, volume, pitch, and optional pitch
+  jitter — and code addresses sounds by <code>SoundId</code> (implicitly convertible from string).</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Audio;
+
+var sound = Services.Resolve&lt;IAudioService&gt;();
+sound.Play("coin_pickup");                  // string → SoundId
+sound.Play(new SoundId("explosion"), 0.6f); // scaled volume
+sound.PlayMusic("theme_main", fadeSeconds: 1.5f);
+sound.StopMusic();
+sound.StopAll();</div>
+  <h3>Portable game sound palette</h3>
+  <p>The included <code>AudioLibrary/Clips</code> folder contains 45 clearly named WAV effects. Run
+  <strong>Tools &gt; HLK &gt; Audio &gt; Install Game Sound Library</strong> after importing or replacing clips.
+  The installer builds <code>HLKGameSoundBank</code>, assigns it to settings, and configures a 32-voice
+  pool so fast repeated soundsâ€”including the same soundâ€”can overlap.</p>
+  <div class="code-pane">// Semantic ids keep gameplay independent from clip filenames.
+GameSoundManager.Play(GameSoundCue.UiButtonTap);
+GameSoundManager.Play(GameSoundCue.CoinCollect);
+GameSoundManager.Play(GameSoundCue.PowerUpUse);
+
+// This is the same preference used by the StarterMenu Settings toggle.
+GameSoundManager.SetSoundEnabled(false);</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Play(id)</code> / <code>Play(id, volumeScale)</code></td><td>Fire a one-shot from the pool.</td></tr>
+    <tr><td><code>PlayMusic(id, fadeSeconds)</code></td><td>Start or crossfade the music track (default fade comes from settings).</td></tr>
+    <tr><td><code>StopMusic(fadeSeconds)</code> / <code>StopAll()</code></td><td>Fade out music / stop all one-shot SFX (music is untouched — use <code>StopMusic</code> for the track).</td></tr>
+    <tr><td><code>IsMusicPlaying</code></td><td>True while a music track is audible.</td></tr>
+  </table>
+  <h3>Mixing model</h3>
+  <p>The final gain of a voice is the product of three sliders:
+  <strong>Master &times; Category &times; entry volume</strong>. Categories (Music, Sfx, UI, Voice,
+  Ambient) each have a volume and — for Master, Music, and Sfx — a mute toggle in settings.
+  <code>AudioSettings.PoolSize</code> controls how many pooled <code>AudioSource</code> components serve
+  one-shots. The included game palette installs 32 voices; keep at least 24 for dense currency/confetti
+  sequences.</p>
+  <div class="hint">Settings pointer: assign the <code>DefaultSoundBank</code> and tune the mixer on the
+  <strong>Audio</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="haptic-feedback">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Haptic Feedback</h2>
+  <p>Vibration with a pattern library, expressed as duration/amplitude pairs that translate to Android
+  vibrator waveforms and iOS haptic calls. The static <code>Haptics</code> facade forwards to the
+  registered <code>IHapticService</code>.</p>
+  <div class="code-pane">using HLK.Haptics;
+
+Haptics.LightTap();                 // canned patterns
+Haptics.Success();
+Haptics.Play(HapticPatterns.Heartbeat());
+Haptics.Play(durationMs: 40, amplitude: 180);  // raw pulse
+Haptics.Cancel();</div>
+  <h3>Pattern library</h3>
+  <p><code>HapticPatterns</code> ships: <code>Tick</code>, <code>LightTap</code>, <code>MediumTap</code>,
+  <code>HeavyThud</code>, <code>LongBuzz</code>, <code>DoubleTap</code>, <code>TripleTap</code>,
+  <code>Heartbeat</code>, <code>RampUp</code>, <code>RampDown</code>, <code>Success</code>,
+  <code>Error</code>, <code>CoinPickup</code>, <code>LevelComplete</code>, <code>GameOver</code>, and
+  <code>Explosion</code>. <code>HapticPattern</code> assets let designers author their own patterns without
+  touching code — create one via <strong>Assets ▸ Create ▸ HLK ▸ Haptics ▸ Pattern</strong>, and a few
+  sample patterns ship under <code>Presets/Haptics</code>. (<code>HapticClip</code> is the runtime struct
+  these compile down to, not an authorable asset.)</p>
+  <h3>Backends &amp; modes</h3>
+  <table class="spec-table">
+    <tr><th>Mode</th><th>Backend</th><th>Notes</th></tr>
+    <tr><td><code>Disabled</code></td><td><code>NullHapticBackend</code></td><td>Everything no-ops.</td></tr>
+    <tr><td><code>Dummy</code></td><td><code>EditorHapticsBackend</code></td><td>Logs simulated pulses in the editor.</td></tr>
+    <tr><td><code>Production</code></td><td><code>AndroidHapticsBackend</code> / <code>IOSHapticsBackend</code></td><td>Real vibration; Android needs the <code>VIBRATE</code> permission (one-click button on the Haptics tab).</td></tr>
+  </table>
+  <div class="hint">Settings pointer: mode and per-platform enables on the <strong>Haptics</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="virtual-economy">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Virtual Economy</h2>
+  <p>A persisted wallet for the game's currencies. <code>CurrencyId</code> enumerates
+  <code>Coins</code> (soft) and <code>Gems</code> (premium); balances are stored by stable string key so
+  saved data survives refactors. <code>EconomyService</code> wires the wallet to persistence and registers
+  it as <code>IWallet</code>.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Economy;
+
+var wallet = Services.Resolve&lt;IWallet&gt;();
+
+wallet.Credit(CurrencyId.Coins, 250, reason: "level_win");
+if (wallet.CanAfford(CurrencyId.Gems, 10))
+    wallet.Debit(CurrencyId.Gems, 10, reason: "skip_timer");
+
+long coins = wallet.GetBalance(CurrencyId.Coins);
+wallet.BalanceChanged += (currency, newAmount) =&gt; RefreshHud();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Credit</code> / <code>Debit</code></td><td>Adjust a balance; returns <code>HlkResult&lt;long&gt;</code> with the new amount. Debit fails cleanly on insufficient funds.</td></tr>
+    <tr><td><code>CanAfford(currency, amount)</code></td><td>Pre-check without mutating.</td></tr>
+    <tr><td><code>SetBalance</code> / <code>Reset</code></td><td>Direct writes (cheats, migrations).</td></tr>
+    <tr><td><code>GetRecentChanges(count)</code></td><td>Ring-buffer transaction history (capacity 64 by default) with reasons.</td></tr>
+    <tr><td><code>BalanceChanged</code></td><td>Event: <code>(CurrencyId, long newBalance)</code>.</td></tr>
+  </table>
+  <p>UI companions: <code>CurrencyHud</code> binds a live balance readout, and <code>CoinGatherEffect</code>
+  flies collected coin sprites toward the HUD counter before the credit lands.</p>
+  <div class="hint"><strong>Currency icons &amp; names.</strong> Presentation data (display name, icon) for each
+  currency is driven by a <code>CurrencyCatalog</code> asset. Create one via
+  <strong>Assets ▸ Create ▸ HLK ▸ Economy ▸ Currency Catalog</strong> and place it at
+  <code>Assets/HyperCasualLiveOpsKit/Resources/HLK/CurrencyCatalog.asset</code>; it is auto-loaded from that
+  <code>Resources</code> path (<code>HLK/CurrencyCatalog</code>) by the HUD and icon resolver. It is not
+  generated by default — until you author one, the wallet still works but has no per-currency icons/names.</div>
+</section>
+
+<section class="module" id="localization-tables">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Localization</h2>
+  <p>Key-to-string translation with per-locale tables. A <code>LocalizationTableSet</code> groups one
+  <code>LocalizationTable</code> per locale code; <code>LocalizationService</code> picks the active locale
+  (persisted across sessions under <code>HLK.Locale</code>) and falls back gracefully — missing keys return
+  the supplied fallback or the key itself instead of blowing up.</p>
+  <div class="code-pane">using HLK.Core;
+
+var loc = Services.Resolve&lt;ILocalizationService&gt;();
+string title = loc.Get("shop.title", fallback: "Shop");
+loc.SetLocale("fr");                          // raises LocaleChanged
+var locales = loc.AvailableLocales;           // e.g. ["en", "fr"]</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Get(key, fallback)</code> / <code>TryGet(key, out value)</code></td><td>Translate a key in the active locale, consulting the fallback table when absent.</td></tr>
+    <tr><td><code>SetLocale(locale)</code></td><td>Switch language at runtime; persists the choice.</td></tr>
+    <tr><td><code>CurrentLocale</code> / <code>AvailableLocales</code></td><td>Active code and everything the table set covers.</td></tr>
+    <tr><td><code>LocaleChanged</code></td><td>Event fired with the new locale code.</td></tr>
+  </table>
+  <p>For scene text, add the <code>LocalizedText</code> component next to a label: it looks up its key on
+  enable and re-resolves automatically when the locale changes. Sample tables for
+  <code>en</code> and <code>fr</code> ship with the kit, and the preset generator can scaffold a table set
+  under <code>Presets/Localization/</code>.</p>
+  <div class="hint">Settings pointer: table set, fallback table, and <code>DefaultLocale</code> (default
+  <code>"en"</code>) on the <strong>Localization</strong> tab (<strong>Tools &gt; HLK &gt; Open
+  Toolset</strong>).</div>
+</section>
+
+<section class="module" id="in-app-purchases">
+  <div class="crumb">Monetization</div>
+  <h2>In-App Purchases</h2>
+  <p>Store-neutral purchasing through <code>IAPBridge</code>. Products are authored as
+  <code>IAPProduct</code> assets collected into an <code>IAPCatalog</code>; each product carries a
+  <code>PurchaseReward</code> hook that grants its contents on purchase, restore, or coupon redemption —
+  one grant path for all three.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.IAP;
+
+var iap = Services.Resolve&lt;IAPBridge&gt;();
+await iap.InitializeAsync();                 // idempotent
+
+PurchaseResult r = await iap.PurchaseAsync("coins_medium");
+if (r.Success) Celebrate();
+else Debug.Log($"Failed: {r.Reason} ({r.Detail})");
+
+string price = iap.GetLocalizedPrice("coins_medium");
+RestoreResult restored = await iap.RestoreAsync();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>InitializeAsync()</code></td><td>Bring the store backend up against the catalog; returns <code>false</code> instead of throwing when the store cannot become ready.</td></tr>
+    <tr><td><code>PurchaseAsync(productId)</code></td><td>Full flow: visibility window check → store purchase → optional validation → reward grant → funnel analytics.</td></tr>
+    <tr><td><code>RestoreAsync()</code></td><td>Re-grant non-consumables and subscriptions; consumables are never restored.</td></tr>
+    <tr><td><code>GetLocalizedPrice(productId)</code></td><td>Store-localized price string with a configurable fallback.</td></tr>
+    <tr><td><code>RedeemCouponAsync(code)</code></td><td>Single-use promo code → mapped product grant.</td></tr>
+    <tr><td><code>Purchased</code> / <code>PurchaseFailed</code></td><td>Events after any grant / any failure with its normalized reason.</td></tr>
+  </table>
+  <h3>Product kinds &amp; failure reasons</h3>
+  <p><code>IAPProductKind</code>: <code>Consumable</code>, <code>NonConsumable</code>,
+  <code>Subscription</code>. Failures normalize to <code>PurchaseFailureReason</code>:
+  <code>UserCancelled</code>, <code>UnknownProduct</code>, <code>AlreadyOwned</code>,
+  <code>PaymentDeclined</code>, <code>StoreNotReady</code>, and more.</p>
+  <h3>Backends</h3>
+  <table class="spec-table">
+    <tr><th>Mode</th><th>Backend</th><th>Requires</th></tr>
+    <tr><td><code>Dummy</code></td><td><code>DummyStoreBackend</code></td><td>Nothing. Simulated outcome (<code>AlwaysSucceed</code> / <code>AlwaysFail</code> / <code>AlwaysCancel</code> / <code>Random</code>), configurable latency (default 400 ms), optional fake store dialog in the editor.</td></tr>
+    <tr><td><code>Test</code> / <code>Production</code></td><td><code>UnityPurchasingBackend</code></td><td>Unity IAP package + <span class="define-chip">HLK_UNITY_PURCHASING</span></td></tr>
+  </table>
+  <div class="hint">Settings pointer: mode, catalog asset, and dummy simulation on the
+  <strong>Purchases</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="purchases-pro">
+  <div class="crumb">Monetization</div>
+  <h2>Purchases Pro</h2>
+  <p>The advanced purchasing layer on top of the base flow: subscription tiers, receipt validation,
+  limited-time visibility, and coupon mappings, all configured in the <code>IAPPro</code> settings
+  section.</p>
+  <h3>Subscriptions</h3>
+  <div class="code-pane">var iap = Services.Resolve&lt;IAPBridge&gt;();
+
+if (iap.HasActiveSubscription)
+    ApplyVipPerks(iap.ActiveSubscriptionTier);
+
+bool gold = iap.HasSubscriptionTier("gold");   // rank-aware tier gate
+if (iap.TryGetSubscriptionExpiry("sub_gold_monthly", out var expiry))
+    ShowRenewalDate(expiry);</div>
+  <p>Tiers are declared as <code>SubscriptionTier</code> rows (product id, tier name, rank); a higher rank
+  satisfies checks for lower ones. <code>SubscriptionGraceDays</code> (default 3) keeps perks alive briefly
+  past expiry, and <code>ReverifyOnAppStart</code> re-checks receipts each launch.
+  <code>GetSubscriptionOfferText(productId)</code> surfaces free-trial / introductory / promotional /
+  win-back marketing copy from the product's <code>SubscriptionOffers</code>.</p>
+  <h3>Receipt validation</h3>
+  <p>Enable <code>EnableServerValidation</code> and point <code>ValidatorEndpoint</code> at your server.
+  <code>ValidationFailurePolicy</code> decides what an unverifiable purchase does:
+  <code>Block</code> (withhold the grant), <code>GrantOptimistically</code>, or <code>Defer</code>
+  (queue and re-check via <code>ReverifyQueuedAsync()</code>).</p>
+  <h3>Limited-time products &amp; coupons</h3>
+  <p><code>LimitedTimeProducts</code> constrain when a product may be bought —
+  <code>IsWithinVisibilityWindow(productId)</code> tells the shop UI whether to show it, and
+  <code>NotifyOfferSeen(productId)</code> records an impression. <code>Coupons</code> map redeem codes to
+  products for <code>RedeemCouponAsync</code>; each code redeems once per device.</p>
+  <div class="hint">Settings pointer: everything above lives on the <strong>Purchases Pro</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="ads-mediation">
+  <div class="crumb">Monetization</div>
+  <h2>Ads &amp; Mediation</h2>
+  <p>One ad API across every network. <code>AdService</code> resolves an <code>IAdBackend</code> from the
+  configured mediation provider, checks pacing and the ad-free entitlement before every intrusive show,
+  and normalizes the outcome into <code>AdShowResult</code> / <code>RewardedResult</code>.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Ads;
+
+var ads = Services.Resolve&lt;AdService&gt;();
+await ads.InitializeAsync();
+
+RewardedResult reward = await ads.ShowRewardedAsync(rewardedPlacement);
+if (reward.Completed) GrantDoubleCoins();
+else if (reward.Suppressed) Debug.Log(reward.Reason); // pacing or ad-free
+
+bool shown = await ads.ShowInterstitialAsync(interstitialPlacement);
+ads.LoadBanner(bannerPlacement);
+ads.HideBanner();</div>
+  <h3>Placements</h3>
+  <p><code>AdPlacement</code> is a ScriptableObject naming one ad slot: an id, an <code>AdUnitKind</code>
+  (<code>Rewarded</code>, <code>Interstitial</code>, <code>Banner</code>, <code>AppOpen</code>,
+  <code>RewardedInterstitial</code>, <code>Native</code>), and optional per-placement pacing overrides
+  (min interval, session/day caps, quiet-first-levels). Rewarded placements can opt out of the ad-free
+  entitlement via <code>IgnoreNoAdsEntitlement</code> — players who paid to remove ads usually still want
+  to <em>choose</em> rewarded ones.</p>
+  <h3>Outcomes</h3>
+  <table class="spec-table">
+    <tr><th><code>AdShowOutcome</code></th><th>Meaning</th></tr>
+    <tr><td><code>Completed</code></td><td>Watched to the end — grant the reward.</td></tr>
+    <tr><td><code>Skipped</code></td><td>Dismissed early; the ad was shown but no reward is due.</td></tr>
+    <tr><td><code>Suppressed</code></td><td>Blocked before display (pacing rule or ad-free entitlement) — see <code>Reason</code>.</td></tr>
+    <tr><td><code>Failed</code></td><td>Load or show error.</td></tr>
+    <tr><td><code>NotSupported</code></td><td>The active backend cannot serve this format.</td></tr>
+  </table>
+  <h3>Providers</h3>
+  <table class="spec-table">
+    <tr><th><code>MediationProvider</code></th><th>Backend</th><th>Define</th></tr>
+    <tr><td><code>AdMobDirect</code></td><td><code>AdMobBackend</code></td><td><span class="define-chip">HLK_ADMOB</span></td></tr>
+    <tr><td><code>UnityLevelPlay</code></td><td><code>LevelPlayBackend</code></td><td><span class="define-chip">HLK_LEVELPLAY</span></td></tr>
+    <tr><td><code>AppLovinMax</code></td><td><code>AppLovinBackend</code></td><td><span class="define-chip">HLK_APPLOVIN_MAX</span></td></tr>
+    <tr><td><code>UnityAdsDirect</code></td><td><code>UnityAdsBackend</code></td><td><span class="define-chip">HLK_UNITY_ADS</span></td></tr>
+  </table>
+  <p><code>AdMode</code> selects <code>Dummy</code> (the <code>MockAdBackend</code> renders a fake ad
+  overlay in-engine — no SDK at all), <code>Test</code> (real SDK, test units), or
+  <code>Production</code>. <code>AdsDiagnosticsOverlay</code> can be toggled in development builds to
+  watch fill, pacing decisions, and revenue callbacks live.</p>
+  <div class="warn-hint"><strong>AdMob: set your App ID before building.</strong> Enter your real AdMob
+  <em>App ID</em> in <strong>Assets ▸ Google Mobile Ads ▸ Settings</strong> before you build — a missing or
+  left-in sample App ID crashes the app at launch. Per-placement <em>unit ids</em> and the App IDs are
+  entered on the <strong>Ads</strong> tab's AdMob card; leave the test unit ids in place during development
+  and they default to Google's public sample ids.</div>
+  <div class="hint">Settings pointer: mode, provider, app keys, and unit ids on the <strong>Ads</strong>
+  tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="ads-pro-ad-free">
+  <div class="crumb">Monetization</div>
+  <h2>Ads Pro &amp; Ad-Free</h2>
+  <p>Extended formats, global frequency capping, and the paid ad-removal path, configured in the
+  <code>AdsPro</code> settings section.</p>
+  <h3>Extended formats</h3>
+  <p>Opt-in toggles enable App-Open ads (with a minimum interval, first-run suppression, and optional
+  on-resume showing), rewarded interstitials, and native ads — each with per-platform test/production unit
+  ids. Preload switches (<code>PreloadRewardedOnStart</code>, <code>PreloadInterstitialOnStart</code>,
+  <code>ReloadAfterShow</code>) keep inventory warm.</p>
+  <h3>Frequency capping</h3>
+  <p><code>AdPacing</code> enforces the global rules before any intrusive ad shows:
+  <code>InterstitialMinIntervalSec</code> (default 60), <code>InterstitialMaxPerSession</code> and
+  <code>InterstitialMaxPerDay</code> (0 = uncapped), <code>NoInterstitialsBeforeLevel</code>, and a boot
+  grace window. Feed it progress via <code>Pacing.SetLevel(n)</code> / <code>AdvanceLevel()</code>. A
+  blocked show resolves as <code>Suppressed</code> with the failing rule in <code>Reason</code>.</p>
+  <h3>Ad-free entitlement</h3>
+  <div class="code-pane">using HLK.Core;
+
+// Granted by an IAP reward hook; checked automatically by AdService.
+var owned = Services.Resolve&lt;IEntitlements&gt;();
+if (owned.NoAds) HideBannerContainer();</div>
+  <p>The entitlement flag defaults to the key <code>hce.entitlement.ad_free</code>
+  (<code>AdFreeEntitlementKey</code>). Three switches decide what it silences:
+  <code>AdFreeHidesBanners</code>, <code>AdFreeHidesInterstitials</code>, and
+  <code>AdFreeHidesAppOpen</code> — all on by default. Rewarded ads keep working unless a placement says
+  otherwise. Impression-revenue forwarding (<code>EnableImpressionRevenue</code>) publishes paid events
+  through <code>AdRevenueHub</code> for attribution and analytics.</p>
+  <div class="hint">Settings pointer: the <strong>Ads Pro</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="shop-cosmetics">
+  <div class="crumb">Monetization</div>
+  <h2>Shop &amp; Cosmetics</h2>
+  <p>A catalog-driven store for currency-priced, ad-unlocked, IAP-linked, gated, and cooldown-gift items,
+  with an equip system that applies cosmetic effects to scene objects.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Shop;
+
+var shop = Services.Resolve&lt;IShopService&gt;();
+
+PurchaseOutcome bought = shop.TryPurchase("skin_neon");
+if (bought.IsSuccess()) shop.TryEquip("skin_neon");
+
+bool owned = shop.IsOwned("skin_neon");
+string active = shop.EquippedId;
+shop.PurchaseCompleted += e =&gt; RefreshShopGrid();
+shop.EquipChanged     += e =&gt; RefreshCharacter();</div>
+  <h3>Item anatomy</h3>
+  <p>A <code>ShopItem</code> asset combines an id, display info, a <code>ShopItemKind</code>
+  (<code>NonConsumable</code> / <code>Consumable</code>), and exactly one acquisition style:</p>
+  <ul>
+    <li><strong>Currency-priced</strong> — a <code>CurrencyId</code> plus <code>Price</code>; the wallet is debited.</li>
+    <li><strong>Rewarded-ad unlock</strong> — <code>UnlockByRewardedAd</code>; granted after a completed rewarded view.</li>
+    <li><strong>Real-money</strong> — <code>IapProductId</code> links the item to an IAP product.</li>
+    <li><strong>Cooldown gift</strong> — <code>ClaimCooldownSeconds &gt; 0</code>; claimable for free on a timer
+    (<code>GetCooldownRemaining</code> feeds the countdown label).</li>
+    <li><strong>Gated</strong> — <code>PrerequisiteId</code> requires owning another item first.</li>
+  </ul>
+  <h3>Cosmetics</h3>
+  <p>Equippable items reference a <code>CosmeticEffect</code>: <code>MaterialSwapEffect</code>,
+  <code>MeshSwapEffect</code>, or <code>ChildToggleEffect</code>. Equipping is exclusive per
+  <code>EquipTarget</code>, and <code>ShopItemView</code> renders one catalog entry with its price, state,
+  and buttons. Ownership persists through <code>PlayerPrefsShopStore</code>.</p>
+  <div class="hint">Settings pointer: the shop catalog is a <code>ShopCatalog</code> asset referenced by
+  your scene's <code>ShopCatalogProvider</code>; minigame-adjacent data lives on the
+  <strong>Mini-Games</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="timed-offers">
+  <div class="crumb">Monetization</div>
+  <h2>Timed Offers</h2>
+  <p>Limited-window promotions that appear for the right player at the right moment. Offers are
+  <code>OfferDefinition</code> assets in an <code>OfferCatalog</code>; the service tracks eligibility,
+  impressions, and lifetime caps per offer.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Offers;
+
+var offers = Services.Resolve&lt;IOffersService&gt;();
+
+// PULL: what may I show right now?
+foreach (var offer in offers.GetEligibleOffers())
+    ShowOfferBanner(offer);
+
+// PUSH: react the moment something becomes available.
+offers.OfferActivated += offer =&gt; PopOfferDialog(offer);
+
+offers.NotifyEvent("level_fail");      // arms event-triggered offers
+offers.ReportShown("starter_pack");    // count an impression
+offers.Purchase("starter_pack",
+    r =&gt; { if (r == OfferPurchaseResult.Success) Confetti(); });</div>
+  <h3>Offer kinds</h3>
+  <table class="spec-table">
+    <tr><th><code>OfferKind</code></th><th>Trigger</th></tr>
+    <tr><td><code>FirstSessions</code></td><td>Active between session numbers <code>FirstSessionStart</code> and <code>FirstSessionEnd</code> (feed the count via <code>SetSessionCount</code>).</td></tr>
+    <tr><td><code>TimedWindow</code></td><td>Active between two UTC timestamps (<code>WindowStartUtc</code> / <code>WindowEndUtc</code>).</td></tr>
+    <tr><td><code>EventTriggered</code></td><td>Armed for <code>ArmWindowSeconds</code> after a named gameplay event (e.g. <code>level_fail</code>) arrives via <code>NotifyEvent</code>.</td></tr>
+    <tr><td><code>Always</code></td><td>Always a candidate — reads none of the trigger fields; only <code>MaxLifetimeShows</code> and <code>CooldownSeconds</code> gate when it surfaces.</td></tr>
+  </table>
+  <p>Presentation fields cover discount display: marketing price tags, an original-price strikethrough,
+  <code>DiscountPercent</code>, banner art, and an accent color. <code>MaxLifetimeShows</code> (default 3)
+  and <code>CooldownSeconds</code> throttle repeats; state persists per offer and can be cleared with
+  <code>ResetState</code> / <code>ResetAllState</code> during QA.</p>
+  <div class="hint">Settings pointer: catalog and analytics binding on the <strong>Offers</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="daily-rewards">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Daily Rewards</h2>
+  <p>A login-streak reward loop ("starter gifts"): the player claims one gift per UTC day from a
+  designer-authored <code>StarterGiftSchedule</code>, streaks advance the ramp, and a rewarded ad can
+  multiply the claim.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.DailyReward;
+
+var gifts = Services.Resolve&lt;StarterGiftService&gt;();
+
+gifts.RegisterLogin();                       // rollover + grace bookkeeping
+if (gifts.IsClaimAvailable)
+{
+    var claim = gifts.Claim();               // HlkResult&lt;ClaimResult&gt;
+    if (claim.Success)
+        Debug.Log($"Day {claim.Value.DayNumber}: {claim.Value.Gift}");
+}
+TimeSpan wait = gifts.TimeUntilNextClaim;    // countdown for the UI</div>
+  <h3>Streaks &amp; grace</h3>
+  <p>Claiming on consecutive UTC days grows <code>CurrentStreak</code>. Missing days is judged against
+  <code>StarterGifts.GraceDays</code>: a gap is forgiven while the number of fully-missed days stays at or
+  below the grace allowance; one more and the streak resets to zero so the next claim restarts at day 1.
+  The default grace is <strong>0</strong> — strictly consecutive. Re-entering the app on the same day is
+  always a no-op.</p>
+  <h3>Stock schedule</h3>
+  <p>The generated preset is a looping 5-day cycle (<code>LoopAfterLastDay = true</code>):</p>
+  <table class="spec-table">
+    <tr><th>Day</th><th>Gift</th><th>Label</th></tr>
+    <tr><td>1</td><td>150 Coins</td><td>Welcome Bonus</td></tr>
+    <tr><td>2</td><td>275 Coins</td><td>Warming Up</td></tr>
+    <tr><td>3</td><td>12 Gems</td><td>Gem Drop</td></tr>
+    <tr><td>4</td><td>450 Coins</td><td>Almost There</td></tr>
+    <tr><td>5</td><td>35 Gems (special)</td><td>Streak Finale</td></tr>
+  </table>
+  <h3>Boosted claims &amp; UI</h3>
+  <p><code>ClaimBoosted(multiplier)</code> multiplies currency amounts; <code>ClaimWithAdBoost</code> runs
+  an <code>IRewardedAdGate</code> first (wired to the <code>DoubleAdPlacement</code> setting) and claims
+  only on completion. <code>StarterGiftPanel</code>, <code>StarterGiftTile</code>, and
+  <code>StarterGiftCountdown</code> render the calendar — each tile reflects a <code>GiftDayState</code> of
+  <code>Claimed</code>, <code>Today</code>, or <code>Locked</code>. Preview helpers
+  (<code>PreviewCurrent</code>, <code>PreviewDay</code>, <code>PreviewUpcoming</code>) never mutate
+  state.</p>
+  <h3>Clock hardening</h3>
+  <p><code>DailyCooldownService</code> offers a simpler stamped-cooldown variant with a paid retry
+  (<code>TryPaidRetry</code>). To resist device-clock rollback, set a <code>TimeProbeUrl</code>:
+  <code>RemoteHttpTimeSource</code> estimates server UTC from a single HTTP
+  <code>HEAD</code> request's <code>Date</code> header — no payload, no identifiers. Leave the field
+  empty to rely on the device clock only.</p>
+  <div class="hint">Settings pointer: schedule asset, grace days, launch overlay, and server time on the
+  <strong>Starter Gifts</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="reward-wheel">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Reward Wheel</h2>
+  <p>A weighted prize wheel split into headless selection and cosmetic spin. The outcome is decided by
+  weight <em>before</em> the wheel ever moves; the animation then lands on the pre-selected slice, so
+  presentation can never desync from the grant.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Wheel;
+
+var wheel = Services.Resolve&lt;WheelService&gt;();   // or WheelService.FromSettings()
+
+if (wheel.TrySelect(out WheelSpinResult result))
+{
+    GrantReward(result.RewardId, result.Amount);
+    // Hand result.Index to the WheelView so the spin lands there.
+}</div>
+  <h3>Slice data</h3>
+  <p>A <code>WheelSliceDatabase</code> asset holds the slices. Each <code>WheelSlice</code> carries
+  <code>RewardId</code>, <code>Amount</code>, <code>Weight</code> (relative probability; 0 or negative
+  excludes the slice), icon, label, an optional localization key, and a wedge color. Selection uses
+  <code>WeightedSelector</code>; <code>SampleDistribution(n)</code> returns an empirical histogram so you
+  can sanity-check drop rates, and <code>UseFixedSeed(seed)</code> makes outcomes reproducible for
+  tests.</p>
+  <h3>Spin presentation</h3>
+  <p><code>WheelSpinSettings.Default</code> spins for 3.2 seconds over 5 full turns with a cubic-out
+  deceleration. <code>WheelSpinner.ComputeTargetAngle</code> converts the winning index into a final
+  rotation (with jitter inside the wedge), and <code>SegmentTicker</code> raises a <code>Tick</code> event
+  each time the pointer crosses a slice boundary — hook it to a click sound and a light haptic for a
+  convincing ratchet. <code>WheelView</code> builds the wedge visuals from the database.</p>
+  <div class="hint">Settings pointer: the slice database lives under <strong>Mini-Games</strong>
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="chest-slot-minigames">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Chest &amp; Slot Minigames</h2>
+  <p>Two compact reward minigames sharing one RNG and reward-granting core (<code>MinigameRng</code>,
+  <code>WeightedPicker</code>, <code>MinigameRewardGranter</code>). Both are headless services you can
+  drive from any UI.</p>
+  <h3>Chests</h3>
+  <div class="code-pane">using HLK.Minigames.Chests;
+
+var chests = ChestService.FromServices(config);
+
+ChestTier[] board = chests.PresentRoll();     // e.g. 3 chests to pick from
+ChestOpenResult opened = chests.Open(board[0]);
+if (opened.Success) Show(opened.Drop);</div>
+  <p><code>ChestConfig</code> defines the tier list (each tier has an id, display name, key cost, and a
+  weighted drop table) plus <code>ChestsToShowAtOnce</code> (default 3) and whether duplicate tiers may
+  appear on one board. For animated reveals, split the flow: <code>RollDrop</code> decides the prize,
+  your animation plays, then <code>GrantRolled</code> pays it out.</p>
+  <h3>Slot machine</h3>
+  <div class="code-pane">using HLK.Minigames.Slots;
+
+var slots = SlotMachine.FromServices(config);
+if (slots.TrySpin(out SlotMachineResult spin))
+    ShowReels(spin);   // symbols per reel + payout, spin cost already debited</div>
+  <p><code>SlotMachineConfig</code> defaults: 3 reels, a spin cost of 10 <code>coins</code>, a 1.2-second
+  spin with 0.3-second reel stagger. Symbols are weighted; payouts map symbol combinations to rewards.
+  <code>Validate(problems)</code> on either config lists authoring mistakes before they reach players.</p>
+  <div class="hint">Settings pointer: chest and slot configs on the <strong>Mini-Games</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="quest-goals">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Quests</h2>
+  <p>Windowed goal tracking driven by the same event names you already emit for analytics. Quests are
+  <code>QuestDefinition</code> assets in a <code>QuestCatalog</code>; the service scores incoming events
+  against them, tracks per-window progress, and pays currency on claim.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Quests;
+
+var quests = Services.Resolve&lt;IQuestService&gt;();
+
+// Progress everything that matches this event.
+quests.IngestEvent("stage_clear", new Dictionary&lt;string, object&gt; {
+    { "score", 4200 }
+});
+
+if (quests.CanClaim("daily_win_3"))
+    quests.Claim("daily_win_3");        // grants the reward
+int claimed = quests.ClaimAllCompleted();
+
+quests.Completed += q =&gt;
+    Services.Resolve&lt;IToastService&gt;().Show("Quest complete!", ToastKind.Success);</div>
+  <h3>Windows &amp; matching</h3>
+  <p><code>QuestKind</code> scopes a quest to a window: <code>Daily</code>, <code>Weekly</code>,
+  <code>Event</code>, or <code>Permanent</code>. When the window rolls over (UTC), progress resets
+  automatically. A definition matches by <code>EventName</code>, counts either occurrences or a numeric
+  event property (<code>QuestMatchKind</code> + <code>PropertyName</code>), can require a property filter
+  (<code>ConditionPropertyName</code> / <code>ConditionValue</code>), and finishes at <code>Goal</code>.
+  Rewards are a <code>CurrencyId</code> + <code>RewardAmount</code>.</p>
+  <p><code>Advance(questId, amount)</code> progresses a quest directly when you'd rather not go through
+  events. Progress events: <code>ProgressChanged</code>, <code>Completed</code>, <code>Claimed</code>,
+  and a coarse <code>Changed</code>.</p>
+  <div class="hint">Settings pointer: catalog and analytics binding on the <strong>Quests</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="battle-pass">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Battle Pass</h2>
+  <p>A seasonal XP ladder with parallel free and premium reward tracks. XP arrives from gameplay events
+  or direct grants; premium unlocks through an IAP product; every tier holds up to two claimable
+  rewards.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.BattlePass;
+
+var pass = Services.Resolve&lt;IBattlePassService&gt;();
+
+pass.GrantXp(50);                              // or IngestEvent("level_complete")
+int tier = pass.CurrentTier;
+
+if (pass.CanClaim(tier, BattlePassTrack.Free))
+    pass.Claim(tier, BattlePassTrack.Free);
+
+if (!pass.IsPremiumUnlocked) ShowPremiumUpsell(pass.Config.PremiumProductId);
+pass.TierAdvanced += a =&gt; PlayTierUpFanfare();</div>
+  <h3>Season configuration</h3>
+  <p><code>BattlePassConfig</code> holds the <code>SeasonId</code> (changing it starts a fresh season),
+  the tier ladder (each <code>BattlePassTier</code> sets an XP threshold and a reward per track), the
+  premium product id, and the XP feed: a CSV of qualifying event names (or
+  <code>AcceptAllEvents</code>), with <code>XpSource</code> choosing between a flat
+  <code>XpPerEvent</code> and reading a numeric event parameter. Reward kinds cover currency and item
+  grants — item fulfillment routes through your <code>IBattlePassItemFulfiller</code>.</p>
+  <p>Events: <code>XpChanged</code>, <code>TierAdvanced</code>, <code>RewardClaimed</code>,
+  <code>ItemRewardGranted</code>, <code>PremiumUnlocked</code>, <code>Changed</code>.</p>
+  <h3>Wiring it up</h3>
+  <ul>
+    <li><strong>Unlock premium on purchase.</strong> Nothing unlocks the premium track automatically —
+    when the IAP for <code>Config.PremiumProductId</code> succeeds, call
+    <code>Services.Resolve&lt;IBattlePassService&gt;().UnlockPremium()</code> from your purchase-success
+    handler (and again after a restore).</li>
+    <li><strong>Currency rewards need an economy adapter.</strong> Depositing currency-kind rewards routes
+    through an <code>IBattlePassEconomy</code> registered in the service registry. A wallet-backed adapter
+    ships at bootstrap whenever an <code>IWallet</code> is present; if you swap the wallet out, register your
+    own <code>IBattlePassEconomy</code> or currency rewards silently no-op.</li>
+    <li><strong>XP from gameplay events.</strong> A bus→<code>IngestEvent</code> forwarder ships at
+    bootstrap, so events you emit on the analytics bus that match the season's
+    <code>EventNamesCsv</code> (or <code>AcceptAllEvents</code>) drive XP. You can still call
+    <code>GrantXp</code> / <code>IngestEvent</code> directly.</li>
+  </ul>
+  <div class="hint">Settings pointer: season config on the <strong>Battle Pass</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="energy-system">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Energy System</h2>
+  <p>A regenerating lives/energy meter that gates level attempts, refills over wall-clock time (including
+  while the app is closed), and sells refills through ads or IAP.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Energy;
+
+var energy = Services.Resolve&lt;IEnergyService&gt;();
+
+if (energy.TrySpend(1).Success) StartLevel();
+else ShowRefillDialog();
+
+energy.Refill(energy.RewardedAdRefillAmount);   // after a rewarded ad
+energy.AmountChanged += n =&gt; hud.SetHearts(n, energy.Max);
+energy.Emptied += () =&gt; ShowOutOfEnergyPopup();</div>
+  <h3>Defaults</h3>
+  <table class="spec-table">
+    <tr><th>Field (<code>EnergyConfig</code>)</th><th>Default</th></tr>
+    <tr><td><code>Max</code> / <code>Start</code></td><td>5 / 5</td></tr>
+    <tr><td><code>RegenSeconds</code></td><td>480 (one unit per 8 minutes)</td></tr>
+    <tr><td><code>CostPerLevel</code></td><td>1</td></tr>
+    <tr><td><code>FullRefillProductId</code></td><td><code>energy_full_refill</code></td></tr>
+    <tr><td><code>RewardedAdRefillAmount</code></td><td>3</td></tr>
+  </table>
+  <p><code>Reconcile()</code> recomputes regeneration against elapsed real time — the
+  <code>EnergyFocusWatcher</code> calls it on app focus when <code>RecalcRegenOnFocus</code> is enabled,
+  so returning players find the hearts they earned while away. Regeneration stops at <code>Max</code>,
+  and every top-up path is clamped to <code>Max</code> as well — <code>Refill</code> / <code>RefillToMax</code>
+  discard any excess and return the number of units actually added.</p>
+  <div class="hint">Settings pointer: config asset and focus behavior on the <strong>Energy</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="content-gating">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Content Gating</h2>
+  <p>Declarative lock/unlock rules for buttons, levels, and features. Designers author
+  <code>UnlockCondition</code> assets, attach an <code>UnlockGate</code> component to the UI, and the gate
+  keeps the target's interactable state, label, and locked overlay in sync.</p>
+  <h3>Condition types</h3>
+  <table class="spec-table">
+    <tr><th>Asset</th><th>Unlocks when…</th></tr>
+    <tr><td><code>CurrencyUnlockCondition</code></td><td>the wallet holds enough of a currency. It only <em>checks</em> affordability and never debits — performing the actual spend is the game's job.</td></tr>
+    <tr><td><code>LevelUnlockCondition</code></td><td>the player level reaches a threshold.</td></tr>
+    <tr><td><code>FlagUnlockCondition</code></td><td>a named boolean flag is set (tutorials, one-time unlocks).</td></tr>
+    <tr><td><code>CooldownUnlockCondition</code></td><td>a timed cooldown has elapsed; consuming re-stamps it.</td></tr>
+    <tr><td><code>CompositeUnlockCondition</code></td><td>all / any of a list of child conditions pass.</td></tr>
+  </table>
+  <div class="code-pane">using HLK.Gating;
+
+// Evaluate anywhere, not just on a component:
+GateStatus status = GatingService.Instance.Evaluate(condition);
+if (!status.Unlocked) label.text = status.LockReason;
+
+GatingService.Instance.SetFlag("beat_world_1", true);
+GatingService.Instance.RequestReevaluate();   // nudge every gate to refresh</div>
+  <p><code>UnlockGate</code> re-evaluates on a timer (default every 0.5 s) and raises
+  <code>StatusChanged</code>. With <code>ConsumeOnClick</code> enabled, clicking the unlocked target runs
+  the condition's consume step. Only stateful conditions mutate here: a <code>CooldownUnlockCondition</code>
+  re-stamps its timer on consume. Currency conditions do <em>not</em> spend on consume — they only check
+  affordability, so your game must perform the actual wallet debit itself.</p>
+  <p>Player state flows through an <code>IPlayerContext</code>. The built-in <code>DefaultPlayerContext</code>
+  bridges the wallet and save flags automatically, but the <strong>level number is <em>not</em> auto-wired</strong>
+  — with no level provider it reports <code>0</code>, so a <code>LevelUnlockCondition</code> stays locked
+  (unless its threshold is 0). Supply a level provider, or register your own context, before level gates work:</p>
+  <div class="code-pane">using HLK.Gating;
+using HLK.Gating.Context;
+
+// Option A — feed your progression level into the default context:
+GatingService.CreateAndRegister(
+    new DefaultPlayerContext(() =&gt; SaveModel.Level));   // () =&gt; int provider
+
+// Option B — register a fully custom IPlayerContext (server-authoritative, tests):
+GatingService.CreateAndRegister(myPlayerContext);</div>
+</section>
+
+<section class="module" id="rate-us-prompts">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Rate-Us Prompts</h2>
+  <p>Store review requests with strict throttling, an optional soft pre-prompt, and platform-correct
+  backends. The service tracks sessions and prompt history so review dialogs appear rarely and only to
+  players who have had time to enjoy the game.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.RateUs;
+
+var rate = Services.Resolve&lt;IRateUsService&gt;();
+
+// rate.RegisterSession();  // already called once per launch by RateUsBootstrap — do NOT call again
+var outcome = await rate.MaybeRequestReviewAsync(); // gated by throttles
+// QA helpers:
+await rate.ForceRequestReviewAsync();          // bypass every gate
+await rate.OpenStorePage();                    // direct store listing</div>
+  <h3>Throttle gates</h3>
+  <table class="spec-table">
+    <tr><th>Setting</th><th>Default</th><th>Effect</th></tr>
+    <tr><td><code>SessionsBeforeFirstPrompt</code></td><td>5</td><td>Never ask before this many sessions.</td></tr>
+    <tr><td><code>DaysBetweenPrompts</code></td><td>14</td><td>Cooldown after any prompt.</td></tr>
+    <tr><td><code>LifetimePromptCap</code></td><td>3</td><td>Hard ceiling per install.</td></tr>
+    <tr><td><code>StopAfterRated</code></td><td>true</td><td>Once rated, never ask again.</td></tr>
+  </table>
+  <h3>Soft pre-prompt</h3>
+  <p>When <code>PrePromptEnabled</code> is on (default), a friendly in-game question runs before the real
+  store dialog, protecting your quota from players likely to decline. The default copy — title
+  <em>"Having fun so far?"</em>, body <em>"Would you mind rating us?"</em>, buttons <em>"Rate it"</em> /
+  <em>"Maybe later"</em> — is fully editable in settings. Provide the dialog UI by assigning a
+  <code>RateUsSoftPrompter</code> delegate via <code>SetSoftPrompter</code> — for example route it through
+  the Popup Stack.</p>
+  <h3>Backends</h3>
+  <p><code>RateUsMode</code>: <code>Disabled</code>, <code>Dummy</code> (logs, no dialog), or
+  <code>Production</code> — Android uses Google Play In-App Review, iOS uses the system review controller, and
+  <code>GetGateState()</code> plus <code>ResetGates()</code> support QA. Fill in
+  <code>AndroidPackageName</code> / <code>IOSAppId</code> for the store-page fallback link.</p>
+  <p>The Android backend (<code>AndroidRateUsBackend</code>) reaches the Play In-App Review library entirely
+  by reflection, so no scripting define or managed reference is needed to compile. To make the native stars
+  popup actually fire on device, add the Play review Gradle dependency
+  <code>com.google.android.play:review:2.0.1</code> — the <strong>Rate Prompt</strong> tab has a one-click
+  button that inserts it into your Android <code>mainTemplate.gradle</code>. Without that dependency the
+  request reports "unavailable" at runtime and the service falls back to the Play Store listing.</p>
+  <div class="hint">Settings pointer: throttles, copy, and store ids on the <strong>Rate Prompt</strong>
+  tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="local-notifications">
+  <div class="crumb">LiveOps &amp; Engagement</div>
+  <h2>Local Notifications</h2>
+  <p>Schedule on-device reminders — energy refilled, gift ready, streak about to break — with permission
+  handling on both mobile platforms and a log-only backend everywhere else.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Notifications;
+
+var notify = Services.Resolve&lt;INotificationService&gt;();
+
+var perm = await notify.RequestPermissionAsync();
+if (perm.Success &amp;&amp; perm.Value == NotificationPermissionStatus.Granted)
+{
+    var handle = notify.Schedule(
+        "Energy refilled!", "Your hearts are full — jump back in.",
+        TimeSpan.FromMinutes(50));
+    // Later: notify.Cancel(handle.Value);
+}
+notify.CancelAll();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>RequestPermissionAsync()</code></td><td>Prompt for authorization; resolves to a <code>NotificationPermissionStatus</code>.</td></tr>
+    <tr><td><code>Schedule(request)</code> / <code>Schedule(title, body, fireAfter)</code></td><td>Queue a one-shot or repeating (<code>Once</code>/<code>Hourly</code>/<code>Daily</code>/<code>Weekly</code>) notification; returns a cancellable <code>NotificationHandle</code>.</td></tr>
+    <tr><td><code>Cancel(handle)</code> / <code>CancelAll()</code></td><td>Remove pending notifications; stale handles no-op.</td></tr>
+    <tr><td><code>GetPending()</code></td><td>Diagnostic snapshot of everything still scheduled.</td></tr>
+  </table>
+  <p><code>NotificationMode</code>: <code>Disabled</code>, <code>Dummy</code> (log-only; the editor
+  default), or <code>Production</code> — the mobile backend requires Unity's Mobile Notifications package
+  and <span class="define-chip">HLK_MOBILE_NOTIFICATIONS</span>. Only the default <code>hce_default</code>
+  Android channel is created automatically; there is no settings list of extra channels — supply a custom
+  category/channel per notification via <code>NotificationRequest.CategoryId</code>. The iOS
+  alert/badge/sound options do come from settings.</p>
+  <div class="hint">Settings pointer: mode, iOS options, and auto-request behavior on the
+  <strong>Notifications</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="game-services">
+  <div class="crumb">Platform Services</div>
+  <h2>Game Services</h2>
+  <p>Leaderboards, achievements, and platform sign-in behind one interface. Your code speaks in
+  <em>logical</em> ids; a <code>GameServicesCatalog</code> asset maps each one to its Game Center and
+  Play Games store ids, so gameplay code never branches per platform.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.GameServices;
+
+var gs = Services.Resolve&lt;IGameServices&gt;();
+
+await gs.InitializeAsync();
+var signIn = await gs.SignInAsync();
+if (signIn.Success) Debug.Log($"Hello {signIn.Value.DisplayName}");
+
+await gs.SubmitScoreAsync("weekly_score", 12_400);
+await gs.UnlockAchievementAsync("first_win");
+await gs.IncrementAchievementAsync("collect_100_coins", 25.0);
+await gs.ShowLeaderboardUIAsync("weekly_score");</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>SignInAsync()</code> / <code>SignOutAsync()</code></td><td>Authenticate the local player; <code>SignInChanged</code> fires with the player info.</td></tr>
+    <tr><td><code>SubmitScoreAsync(id, score)</code></td><td>Post to a logical leaderboard; optionally mirrored to analytics.</td></tr>
+    <tr><td><code>LoadTopScoresAsync(id, count)</code></td><td>Fetch entries for a custom leaderboard UI.</td></tr>
+    <tr><td><code>UnlockAchievementAsync</code> / <code>IncrementAchievementAsync</code></td><td>Binary and percentage-based achievements.</td></tr>
+    <tr><td><code>ShowLeaderboardUIAsync</code> / <code>ShowAchievementsUIAsync</code></td><td>Open the platform overlay.</td></tr>
+  </table>
+  <p><code>LeaderboardScoreFormatter</code> renders scores per the catalog's
+  <code>LeaderboardScoreFormat</code> (<code>Number</code>, <code>TimeCentiseconds</code>,
+  <code>Currency</code>).</p>
+  <div class="warn-hint"><strong>Put the catalog in Resources.</strong> Create the catalog via
+  <strong>Assets ▸ Create ▸ HLK ▸ GameServices ▸ Catalog</strong> and place it at a
+  <code>Resources/HLK/</code> path — the bootstrap loads it from <code>Resources.Load("HLK/GameServicesCatalog")</code>.
+  If the asset lives anywhere else it is never found, and your logical ids are submitted to the platform
+  verbatim (the per-platform Game Center / Play Games id mapping never applies).</div>
+  <h3>Providers</h3>
+  <table class="spec-table">
+    <tr><th><code>GameServicesProvider</code></th><th>Backend</th><th>Define</th></tr>
+    <tr><td><code>Auto</code></td><td>Picks per platform</td><td>—</td></tr>
+    <tr><td><code>Dummy</code></td><td><code>DummyGameServicesBackend</code> (in-memory)</td><td>—</td></tr>
+    <tr><td><code>GameCenter</code></td><td><code>GameCenterBackend</code></td><td><span class="define-chip">HLK_GAME_CENTER</span></td></tr>
+    <tr><td><code>PlayGames</code></td><td><code>PlayGamesBackend</code></td><td><span class="define-chip">HLK_PLAY_GAMES_SERVICES</span></td></tr>
+  </table>
+  <div class="hint">Settings pointer: provider, auto sign-in, and sample ids on the
+  <strong>Game Services</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="cloud-save">
+  <div class="crumb">Platform Services</div>
+  <h2>Cloud Save</h2>
+  <p>Synchronizes the local <a href="#save-system">save blob</a> with a per-player cloud slot, with an
+  explicit, configurable conflict policy instead of silent last-writer-wins.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.CloudSave;
+
+var cloud = Services.Resolve&lt;CloudSaveService&gt;();
+
+await cloud.InitializeAsync();
+await cloud.SignInAsync();
+
+CloudSaveResult sync = await cloud.SyncAsync();   // two-way, policy-driven
+if (sync.Status == CloudSaveStatus.ConflictResolved)
+    Debug.Log($"Adopted {sync.Direction}");
+
+await cloud.UploadAsync();                        // explicit push
+await cloud.DownloadAndAdoptAsync();              // explicit pull
+cloud.RemoteAdopted += payload =&gt; ReloadUiFromSave();</div>
+  <h3>Conflict policies</h3>
+  <table class="spec-table">
+    <tr><th><code>ConflictPolicy</code></th><th>Winner when both sides changed</th></tr>
+    <tr><td><code>PlayerWins</code></td><td>The payload with the better player progress.</td></tr>
+    <tr><td><code>SchemaWins</code></td><td>The payload with the newer save schema / timestamp.</td></tr>
+    <tr><td><code>ForceLocal</code> / <code>ForceRemote</code></td><td>Always this device / always the cloud copy.</td></tr>
+  </table>
+  <p><code>CloudSaveAutoSync</code> can sync on app pause (default on) and on currency changes (default
+  off). Results carry a <code>CloudSaveStatus</code> — <code>Ok</code>, <code>ConflictResolved</code>,
+  <code>ConflictUnresolved</code>, <code>NotSignedIn</code>, <code>NetworkError</code>,
+  <code>QuotaExceeded</code> — plus which <code>SyncDirection</code> actually happened.</p>
+  <h3>Providers</h3>
+  <table class="spec-table">
+    <tr><th><code>CloudSaveProvider</code></th><th>Backend</th><th>Define</th></tr>
+    <tr><td><code>Auto</code></td><td>Platform pick</td><td>—</td></tr>
+    <tr><td><code>LocalFallback</code></td><td><code>LocalFileCloudBackend</code> — a file-based stand-in for editor testing</td><td>—</td></tr>
+    <tr><td><code>ICloud</code></td><td>iCloud key-value storage</td><td><span class="define-chip">HLK_ICLOUD</span></td></tr>
+    <tr><td><code>PlayGames</code></td><td><code>PlayGamesCloudBackend</code> (Saved Games)</td><td><span class="define-chip">HLK_PLAY_GAMES_SAVE</span></td></tr>
+  </table>
+  <div class="hint">Settings pointer: provider, policy, and auto-sync triggers on the
+  <strong>Cloud Save</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="consent-privacy">
+  <div class="crumb">Platform Services</div>
+  <h2>Consent &amp; Privacy</h2>
+  <p>Privacy consent for two dimensions at once: regional regulation (GDPR-style consent via Google's UMP)
+  and Apple's App Tracking Transparency. The rest of the kit asks one question —
+  <code>CanRequestPersonalized</code> — and the consent module answers it.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Consent;
+
+var consent = Services.Resolve&lt;IConsentService&gt;();
+
+var res = await consent.RequestAsync();      // shows forms only if required
+bool personalized = consent.CanRequestPersonalized;
+
+// Settings screen: let players revisit their choice.
+await consent.ShowPrivacyOptionsAsync();
+consent.Resolved += r =&gt; ReconfigureAdRequests();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>RequestAsync()</code></td><td>Run the full flow: gather requirement info, show the form when regulation demands it, resolve.</td></tr>
+    <tr><td><code>WaitForResolvedAsync()</code></td><td>Await the outcome from elsewhere (e.g. the ads bootstrap holds initialization on this).</td></tr>
+    <tr><td><code>ShowPrivacyOptionsAsync()</code></td><td>Re-open the privacy options form on demand.</td></tr>
+    <tr><td><code>ResetAsync()</code></td><td>Clear stored consent (QA / region simulation).</td></tr>
+    <tr><td><code>CanRequestPersonalized</code></td><td>The single flag ad and analytics code should consult.</td></tr>
+  </table>
+  <p><code>ConsentMode</code>: <code>Disabled</code>, <code>Dummy</code> (returns the forced
+  <code>DummyOutcome</code> from settings — handy for QA), or <code>Production</code> using Google UMP
+  behind <span class="define-chip">HLK_UMP</span>; on iOS the ATT prompt is additionally gated by
+  <span class="define-chip">HLK_ATT</span>. <code>ConsentGate</code> lets other bootstraps defer work
+  until consent resolves.</p>
+  <div class="warn-hint"><strong>iOS App Tracking Transparency (App Store compliance).</strong> To show the
+  ATT prompt on iOS you must (1) add an <code>NSUserTrackingUsageDescription</code> string to
+  <code>Info.plist</code> — Apple rejects builds that call the tracking API without it — and (2) install the
+  <strong>iOS 14 Advertising Support</strong> package (<code>com.unity.ads.ios-support</code>) and enable
+  <span class="define-chip">HLK_ATT</span> (the package auto-defines it). Without both, the ATT prompt is
+  skipped and personalized-ads eligibility falls back to non-tracked.</div>
+  <div class="hint">Settings pointer: mode, QA outcome, and policy URLs on the <strong>Consent</strong>
+  tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="push-messaging">
+  <div class="crumb">Platform Services</div>
+  <h2>Push Messaging</h2>
+  <p>Remote push notifications with token lifecycle, topic subscriptions, and an in-editor simulator so
+  you can build the receiving side without a backend.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Push;
+
+var push = Services.Resolve&lt;IPushService&gt;();
+
+await push.InitializeAsync();
+await push.RequestPermissionAsync();
+await push.SubscribeAsync("news");
+
+push.TokenChanged    += token =&gt; SendTokenToBackend(token);
+push.MessageReceived += msg   =&gt; HandlePush(msg.Title, msg.Data);
+
+// Editor testing without Firebase:
+push.SimulateIncoming("Sale!", "The starter pack is 50% off", "news");</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>InitializeAsync()</code></td><td>Start the backend and obtain a device token.</td></tr>
+    <tr><td><code>SubscribeAsync</code> / <code>UnsubscribeAsync</code></td><td>Topic management; settings can auto-subscribe a topic list after registration.</td></tr>
+    <tr><td><code>Token</code> / <code>HasToken</code> / <code>ClearTokenAsync()</code></td><td>Token access and invalidation.</td></tr>
+    <tr><td><code>MessageReceived</code></td><td>Raised on the main thread for foreground/opened messages.</td></tr>
+    <tr><td><code>SimulateIncoming(...)</code></td><td>Inject a fake <code>PushMessage</code> in Dummy mode.</td></tr>
+  </table>
+  <p><code>PushMode</code>: <code>Disabled</code>, <code>Dummy</code>, or <code>Firebase</code> — the FCM
+  backend compiles behind <span class="define-chip">HLK_FIREBASE_MESSAGING</span> and requires the Firebase
+  Messaging package plus your platform config files.</p>
+  <div class="hint">Settings pointer: mode, permission timing, and auto-subscribe topics on the
+  <strong>Push</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="social-sharing">
+  <div class="crumb">Platform Services</div>
+  <h2>Social Sharing</h2>
+  <p>Native share sheets for text, links, images, screenshots, email, and SMS, wrapped in the static
+  <code>Share</code> facade. Every call resolves to a <code>ShareResult</code> that distinguishes success,
+  cancellation, and failure with a reason.</p>
+  <div class="code-pane">using HLK.Sharing;
+
+var r = await Share.TextAsync("I reached level 40!", url: "https://example.com");
+if (r.WasCancelled) return;
+
+// Capture + share in one call (superSize upscales the capture):
+await Share.ScreenshotAsync("Beat my score!");
+
+if (Share.CanSendMail())
+    await Share.EmailAsync(new EmailRequest { /* to, subject, body… */ });</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>DefaultAsync()</code></td><td>Share the configured default URL + tagline.</td></tr>
+    <tr><td><code>TextAsync</code> / <code>ImageAsync</code> / <code>ScreenshotAsync</code></td><td>Payload variants; screenshots capture via <code>ScreenCaptureHelper</code> before opening the sheet.</td></tr>
+    <tr><td><code>EmailAsync</code> / <code>MessageAsync</code></td><td>Channel-specific composers, with <code>CanSendMail()</code> / <code>CanSendMessage()</code> preflight.</td></tr>
+  </table>
+  <p><code>SharingMode</code>: <code>Disabled</code>, <code>Dummy</code> (logs the request), or
+  <code>Native</code> behind <span class="define-chip">HLK_NATIVE_SHARE</span>. Share attempts and
+  outcomes can be mirrored onto the analytics bus.</p>
+  <div class="hint">Settings pointer: mode and default share URL/tagline on the <strong>Sharing</strong>
+  tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="in-app-webview">
+  <div class="crumb">Platform Services</div>
+  <h2>In-App Web View</h2>
+  <p>Open web content — privacy policy, support portal, seasonal event page — inside the app instead of
+  bouncing players to an external browser. Supports raw HTML as well as URLs, with a JS message bridge
+  back into the game.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.WebView;
+
+var web = Services.Resolve&lt;WebViewService&gt;();
+
+await web.OpenUrlAsync("https://example.com/events", WebViewLayout.Fullscreen);
+await web.OpenPrivacyPolicyAsync();           // uses the configured URL
+
+var req = WebViewRequest.ForHtml("&lt;h1&gt;Patch notes&lt;/h1&gt;")
+    .WithTitle("What's new")
+    .WithJavaScript(true);
+await web.OpenAsync(req);
+
+web.MessageReceived += m =&gt; HandleJsMessage(m);
+await web.CloseAsync();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>OpenUrlAsync</code> / <code>OpenHtmlAsync</code> / <code>OpenAsync(request)</code></td><td>Show content with a chosen <code>WebViewLayout</code>; requests can restrict navigable schemes.</td></tr>
+    <tr><td><code>OpenPrivacyPolicyAsync</code> / <code>OpenTermsAsync</code></td><td>One-liners for the two URLs every store review asks about.</td></tr>
+    <tr><td><code>SendMessageAsync(msg)</code></td><td>Game → page messaging; <code>MessageReceived</code> is the reverse channel.</td></tr>
+    <tr><td><code>PageStarted</code> / <code>PageFinished</code> / <code>Closed</code></td><td>Navigation lifecycle events.</td></tr>
+  </table>
+  <p><code>WebViewMode</code>: <code>Dummy</code>, <code>Disabled</code>, or <code>Native</code>.
+  <strong>Dummy</strong> is a <em>system-browser fallback with an emulated lifecycle</em> — URLs (and HTML,
+  written to a temp <code>file://</code>) are handed to the OS browser via <code>Application.OpenURL</code>
+  and the "view" reports synthetic page-started/finished/closed events; it is not an in-engine panel.</p>
+  <p><strong>Native</strong> binds to the <a href="https://uniwebview.com/">UniWebView</a> plugin. To use it:
+  import the UniWebView asset into the project, enable the
+  <span class="define-chip">HLK_NATIVE_WEBVIEW</span> scripting define, and ensure
+  <code>HLK.Runtime.asmdef</code> references the <code>UniWebView</code> assembly (this reference already ships
+  in the kit's asmdef).</p>
+  <div class="warn-hint">Enabling <span class="define-chip">HLK_NATIVE_WEBVIEW</span> <em>without</em> the
+  UniWebView plugin present breaks compilation — the native backend references UniWebView types directly. Add
+  the plugin and the define together, or neither.</div>
+  <div class="hint">Settings pointer: mode and policy/terms URLs on the <strong>Web View</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="deep-links">
+  <div class="crumb">Platform Services</div>
+  <h2>Deep Links</h2>
+  <p>Routes custom-scheme and universal links into structured payloads. Links that arrive before your
+  handler subscribes are buffered, so cold-start links are never lost.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.DeepLinks;
+
+var links = Services.Resolve&lt;IDeepLinkService&gt;();
+
+links.Received += payload =&gt;
+{
+    switch (payload.RouteSlug())          // host + path, normalized
+    {
+        case "shop":  OpenShop(payload.GetQuery("item")); break;
+        case "gift":  RedeemGiftCode(payload.GetQuery("code")); break;
+    }
+};
+links.DrainPending();                     // flush anything buffered pre-subscribe
+
+// Editor testing:
+links.SimulateIncoming("hce://shop?item=starter_pack");</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Received</code></td><td>Event with a parsed <code>DeepLinkPayload</code> (scheme, host, path, query map).</td></tr>
+    <tr><td><code>DrainPending()</code> / <code>PendingCount</code></td><td>Deliver links buffered before a subscriber existed.</td></tr>
+    <tr><td><code>Last</code> / <code>LastRaw</code></td><td>Most recent payload / raw URL for diagnostics.</td></tr>
+    <tr><td><code>SimulateIncoming(url)</code></td><td>Feed a fake link through the full parse-and-dispatch path.</td></tr>
+  </table>
+  <p>Declare your schemes and App/Universal Link hosts in settings (<code>CustomSchemes</code>,
+  <code>UniversalLinkHosts</code>); the engine backend hooks Unity's application deep-link events on
+  device.</p>
+  <div class="hint"><strong>Android manifest is handled for you.</strong> At build time an
+  <code>IPostGenerateGradleAndroidProject</code> post-processor injects the launcher
+  <code>&lt;intent-filter&gt;</code> into the generated <code>AndroidManifest.xml</code> — a custom-scheme
+  filter for each entry in <code>CustomSchemes</code> (works with no account or server) and an
+  <code>autoVerify</code> <code>https</code> filter for each <code>UniversalLinkHosts</code> entry (App Links
+  additionally require an <code>assetlinks.json</code> hosted at your domain's
+  <code>/.well-known/</code>). Nothing is written when both lists are empty. Test a scheme on device with
+  <code>adb shell am start -a android.intent.action.VIEW -d "yourscheme://offer?id=x" your.package</code>.</div>
+  <div class="hint">Settings pointer: the <strong>Deep Links</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="remote-config">
+  <div class="crumb">Platform Services</div>
+  <h2>Remote Config</h2>
+  <p>Server-tunable values with typed accessors and offline-safe defaults. Seed key/value defaults in
+  settings; they answer immediately and act as the fallback whenever a fetch fails or a key is
+  missing.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.RemoteConfig;
+
+var rc = Services.Resolve&lt;IRemoteConfig&gt;();
+
+await rc.InitializeAsync();
+await rc.FetchAndActivateAsync();
+
+int maxLives   = rc.GetInt("max_lives", 5);
+bool hardMode  = rc.GetBool("hard_mode", false);
+var tuning     = rc.GetJson&lt;DifficultyTuning&gt;("difficulty", fallback: null);
+
+rc.ConfigActivated += () =&gt; ApplyLiveTuning();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>FetchAsync(force)</code> / <code>ActivateAsync()</code> / <code>FetchAndActivateAsync()</code></td><td>Two-phase fetch-then-apply, or the combined call. Fetches respect <code>CacheSeconds</code> (default 3600) unless forced.</td></tr>
+    <tr><td><code>GetString/Bool/Int/Long/Double/Float</code></td><td>Typed reads with per-call fallbacks; values coerce sensibly across types.</td></tr>
+    <tr><td><code>GetJson&lt;T&gt;(key, fallback)</code></td><td>Parse a JSON payload stored under one key straight into your own type.</td></tr>
+    <tr><td><code>State</code> / <code>LastFetchTimeUtc</code> / <code>Keys</code></td><td>Lifecycle (<code>DefaultsReady</code> → <code>Fetching</code> → <code>Activated</code> / <code>FetchFailed</code>) and diagnostics.</td></tr>
+  </table>
+  <h3>Providers</h3>
+  <table class="spec-table">
+    <tr><th><code>RemoteConfigProvider</code></th><th>Backend</th><th>Define</th></tr>
+    <tr><td><code>Dummy</code></td><td>Defaults only — fully offline</td><td>—</td></tr>
+    <tr><td><code>Firebase</code></td><td>Firebase Remote Config</td><td><span class="define-chip">HLK_FIREBASE_REMOTE_CONFIG</span></td></tr>
+    <tr><td><code>UnityGamingServices</code></td><td>UGS Remote Config</td><td><span class="define-chip">HLK_UGS_REMOTE_CONFIG</span></td></tr>
+  </table>
+  <p>The backend factory preflights each provider and refuses to promote past Dummy until its prerequisites
+  are met:</p>
+  <ul>
+    <li><strong>Firebase</strong> — the Firebase Unity SDK (Remote Config), the platform config files
+    (<code>google-services.json</code> on Android, <code>GoogleService-Info.plist</code> on iOS), and the
+    <span class="define-chip">HLK_FIREBASE_REMOTE_CONFIG</span> define.
+    <code>HLK.Runtime.asmdef</code> references the <code>Firebase.RemoteConfig</code> assembly.</li>
+    <li><strong>Unity Gaming Services</strong> — the project linked to a UGS org, <em>both</em> the
+    <code>com.unity.remote-config</code> and <code>com.unity.services.authentication</code> packages (UGS
+    Remote Config signs in anonymously first), and the <span class="define-chip">HLK_UGS_REMOTE_CONFIG</span>
+    define. <code>HLK.Runtime.asmdef</code> references the <code>Unity.Services.RemoteConfig</code> and
+    <code>Unity.Services.Authentication</code> assemblies.</li>
+  </ul>
+  <div class="hint">Settings pointer: provider, cache window, and seed defaults on the
+  <strong>Remote Config</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="app-updates">
+  <div class="crumb">Platform Services</div>
+  <h2>App Updates</h2>
+  <p>Detect newer builds and walk players through updating — via Google's in-app update flows on Android,
+  a store version check on iOS, and a simulated backend for QA everywhere.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.AppUpdate;
+
+var updates = Services.Resolve&lt;IAppUpdateService&gt;();
+
+var check = await updates.CheckForUpdateAsync();
+if (check.Success &amp;&amp; check.Value.Availability == UpdateAvailability.UpdateAvailable)
+{
+    if (updates.SupportsInAppFlow)
+        await updates.StartFlexibleUpdateAsync();   // download in background
+    else
+        await updates.OpenStorePageAsync();         // iOS / fallback
+}
+// Flexible flow, once downloaded:
+await updates.CompleteFlexibleUpdateAsync();</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>CheckForUpdateAsync()</code></td><td>Resolve an <code>UpdateInfo</code> (availability, version, staleness); <code>CheckCompleted</code> mirrors it as an event.</td></tr>
+    <tr><td><code>StartFlexibleUpdateAsync()</code> / <code>StartImmediateUpdateAsync()</code></td><td>Background download vs. blocking full-screen flow.</td></tr>
+    <tr><td><code>CompleteFlexibleUpdateAsync()</code></td><td>Apply/finalize a downloaded flexible update (Play <code>completeUpdate</code>).</td></tr>
+    <tr><td><code>OpenStorePageAsync()</code></td><td>Store-listing fallback via <code>StoreDeepLink</code>.</td></tr>
+    <tr><td><code>SimulateAvailability(state)</code></td><td>Force a state in the simulated backend for QA.</td></tr>
+  </table>
+  <p><code>AppUpdateMode</code>: <code>Disabled</code>, <code>Simulated</code> (settings choose the forced
+  availability and version), <code>AppStoreVersionCheck</code> (queries Apple's public iTunes Lookup
+  endpoint and deep-links to the store listing — no SDK needed), or <code>PlayInApp</code> behind
+  <span class="define-chip">HLK_PLAY_APP_UPDATE</span>. <code>UpdateAvailability.CriticalUpdate</code>
+  supports force-update gates; <code>VersionComparer</code> handles semantic version ordering.</p>
+  <div class="warn-hint"><strong>iOS store id.</strong> <code>AppStoreVersionCheck</code> reads the numeric
+  App Store id from the <strong>Rate Us</strong> settings section (<code>RateUsSettings.IOSAppId</code>) — the
+  same id used for the rate-prompt store link. Without it the iTunes Lookup falls back to a bundle-id query
+  and the store deep-link cannot be built, so fill in <code>IOSAppId</code> on the Rate Prompt tab before
+  shipping iOS update checks.</div>
+  <div class="hint">Settings pointer: mode, simulated values, and boot prompting on the
+  <strong>App Update</strong> tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="attribution-tracking">
+  <div class="crumb">Platform Services</div>
+  <h2>Attribution</h2>
+  <p>Install-source measurement (MMP) integration: where did this player come from, and which campaigns
+  produce payers. Ships with an AppsFlyer backend and a fully offline in-memory stand-in.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Attribution;
+
+var attr = Services.Resolve&lt;IAttributionService&gt;();
+
+attr.AttributionResolved += data =&gt;
+    Debug.Log($"Source: {data.MediaSource} / {data.Campaign}");
+
+attr.SendEvent("tutorial_complete");
+attr.SendRevenue(4.99, "USD");                     // purchase signal
+attr.SetCustomerUserId(playerId);
+attr.SetTrackingConsent(consentGranted);</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>AttributionResolved</code> / <code>LastAttribution</code></td><td>Conversion data once the MMP resolves the install source.</td></tr>
+    <tr><td><code>SendEvent</code> / <code>SendRevenue</code></td><td>In-app and monetary events for campaign optimization.</td></tr>
+    <tr><td><code>SetTrackingConsent(granted)</code></td><td>Gate data collection on the consent module's outcome.</td></tr>
+    <tr><td><code>InstallId</code></td><td>Stable per-install identifier.</td></tr>
+  </table>
+  <p><code>AttributionMode</code>: <code>Disabled</code>, <code>Dummy</code> (in-memory), or
+  <code>Production</code> — AppsFlyer behind <span class="define-chip">HLK_APPSFLYER</span> with your
+  dev key. On iOS the SDK start can wait up to <code>AttPromptTimeoutSeconds</code> (default 60) for the
+  App Tracking Transparency prompt; conversion data can be forwarded onto the analytics bus.</p>
+  <div class="hint">Settings pointer: mode, dev key, and ATT timing on the <strong>Attribution</strong>
+  tab (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="crash-reporting">
+  <div class="crumb">Platform Services</div>
+  <h2>Crash Reporting</h2>
+  <p>Uncaught-exception capture, breadcrumbs, and custom keys behind a swappable backend. The static
+  facade on <code>CrashReporterService</code> keeps call sites one line long.</p>
+  <div class="code-pane">using HLK.CrashReporter;
+
+CrashReporterService.Log("Entered shop");                  // breadcrumb
+CrashReporterService.Key("ab_bucket", "wheel_v2");         // custom key
+CrashReporterService.User(playerId);
+
+try { RiskyThing(); }
+catch (Exception ex) { CrashReporterService.Report(ex); }
+
+CrashReporterService.Report("Soft failure", CrashSeverity.Warning);</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Initialize()</code> / <code>Shutdown()</code></td><td>Hook / unhook the log and exception listeners (bootstrap does this for you).</td></tr>
+    <tr><td><code>LogBreadcrumb</code> / <code>SetCustomKey</code> / <code>SetUserId</code></td><td>Context attached to subsequent reports.</td></tr>
+    <tr><td><code>LogException(ex, context)</code></td><td>Non-fatal exception with optional key/values.</td></tr>
+    <tr><td><code>SetCollectionEnabled(bool)</code></td><td>Runtime kill-switch (tie it to consent).</td></tr>
+    <tr><td><code>TriggerTestCrash()</code></td><td>Verify the pipeline end-to-end on device.</td></tr>
+  </table>
+  <p><code>CrashReporterMode</code>: <code>Disabled</code> (the fresh-import default — nothing is captured),
+  <code>LogOnly</code> (console echo; select this to see reports without an SDK), or <code>Production</code>
+  via Firebase Crashlytics behind
+  <span class="define-chip">HLK_CRASHLYTICS</span>. Settings choose whether uncaught exceptions and
+  error-level logs are reported, and can stamp a build label on every report.</p>
+  <div class="hint">Settings pointer: the <strong>Crash Reporter</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="native-dialogs">
+  <div class="crumb">Platform Services</div>
+  <h2>Native Dialogs</h2>
+  <p>OS-styled alerts, confirmations, action sheets, text prompts, and short toasts through one awaitable
+  API — with a uGUI-rendered fallback so the same calls work in the editor and on unsupported
+  platforms.</p>
+  <div class="code-pane">using HLK.NativeUI;
+
+await NativeDialogs.ShowAlertAsync("Update ready", "Restart to apply.");
+
+bool quit = await NativeDialogs.ConfirmAsync("Quit?", "Progress is saved.");
+
+var pick = await NativeDialogs.ShowActionSheetAsync(
+    "Choose avatar", new[] { "Knight", "Rogue", "Wizard" });
+
+string name = await NativeDialogs.PromptTextAsync("Name your pet", "Be nice.");
+NativeDialogs.ShowToast("Saved!");</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>ShowAlertAsync</code></td><td>Single-button notice; returns which button closed it.</td></tr>
+    <tr><td><code>ConfirmAsync</code></td><td>Yes/no question resolving to a <code>bool</code>.</td></tr>
+    <tr><td><code>ShowActionSheetAsync</code></td><td>Option list; resolves to the chosen index.</td></tr>
+    <tr><td><code>ShowPromptAsync</code> / <code>PromptTextAsync</code></td><td>Text-entry dialog.</td></tr>
+    <tr><td><code>ShowToast(message, length)</code></td><td>Short OS toast (Android native; rendered in-engine elsewhere).</td></tr>
+  </table>
+  <p><code>NativeUIMode</code>: <code>InEngine</code> (the built-in renderer) or <code>Native</code>
+  behind <span class="define-chip">HLK_NATIVE_UI</span> — with
+  <code>UseInEngineWhenUnsupported</code> (default on) falling back automatically per dialog type.</p>
+  <div class="hint">Settings pointer: the <strong>Native UI</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="runtime-permissions">
+  <div class="crumb">Platform Services</div>
+  <h2>Runtime Permissions</h2>
+  <p>Cross-platform permission checks and requests for camera, microphone, photo library (read and add),
+  and when-in-use location, normalized into one <code>PermissionState</code> model.</p>
+  <div class="code-pane">using HLK.Permissions;
+
+// One-liner: request only if needed, true when usable.
+if (await Permissions.EnsureAsync(HLKPermission.Camera))
+    StartArMode();
+
+PermissionState state = Permissions.Check(HLKPermission.Photos);
+if (state == PermissionState.DeniedPermanently)
+    Permissions.OpenAppSettings();   // the only remaining path</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Check(permission)</code></td><td>Non-prompting status: <code>Undetermined</code>, <code>Granted</code>, <code>Denied</code>, <code>DeniedPermanently</code>, <code>NotApplicable</code>.</td></tr>
+    <tr><td><code>RequestAsync(permission)</code></td><td>Show the OS prompt when allowed; resolves to the new state.</td></tr>
+    <tr><td><code>EnsureAsync(permission)</code></td><td>Check-then-request convenience returning <code>bool</code>.</td></tr>
+    <tr><td><code>OpenAppSettings()</code></td><td>Deep-link to the app's OS settings page.</td></tr>
+  </table>
+  <p><code>PermissionsMode</code>: <code>Auto</code>, <code>Simulated</code> (always auto-grants — no OS prompt), or
+  <code>Native</code> behind <span class="define-chip">HLK_NATIVE_PERMISSIONS</span>. Build
+  post-processors inject the iOS usage-description strings you enter in settings into
+  <code>Info.plist</code>, and align the Android manifest — no manual plist editing.</p>
+  <div class="hint">Settings pointer: mode and iOS usage strings on the <strong>Permissions</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="analytics-pipeline">
+  <div class="crumb">Platform Services</div>
+  <h2>Analytics Pipeline</h2>
+  <p>A fan-out event bus: game code emits once, every attached <code>IAnalyticsSink</code> receives the
+  event. One misbehaving sink can't take the pipeline down — sink exceptions are contained per
+  dispatch.</p>
+  <div class="code-pane">using HLK.Analytics;
+
+AnalyticsApi.Emit("level_complete");
+AnalyticsApi.Emit("level_complete", ("level", 12), ("stars", 3));
+AnalyticsApi.Emit("iap_shown", new Dictionary&lt;string, object&gt; {
+    { "placement", "out_of_energy" }
+});
+
+// Custom destination:
+AnalyticsApi.Bus.AddSink(new MyBackendSink());</div>
+  <h3>Sinks</h3>
+  <table class="spec-table">
+    <tr><th>Sink</th><th>Destination</th><th>Requires</th></tr>
+    <tr><td><code>DebugLogSink</code></td><td>Unity console (toggleable)</td><td>—</td></tr>
+    <tr><td><code>UnityAnalyticsSink</code></td><td>Unity Analytics</td><td><span class="define-chip">HLK_UNITY_ANALYTICS</span></td></tr>
+    <tr><td><code>FirebaseAnalyticsSink</code></td><td>Firebase Analytics</td><td><span class="define-chip">HLK_FIREBASE</span></td></tr>
+    <tr><td><code>ForwardingSink</code></td><td>Adapter for hooking arbitrary delegates</td><td>—</td></tr>
+  </table>
+  <p><code>AnalyticsMode</code> gates the fan-out: <code>Disabled</code>, <code>ConsoleOnly</code>
+  (default), or <code>Live</code> (console plus every enabled provider). Other modules publish onto the
+  same bus when their "bind to analytics" switches are on — quests, offers, IAP funnel steps, ad outcomes,
+  sharing results, and game-services submissions emit automatically. The battle pass emits its outbound
+  telemetry the same way, but its <em>inbound</em> XP relies on a bus→<code>IngestEvent</code> forwarder
+  (shipped at bootstrap) so gameplay events on the bus also drive the pass — see the
+  <a href="#battle-pass">Battle Pass</a> section.</p>
+  <h3>Going live (UGS / Firebase)</h3>
+  <p>The stand-in sinks need no setup, but the real providers do:</p>
+  <ul>
+    <li><strong>Unity Analytics (UGS)</strong> — link the project in <strong>Project Settings ▸
+    Services</strong> (UGS requires a Cloud project id), install the <code>com.unity.services.analytics</code>
+    UPM package, and add <span class="define-chip">HLK_UNITY_ANALYTICS</span>.</li>
+    <li><strong>Firebase Analytics</strong> — import the Firebase SDK, drop
+    <code>google-services.json</code> (Android) / <code>GoogleService-Info.plist</code> (iOS) under
+    <code>Assets</code>, and add <span class="define-chip">HLK_FIREBASE</span>.</li>
+  </ul>
+  <p>Then switch the mode to <code>Live</code> and enable the matching sink. The Analytics tab checks each
+  of these prerequisites and reports the effective backend.</p>
+  <div class="hint">Settings pointer: mode and sink toggles on the <strong>Analytics</strong> tab
+  (<strong>Tools &gt; HLK &gt; Open Toolset</strong>).</div>
+</section>
+
+<section class="module" id="popup-stack">
+  <div class="crumb">UI &amp; Feedback</div>
+  <h2>Popup Stack</h2>
+  <p>Modal dialogs with serialized queueing, stacking, a shared dimming backdrop, and input blocking.
+  Popups are prefabs whose root implements <code>IPopupView</code> — derive from <code>PopupBase</code>
+  and the animation/close plumbing is handled for you.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.UI;
+
+var popups = Services.Resolve&lt;IPopupService&gt;();
+
+PopupHandle h = popups.Open(settingsPrefab, payload: null,
+    onOpened: handle =&gt; Debug.Log("visible"));
+h.Closed += () =&gt; ResumeGameplay();
+h.Close();            // or popups.CloseTop() / popups.CloseAll()</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Open(prefab, payload, onOpened)</code></td><td>Queue a popup; returns its <code>PopupHandle</code> immediately so you can subscribe to <code>Closed</code> before it shows.</td></tr>
+    <tr><td><code>CloseTop()</code> / <code>Close(handle)</code> / <code>CloseAll()</code></td><td>Dismissal — targeted, topmost, or everything.</td></tr>
+    <tr><td><code>OpenCount</code> / <code>PendingCount</code> / <code>AnyOpen</code></td><td>Stack and queue state (pause gameplay while <code>AnyOpen</code>).</td></tr>
+  </table>
+  <p>Ready-made views: <code>MessagePopup</code> (title/body/OK via <code>MessagePopupArgs</code>) and
+  <code>ConfirmPopup</code> (accept/cancel with an <code>Action&lt;bool&gt;</code> choice callback). A
+  popup can opt out of backdrop dimming or timescale independence per prefab; the overlay canvas sorts
+  at order 30000 so popups clear regular UI.</p>
+</section>
+
+<section class="module" id="toast-messages">
+  <div class="crumb">UI &amp; Feedback</div>
+  <h2>Toast Messages</h2>
+  <p>Transient, non-blocking notices shown strictly one at a time in arrival order. Each toast carries a
+  kind for coloring and its own duration; the queue drains on unscaled time, so toasts keep flowing while
+  the game is paused.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.UI;
+
+var toasts = Services.Resolve&lt;IToastService&gt;();
+
+toasts.Show("Progress saved");                          // Info, default length
+toasts.Show("Purchase complete!", ToastKind.Success);
+toasts.Show("No connection", ToastKind.Error, duration: 4f);</div>
+  <table class="spec-table">
+    <tr><th>Member</th><th>Purpose</th></tr>
+    <tr><td><code>Show(message, kind, duration)</code></td><td>Enqueue; a duration ≤ 0 falls back to <code>DefaultDuration</code>.</td></tr>
+    <tr><td><code>DefaultDuration</code></td><td>Seconds a toast stays visible when unspecified — <strong>2.2</strong> by default, settable at runtime.</td></tr>
+    <tr><td><code>QueuedCount</code> / <code>IsShowing</code> / <code>ShownCount</code></td><td>Queue introspection.</td></tr>
+    <tr><td><code>BindView(view)</code> / <code>ClearQueue()</code></td><td>Attach the on-screen renderer / drop pending messages.</td></tr>
+  </table>
+  <p>Kinds: <code>Info</code>, <code>Success</code>, <code>Warning</code>, <code>Error</code>. With no
+  view bound (early boot, headless tests) messages are logged instead and the queue still advances — a
+  later-bound view is never flooded with a backlog. Drop a <code>ToastView</code> prefab in the scene and
+  <code>ToastBinder</code> connects it to the service.</p>
+</section>
+
+<section class="module" id="ui-widgets">
+  <div class="crumb">UI &amp; Feedback</div>
+  <h2>UI Widgets</h2>
+  <p>Small, dependency-free components that cover the recurring polish work of mobile UI:</p>
+  <table class="spec-table">
+    <tr><th>Component</th><th>What it does</th></tr>
+    <tr><td><code>SafeAreaFitter</code></td><td>Anchors a RectTransform to <code>Screen.safeArea</code> and re-fits on rotation and resolution changes — notch and cutout safety with zero code.</td></tr>
+    <tr><td><code>NumberTicker</code></td><td>Rolls a TextMeshPro number from its current value to a target with easing, allocation-free (no per-frame string garbage).</td></tr>
+    <tr><td><code>PressFeedback</code></td><td>Squeezes a transform while the pointer is held and springs back on release; runs on unscaled time so buttons stay lively in pause menus.</td></tr>
+    <tr><td><code>RewardClaimButton</code></td><td>Claim flow in a box: designer callback, dismiss animation (Animator trigger or CanvasGroup fade fallback), delayed removal.</td></tr>
+    <tr><td><code>FadeTransitionTrigger</code></td><td>Inspector-wired scene change through <code>IFlowService</code>; logs and no-ops when the flow service is absent instead of throwing.</td></tr>
+  </table>
+</section>
+
+<section class="module" id="toolset-window">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Toolset Window</h2>
+  <p>The kit's one configuration surface. Open it via <strong>Tools &gt; HLK &gt; Open Toolset</strong>
+  (or <strong>Tools &gt; HLK &gt; Guided Setup</strong> — same window; the toolset <em>is</em> the setup
+  flow). It binds directly to the <code>HLKSettings</code> asset and remembers your last tab.</p>
+  <h3>Tab layout</h3>
+  <p>Tabs are arranged in two rows — the core row first, the Pro row after:</p>
+  <table class="spec-table">
+    <tr><th>Row</th><th>Tabs</th></tr>
+    <tr><td>Core</td><td>Overview &middot; Ads &middot; Analytics &middot; Audio &middot; Haptics &middot; Purchases &middot; Mini-Games &middot; Notifications &middot; Rate Prompt &middot; Starter Gifts &middot; General</td></tr>
+    <tr><td>Pro</td><td>Ads Pro &middot; App Update &middot; Attribution &middot; Battle Pass &middot; Cloud Save &middot; Consent &middot; Crash Reporter &middot; Deep Links &middot; Energy &middot; Game Services &middot; Purchases Pro &middot; Localization &middot; Native UI &middot; Offers &middot; Permissions &middot; Push &middot; Quests &middot; Remote Config &middot; Sharing &middot; Web View</td></tr>
+  </table>
+  <h3>What the tabs give you beyond fields</h3>
+  <ul>
+    <li><strong>SDK probes</strong> — each vendor-backed tab detects whether the SDK and its scripting
+    define are actually present, and shows what the effective backend will be.</li>
+    <li><strong>Pre-flight checks</strong> — production-readiness banners (e.g. missing ad unit ids)
+    before you ship with placeholder values.</li>
+    <li><strong>Helper actions</strong> — one-click steps like adding the Android <code>VIBRATE</code>
+    permission, always behind an explicit confirmation dialog.</li>
+    <li><strong>Asset creation</strong> — buttons to generate the preset assets for data-driven modules
+    (also reachable in bulk via <strong>Tools &gt; HLK &gt; Generate Starter Config Assets</strong>).</li>
+  </ul>
+  <div class="hint">If the settings asset is missing, the window offers to create it at
+  <code>Assets/HyperCasualLiveOpsKit/Resources/HLK/HLKSettings.asset</code> — the only path the runtime
+  loads from.</div>
+</section>
+
+<section class="module" id="cheat-console">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Cheat Console</h2>
+  <p>An on-screen QA console for the actions testers repeat all day. Its compile-time gate keeps releases
+  clean: with <span class="define-chip">HLK_CHEATS</span> defined you get the live
+  <code>CheatService</code> plus the console overlay; without it, an inert <code>NoOpCheatService</code>
+  is registered instead, so any code resolving <code>ICheatService</code> still works — it just refuses
+  politely.</p>
+  <div class="code-pane">using HLK.Core;
+using HLK.Cheats;
+
+var cheats = Services.Resolve&lt;ICheatService&gt;();
+if (cheats.Enabled)
+{
+    cheats.GrantCurrency("Coins", 5000);
+    cheats.ResetDailyStreak();
+    cheats.Execute(CheatActionId.WipeAllData);
+}</div>
+  <h3>Opening the console</h3>
+  <ul>
+    <li><strong>Desktop / editor:</strong> the toggle key — <code>BackQuote</code> (`) by default.</li>
+    <li><strong>Device:</strong> press and hold with <strong>3 fingers for 1 second</strong>.</li>
+  </ul>
+  <p>Both gestures, keyboard shortcuts, grant amounts (defaults: 1000 coins / 100 gems), and currency ids
+  are configured in a <code>CheatBindings</code> asset loaded from <code>Resources/HLK/CheatBindings</code>.</p>
+  <h3>Built-in actions</h3>
+  <p><code>CheatActionId</code>: <code>GrantCoins</code>, <code>GrantGems</code>,
+  <code>ResetDailyStreak</code>, <code>ClearShopOwnership</code>, <code>WipeAllData</code> — plus
+  <code>ReloadActiveScene()</code> on the service. When compiled in, a warning is logged every launch as
+  a reminder to strip the define from release builds.</p>
+</section>
+
+<section class="module" id="scripting-defines">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Scripting Defines</h2>
+  <p>Vendor SDK code never compiles until you opt in. Each integration sits behind an <code>HLK_*</code>
+  define; install the vendor SDK, make sure the define is set, and the real backend replaces the stand-in.
+  How the define gets set depends on how the SDK is distributed:</p>
+  <ul>
+    <li><strong>UPM-package integrations define themselves.</strong> These sit behind a
+    <em>version define</em> in <code>HLK.Runtime.asmdef</code>, so installing the package automatically adds
+    the define — no manual step: <span class="define-chip">HLK_ADMOB</span>,
+    <span class="define-chip">HLK_UNITY_PURCHASING</span>, <span class="define-chip">HLK_UNITY_ANALYTICS</span>,
+    <span class="define-chip">HLK_FIREBASE</span>, <span class="define-chip">HLK_CRASHLYTICS</span>,
+    <span class="define-chip">HLK_FIREBASE_MESSAGING</span>, <span class="define-chip">HLK_MOBILE_NOTIFICATIONS</span>,
+    <span class="define-chip">HLK_APPSFLYER</span>, <span class="define-chip">HLK_LEVELPLAY</span>,
+    <span class="define-chip">HLK_UNITY_ADS</span>, and <span class="define-chip">HLK_ATT</span>.</li>
+    <li><strong>Everything else is set manually.</strong> SDKs delivered as <code>.unitypackage</code> /
+    asset-store imports (and the kit's own compile-time switches) have no version define, so you add the
+    define yourself — via the relevant Toolset tab, or Project Settings → Player → Scripting Define Symbols.
+    This covers <span class="define-chip">HLK_APPLOVIN_MAX</span>,
+    <span class="define-chip">HLK_PLAY_GAMES_SERVICES</span>, <span class="define-chip">HLK_PLAY_GAMES_SAVE</span>,
+    <span class="define-chip">HLK_GAME_CENTER</span>, <span class="define-chip">HLK_NATIVE_SHARE</span>,
+    <span class="define-chip">HLK_ICLOUD</span>, <span class="define-chip">HLK_NATIVE_PERMISSIONS</span>,
+    <span class="define-chip">HLK_NATIVE_WEBVIEW</span>, <span class="define-chip">HLK_NATIVE_UI</span>,
+    <span class="define-chip">HLK_UMP</span>, <span class="define-chip">HLK_PLAY_APP_UPDATE</span>,
+    <span class="define-chip">HLK_FIREBASE_REMOTE_CONFIG</span>,
+    <span class="define-chip">HLK_UGS_REMOTE_CONFIG</span>, <span class="define-chip">HLK_CHEATS</span>, and
+    <span class="define-chip">HLK_LOG_VERBOSE</span>.</li>
+  </ul>
+  <table class="spec-table">
+    <tr><th>Define</th><th>Enables</th><th>Module</th></tr>
+    <tr><td><span class="define-chip">HLK_ADMOB</span></td><td>Google Mobile Ads backend</td><td>Ads</td></tr>
+    <tr><td><span class="define-chip">HLK_LEVELPLAY</span></td><td>Unity LevelPlay (ironSource) mediation</td><td>Ads</td></tr>
+    <tr><td><span class="define-chip">HLK_APPLOVIN_MAX</span></td><td>AppLovin MAX mediation</td><td>Ads</td></tr>
+    <tr><td><span class="define-chip">HLK_UNITY_ADS</span></td><td>Unity Ads direct</td><td>Ads</td></tr>
+    <tr><td><span class="define-chip">HLK_UNITY_PURCHASING</span></td><td>Unity IAP store backend</td><td>IAP</td></tr>
+    <tr><td><span class="define-chip">HLK_UNITY_ANALYTICS</span></td><td>Unity Analytics sink</td><td>Analytics</td></tr>
+    <tr><td><span class="define-chip">HLK_FIREBASE</span></td><td>Firebase Analytics sink</td><td>Analytics</td></tr>
+    <tr><td><span class="define-chip">HLK_FIREBASE_MESSAGING</span></td><td>Firebase Cloud Messaging</td><td>Push</td></tr>
+    <tr><td><span class="define-chip">HLK_FIREBASE_REMOTE_CONFIG</span></td><td>Firebase Remote Config backend</td><td>Remote Config</td></tr>
+    <tr><td><span class="define-chip">HLK_UGS_REMOTE_CONFIG</span></td><td>Unity Gaming Services backend</td><td>Remote Config</td></tr>
+    <tr><td><span class="define-chip">HLK_CRASHLYTICS</span></td><td>Firebase Crashlytics backend</td><td>Crash Reporting</td></tr>
+    <tr><td><span class="define-chip">HLK_UMP</span></td><td>Google User Messaging Platform</td><td>Consent</td></tr>
+    <tr><td><span class="define-chip">HLK_ATT</span></td><td>iOS App Tracking Transparency prompt</td><td>Consent</td></tr>
+    <tr><td><span class="define-chip">HLK_APPSFLYER</span></td><td>AppsFlyer SDK</td><td>Attribution</td></tr>
+    <tr><td><span class="define-chip">HLK_PLAY_GAMES_SERVICES</span></td><td>Google Play Games sign-in / leaderboards</td><td>Game Services</td></tr>
+    <tr><td><span class="define-chip">HLK_GAME_CENTER</span></td><td>Apple Game Center</td><td>Game Services</td></tr>
+    <tr><td><span class="define-chip">HLK_PLAY_GAMES_SAVE</span></td><td>Play Games Saved Games</td><td>Cloud Save</td></tr>
+    <tr><td><span class="define-chip">HLK_ICLOUD</span></td><td>iCloud key-value storage</td><td>Cloud Save</td></tr>
+    <tr><td><span class="define-chip">HLK_PLAY_APP_UPDATE</span></td><td>Google Play in-app update flows</td><td>App Updates</td></tr>
+    <tr><td><span class="define-chip">HLK_MOBILE_NOTIFICATIONS</span></td><td>Unity Mobile Notifications backend</td><td>Notifications</td></tr>
+    <tr><td><span class="define-chip">HLK_NATIVE_SHARE</span></td><td>Native share sheet plugin</td><td>Sharing</td></tr>
+    <tr><td><span class="define-chip">HLK_NATIVE_WEBVIEW</span></td><td>Native web-view plugin</td><td>Web View</td></tr>
+    <tr><td><span class="define-chip">HLK_NATIVE_UI</span></td><td>Native dialog backends</td><td>Native Dialogs</td></tr>
+    <tr><td><span class="define-chip">HLK_NATIVE_PERMISSIONS</span></td><td>Native permission requests</td><td>Permissions</td></tr>
+    <tr><td><span class="define-chip">HLK_CHEATS</span></td><td>Compiles the cheat console in</td><td>Cheats</td></tr>
+    <tr><td><span class="define-chip">HLK_LOG_VERBOSE</span></td><td>Verbose diagnostic logging at compile time</td><td>Core</td></tr>
+  </table>
+  <div class="warn-hint"><strong>Rule of thumb:</strong> a define without its SDK produces compile errors;
+  an SDK without its define is silently ignored. Add both, or neither. Verbose logging can also be flipped
+  at runtime via <code>General.VerboseLogging</code> without any define.</div>
+</section>
+
+<section class="module" id="faq-troubleshooting">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Troubleshooting</h2>
+  <p>Issues are grouped by module. Diagnostic logging helps with nearly all of them: enable
+  <code>VerboseLogging</code> on the General tab and watch for <code>[HLK]</code>-tagged lines.</p>
+
+  <h3>Core &amp; boot</h3>
+  <table class="fix-table">
+    <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+    <tr>
+      <td><code>Resolve&lt;T&gt;()</code> throws <code>InvalidOperationException</code></td>
+      <td>You resolved before the module's bootstrap ran, or from a script executing before assemblies-loaded hooks.</td>
+      <td>Resolve in <code>Start()</code> rather than field initializers, or use <code>Services.TryResolve</code> and retry.</td>
+    </tr>
+    <tr>
+      <td>Settings edits ignored at runtime</td>
+      <td>The asset isn't at the required Resources path, so a transient default instance is being served.</td>
+      <td>Keep the asset at <code>Resources/HLK/HLKSettings.asset</code>; the Toolset window creates it correctly.</td>
+    </tr>
+    <tr>
+      <td>Exceptions from SDK callbacks touching Unity objects</td>
+      <td>The vendor invoked your handler on a worker thread.</td>
+      <td>Wrap the body in <code>MonoHost.Post(() =&gt; ...)</code>.</td>
+    </tr>
+  </table>
+
+  <h3>Save &amp; cloud</h3>
+  <table class="fix-table">
+    <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+    <tr>
+      <td>Progress lost when the app is killed quickly</td>
+      <td><code>RequestSave()</code> debounces (~1 s) and the flush never ran.</td>
+      <td>Call <code>FlushNow()</code> at critical moments and <code>AttachLifecycle()</code> once at boot.</td>
+    </tr>
+    <tr>
+      <td><code>SyncAsync</code> reports <code>NotSignedIn</code></td>
+      <td>The cloud backend needs platform sign-in that hasn't happened.</td>
+      <td>Await <code>SignInAsync()</code> first; in the editor use the <code>LocalFallback</code> provider.</td>
+    </tr>
+    <tr>
+      <td>Cloud adopts the "wrong" copy on conflict</td>
+      <td>The active <code>ConflictPolicy</code> doesn't match your expectation.</td>
+      <td>Pick the policy explicitly on the Cloud Save tab, or pass one to <code>SyncAsync(policy)</code>.</td>
+    </tr>
+  </table>
+
+  <h3>Monetization</h3>
+  <table class="fix-table">
+    <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+    <tr>
+      <td>Rewarded call resolves <code>Suppressed</code></td>
+      <td>A pacing rule blocked it (min interval, session/day cap, quiet levels) or the ad-free entitlement is active.</td>
+      <td>Read the <code>Reason</code> string; review Ads Pro caps and the placement's overrides.</td>
+    </tr>
+    <tr>
+      <td>Only mock ads ever appear on device</td>
+      <td><code>AdMode</code> is still <code>Dummy</code>, or the mediation SDK/define pair is missing.</td>
+      <td>Set Test/Production on the Ads tab, install the SDK, add its define; the tab's probe shows the effective backend.</td>
+    </tr>
+    <tr>
+      <td><code>PurchaseAsync</code> fails with <code>StoreNotReady</code></td>
+      <td>Initialization didn't finish (or failed) before purchasing.</td>
+      <td>Await <code>InitializeAsync()</code> and check its <code>bool</code>; verify the catalog has your product id.</td>
+    </tr>
+    <tr>
+      <td>Restore brings back nothing</td>
+      <td>Consumables are not restorable by design.</td>
+      <td>Model permanent items as <code>NonConsumable</code>; verify with a test account that owns them.</td>
+    </tr>
+  </table>
+
+  <h3>LiveOps</h3>
+  <table class="fix-table">
+    <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+    <tr>
+      <td>Daily streak resets after one missed day</td>
+      <td><code>GraceDays</code> defaults to 0 — strictly consecutive claims.</td>
+      <td>Raise <code>GraceDays</code> on the Starter Gifts tab; consider setting a <code>TimeProbeUrl</code> against clock cheats.</td>
+    </tr>
+    <tr>
+      <td>Wheel's <code>TrySelect</code> returns false</td>
+      <td>No database assigned, or every slice has weight ≤ 0.</td>
+      <td>Assign <code>WheelDatabase</code> under Mini-Games and give at least one slice a positive weight.</td>
+    </tr>
+    <tr>
+      <td>Quests never progress</td>
+      <td>Event names don't match the definitions, or the window rolled over.</td>
+      <td>Compare the emitted name with <code>QuestDefinition.EventName</code>; remember Daily/Weekly windows reset UTC.</td>
+    </tr>
+    <tr>
+      <td>Battle pass XP stays at zero</td>
+      <td>The event isn't in <code>EventNamesCsv</code> (and <code>AcceptAllEvents</code> is off), or no bus→<code>IngestEvent</code> forwarder is feeding the pass.</td>
+      <td>Add the event name to the season config; make sure the bus→<code>IngestEvent</code> forwarder is attached (it ships at bootstrap) so bus events reach the pass, or grant directly with <code>GrantXp</code>.</td>
+    </tr>
+    <tr>
+      <td>Energy doesn't refill overnight</td>
+      <td>Reconciliation never ran after the app resumed.</td>
+      <td>Keep <code>RecalcRegenOnFocus</code> enabled or call <code>Reconcile()</code> when your home screen opens.</td>
+    </tr>
+    <tr>
+      <td>Review prompt never shows</td>
+      <td>Throttle gates: 5 sessions first, 14-day spacing, lifetime cap 3, and "stop after rated".</td>
+      <td>That's working as intended. For QA, use <code>ForceRequestReviewAsync()</code> or <code>ResetGates()</code>.</td>
+    </tr>
+  </table>
+
+  <h3>Platform services</h3>
+  <table class="fix-table">
+    <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+    <tr>
+      <td>Notifications never fire in the editor</td>
+      <td>The editor runs the log-only Dummy backend.</td>
+      <td>Test on device with <code>Production</code> mode, the Mobile Notifications package, and its define.</td>
+    </tr>
+    <tr>
+      <td>Push token stays null</td>
+      <td>Firebase configuration files are missing or the messaging define is absent.</td>
+      <td>Ship the Firebase platform files (<code>google-services.json</code> on Android, <code>GoogleService-Info.plist</code> on iOS) plus the messaging define; in Dummy mode use <code>SimulateIncoming</code>.</td>
+    </tr>
+    <tr>
+      <td>Deep link on cold start seems dropped</td>
+      <td>The link arrived before any subscriber existed.</td>
+      <td>It's buffered — call <code>DrainPending()</code> right after subscribing to <code>Received</code>.</td>
+    </tr>
+    <tr>
+      <td>Remote config values never change</td>
+      <td>The cache window hasn't elapsed, so fetches short-circuit.</td>
+      <td>Lower <code>CacheSeconds</code> during development or call <code>FetchAsync(force: true)</code>.</td>
+    </tr>
+    <tr>
+      <td>Localized text shows raw keys</td>
+      <td>No table set assigned, or the key is missing from the active locale.</td>
+      <td>Assign a <code>TableSet</code> on the Localization tab and add the key; the fallback table covers gaps.</td>
+    </tr>
+  </table>
+
+  <h3>UI, audio &amp; debug</h3>
+  <table class="fix-table">
+    <tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr>
+    <tr>
+      <td>Toasts log to console instead of showing</td>
+      <td>No <code>IToastView</code> is bound in the scene.</td>
+      <td>Add a <code>ToastView</code> prefab with a <code>ToastBinder</code>; queued behavior is otherwise identical.</td>
+    </tr>
+    <tr>
+      <td><code>Play(id)</code> produces silence</td>
+      <td>The id doesn't exist in the bank, or the bank isn't assigned; category or master may also be muted.</td>
+      <td>Check the entry name on the Audio tab, the <code>DefaultSoundBank</code> slot, and the mixer toggles.</td>
+    </tr>
+    <tr>
+      <td>No vibration on Android in Production mode</td>
+      <td>The <code>VIBRATE</code> permission was never added to the manifest.</td>
+      <td>Use the Haptics tab's manifest button; verify device settings allow vibration.</td>
+    </tr>
+    <tr>
+      <td>Cheat console won't open in a build</td>
+      <td><code>HLK_CHEATS</code> wasn't defined for that build target.</td>
+      <td>Add the define for QA builds only; on device use the 3-finger 1-second hold.</td>
+    </tr>
+    <tr>
+      <td>Toon materials render magenta</td>
+      <td>The material uses a variant from a different render pipeline.</td>
+      <td>Switch to the family matching your pipeline (BiRP/URP/HDRP); <code>RenderPipelineUtil</code> tells you which is active.</td>
+    </tr>
+  </table>
+</section>
+
+<section class="module" id="currency-icon-setup">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Currency Icon Setup</h2>
+  <p><code>CurrencyIcons.Get(CurrencyId)</code> first uses the icon assigned to the active
+  <code>CurrencyCatalog</code>. If no catalog icon is assigned, it falls back to
+  <code>Resources.Load&lt;Sprite&gt;("HLK/CurrencyIcons/&lt;CurrencyId&gt;")</code>.</p>
+  <p>For drop-in icons, create <code>Resources/HLK/CurrencyIcons/</code> and add files such as
+  <code>Coins.png</code> and <code>Gems.png</code>. Each filename must match its
+  <code>CurrencyId</code> enum member exactly. Import the image as Sprite (2D and UI), Single mode,
+  with mipmaps and Read/Write disabled.</p>
+  <p>Lookups, including misses, are cached. Call <code>CurrencyIcons.InvalidateAll()</code> after
+  changing icon art or <code>CurrencyIcons.Invalidate(id)</code> to refresh one currency. A fresh
+  play-mode session starts with an empty cache.</p>
+</section>
+
+<section class="module" id="portable-power-ups">
+  <div class="crumb">Core Infrastructure</div>
+  <h2>Portable Power-Ups</h2>
+  <p>The <code>PowerUps</code> module keeps definitions, catalogs, inventory state, effect handlers,
+  the runtime bar, buttons, tutorial popup, setup tools, shared artwork, and the sample Rainbow
+  Release preset together without embedding game-specific behavior in the definitions.</p>
+  <h3>Add a power-up</h3>
+  <ol>
+    <li>Open <strong>Tools &gt; HLK &gt; Power-Ups &gt; Setup &amp; Catalog</strong>.</li>
+    <li>Choose a permanent ID and display name, then create the definition.</li>
+    <li>Assign its center icon and tutorial illustration. The shared slot frame can normally stay unchanged.</li>
+    <li>Implement <code>IPowerUpEffectHandler</code> in the host game and register it while the gameplay scene is active.</li>
+    <li>Run <strong>Tools &gt; HLK &gt; Power-Ups &gt; Validate</strong>.</li>
+  </ol>
+  <div class="code-pane">public sealed class HammerHandler : IPowerUpEffectHandler
+{
+    public string PowerUpId =&gt; "hammer";
+
+    public PowerUpUseResult TryApply(UnityEngine.Object target)
+    {
+        if (target is not BreakableBlock block)
+            return PowerUpUseResult.Rejected("Pick a breakable block.");
+
+        block.Break();
+        return PowerUpUseResult.Used("Block smashed!");
+    }
+}
+
+PowerUpEffectRegistry.Register(handler);
+
+if (PowerUpBar.Instance != null &amp;&amp;
+    PowerUpBar.Instance.TryUseArmed(tappedTarget))
+    return;</div>
+  <p>The default <code>PlayerPrefsPowerUpStateStore</code> supports offline inventory. Install an
+  account or cloud implementation of <code>IPowerUpStateStore</code> through
+  <code>PowerUpServices.SetStateStore(...)</code>. Catalog ordering, enable flags, duplicate-ID
+  validation, and an optional display limit control how definitions appear; a zero display limit
+  shows all enabled definitions in the horizontal scroller.</p>
+</section>
+
+<section class="module" id="release-notes">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Release Notes</h2>
+  <h3>2.0.0</h3>
+  <ul>
+    <li>Added the independently portable Power-Ups module with scalable catalog, injectable state,
+    generic effect registry, horizontal runtime bar, tutorial template, editor creator, and validation.</li>
+    <li>Added daily, weekly, event, and permanent quests; seasonal battle-pass tracks; regenerating energy; and timed offers.</li>
+    <li>Added game services, cloud save, push messaging, consent, deep links, app-update prompts, and typed remote config.</li>
+    <li>Added catalog-based IAP, mediation-ready ads, and shop items for currencies, ads, unlock gates, and real-money products.</li>
+    <li>Added starter gifts, reward wheel, slot and chest minigames, rate prompts, and local notifications.</li>
+    <li>Added queued toasts, modal popups, haptics, pooled audio, wallet economy, versioned saves, localization, analytics, sharing, web view, runtime permissions, attribution, crash reporting, and toon shaders.</li>
+  </ul>
+  <div class="warn-hint"><strong>Upgrade note.</strong> Version 2.0.0 intentionally changes serialized
+  settings names, preset paths, and the default ad-free entitlement key to
+  <code>hce.entitlement.ad_free</code>. Existing <code>HLK_*</code> scripting defines remain unchanged.</div>
+</section>
+
+<section class="module" id="licenses-notices">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Licenses &amp; Notices</h2>
+  <h3>Robert Penner's Easing Equations</h3>
+  <p>The standard easing constants and curve shapes used by <code>Runtime/Core/Easing.cs</code>,
+  including the back-overshoot, elastic-period, and bounce-segment parameterizations, are derived
+  from Robert Penner's easing equations and are used under the BSD License.</p>
+  <div class="code-pane">Copyright (c) 2001 Robert Penner
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted
+provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions
+   and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of
+   conditions and the following disclaimer in the documentation and/or other materials provided
+   with the distribution.
+3. Neither the name of the author nor the names of contributors may be used to endorse or promote
+   products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE, ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</div>
+</section>
+
+<section class="module" id="contact-support">
+  <div class="crumb">Tooling &amp; Debug</div>
+  <h2>Support</h2>
+  <p>Stuck on something this manual doesn't cover? Reach out — real answers from the developer, usually
+  within two business days.</p>
+  <ul>
+    <li><strong>Email:</strong> <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a></li>
+  </ul>
+  <p>To get the fastest turnaround, include:</p>
+  <ul>
+    <li>Unity version, target platform, and render pipeline;</li>
+    <li>the module and mode involved (e.g. "Ads, LevelPlay, Production");</li>
+    <li>console output with <code>VerboseLogging</code> enabled — the <code>[HLK]</code> lines around the
+    failure are usually enough to pinpoint it;</li>
+    <li>which <code>HLK_*</code> defines your build sets.</li>
+  </ul>
+  <p>Bug reports that arrive with a minimal reproduction scene get priority. Feature requests are welcome
+  too — a lot of this kit exists because someone asked.</p>
+</section>
+
+</main>
+
+<footer class="basement">
+  <p>Support: <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a></p>
+  <p>&copy; 2026 Satisvizion. All rights reserved.</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var seekBox   = document.getElementById("seekBox");
+  var seekEmpty = document.getElementById("seekEmpty");
+  var links     = Array.prototype.slice.call(document.querySelectorAll(".rail-link"));
+  var groups    = Array.prototype.slice.call(document.querySelectorAll(".rail-group"));
+
+  // ── Section filter: token-prefix matching ──────────────
+  // Each query token must be a prefix of at least one word in the
+  // link's label (case-insensitive). "re wh" matches "Reward Wheel".
+  function tokensOf(text) {
+    return text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  }
+
+  var labelWords = links.map(function (a) { return tokensOf(a.textContent); });
+
+  function linkMatches(idx, queryTokens) {
+    var words = labelWords[idx];
+    for (var q = 0; q < queryTokens.length; q++) {
+      var tok = queryTokens[q], hit = false;
+      for (var w = 0; w < words.length; w++) {
+        if (words[w].indexOf(tok) === 0) { hit = true; break; }
+      }
+      if (!hit) return false;
+    }
+    return true;
+  }
+
+  function applyFilter() {
+    var queryTokens = tokensOf(seekBox.value);
+    var anyVisible = false;
+
+    links.forEach(function (a, i) {
+      var show = queryTokens.length === 0 || linkMatches(i, queryTokens);
+      a.style.display = show ? "" : "none";
+      if (show) anyVisible = true;
+    });
+
+    groups.forEach(function (g) {
+      var visible = g.querySelectorAll(".rail-link:not([style*='none'])").length > 0;
+      g.style.display = visible ? "" : "none";
+    });
+
+    seekEmpty.style.display = anyVisible ? "none" : "block";
+  }
+
+  seekBox.addEventListener("input", applyFilter);
+
+  // ── Scrollspy: pick the last section whose top passed the fold ──
+  var sections = Array.prototype.slice.call(document.querySelectorAll("section.module"));
+  var linkById = {};
+  links.forEach(function (a) {
+    linkById[a.getAttribute("href").slice(1)] = a;
+  });
+
+  var spyTicking = false;
+
+  function currentSectionId() {
+    var fold = window.scrollY + 96;
+    var winner = sections.length ? sections[0].id : null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= fold) winner = sections[i].id;
+      else break;
+    }
+    // Bottom of document: force the last section.
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
+      winner = sections[sections.length - 1].id;
+    }
+    return winner;
+  }
+
+  function refreshSpy() {
+    spyTicking = false;
+    var id = currentSectionId();
+    links.forEach(function (a) { a.classList.remove("lit"); });
+    var active = linkById[id];
+    if (active) {
+      active.classList.add("lit");
+      var railBox = document.getElementById("railNav");
+      var top = active.offsetTop - railBox.clientHeight / 2;
+      if (Math.abs(railBox.scrollTop - top) > railBox.clientHeight / 2)
+        railBox.scrollTop = top;
+    }
+  }
+
+  window.addEventListener("scroll", function () {
+    if (!spyTicking) {
+      spyTicking = true;
+      window.requestAnimationFrame(refreshSpy);
+    }
+  }, { passive: true });
+
+  refreshSpy();
+})();
+</script>
+</body>
+</html>
