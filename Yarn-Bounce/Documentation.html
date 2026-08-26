@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yarn Bounce &mdash; Documentation</title>
+<style>
+:root {
+  --sheet: #f4f6f7;
+  --card: #ffffff;
+  --ink: #22303c;
+  --ink-soft: #5b6b7a;
+  --ink-faint: #8b98a5;
+  --rule: #dde3e8;
+  --leaf: #0e8f63;
+  --leaf-deep: #0a6b4a;
+  --leaf-wash: #e3f4ec;
+  --sun: #d97e06;
+  --sun-wash: #fdf1de;
+  --night: #1b2530;
+  --night-2: #243140;
+  --night-ink: #cfd9e2;
+  --night-dim: #7e8ea0;
+  --rail-w: 296px;
+  --crown-h: 58px;
+  --bend-lg: 8px;
+  --bend-sm: 4px;
+  --body-face: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono-face: "Cascadia Code", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body-face);
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* ── Top strip ─────────────────────────────────────────── */
+.crown {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--crown-h);
+  background: var(--night);
+  border-bottom: 3px solid var(--leaf);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 22px;
+  z-index: 60;
+}
+.crown-mark {
+  width: 30px; height: 30px;
+  border-radius: var(--bend-sm);
+  background: linear-gradient(150deg, var(--leaf) 0%, var(--leaf-deep) 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: grid; place-items: center;
+  letter-spacing: .5px;
+}
+.crown-name {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: .2px;
+}
+.crown-name em { font-style: normal; color: var(--leaf); }
+.crown-rev {
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--night-ink);
+  background: var(--night-2);
+  border: 1px solid #33445a;
+  border-radius: 999px;
+  padding: 3px 12px;
+  white-space: nowrap;
+}
+
+/* ── Left rail ─────────────────────────────────────────── */
+.rail {
+  position: fixed;
+  top: var(--crown-h);
+  left: 0;
+  bottom: 0;
+  width: var(--rail-w);
+  background: var(--night);
+  overflow-y: auto;
+  padding: 16px 0 40px;
+  scrollbar-width: thin;
+  scrollbar-color: #3a4a5e var(--night);
+}
+.rail::-webkit-scrollbar { width: 8px; }
+.rail::-webkit-scrollbar-thumb { background: #3a4a5e; border-radius: 4px; }
+
+.rail-seek {
+  padding: 0 16px 14px;
+}
+.rail-seek input {
+  width: 100%;
+  background: var(--night-2);
+  border: 1px solid #33445a;
+  border-radius: var(--bend-sm);
+  color: var(--night-ink);
+  font-family: var(--body-face);
+  font-size: 13.5px;
+  padding: 8px 11px;
+  outline: none;
+}
+.rail-seek input:focus { border-color: var(--leaf); }
+.rail-seek input::placeholder { color: var(--night-dim); }
+
+.rail-group { margin-bottom: 6px; }
+.rail-group-name {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .13em;
+  color: var(--night-dim);
+  padding: 12px 20px 5px;
+}
+.rail-link {
+  display: block;
+  color: var(--night-ink);
+  text-decoration: none;
+  font-size: 13.5px;
+  padding: 5px 20px 5px 24px;
+  border-left: 3px solid transparent;
+  transition: background .12s, border-color .12s;
+}
+.rail-link:hover { background: var(--night-2); }
+.rail-link.lit {
+  border-left-color: var(--sun);
+  background: var(--night-2);
+  color: #fff;
+}
+.rail-none {
+  display: none;
+  color: var(--night-dim);
+  font-size: 13px;
+  padding: 10px 20px;
+}
+
+/* ── Page column ───────────────────────────────────────── */
+.page {
+  margin-left: var(--rail-w);
+  padding: calc(var(--crown-h) + 30px) 42px 30px;
+  max-width: 1040px;
+}
+
+.module {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--bend-lg);
+  padding: 30px 34px;
+  margin-bottom: 26px;
+  scroll-margin-top: calc(var(--crown-h) + 18px);
+}
+
+.module h2 {
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.module .crumb {
+  color: var(--leaf);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .11em;
+  margin-bottom: 2px;
+}
+.module h3 {
+  font-size: 16.5px;
+  font-weight: 650;
+  margin: 24px 0 8px;
+  color: var(--ink);
+}
+.module p { margin: 10px 0; color: var(--ink); }
+.module ul, .module ol { margin: 10px 0 10px 24px; }
+.module li { margin: 4px 0; }
+.module a { color: var(--leaf-deep); }
+
+/* ── Masthead ──────────────────────────────────────────── */
+.masthead {
+  background: linear-gradient(135deg, var(--night) 0%, #253a33 60%, var(--leaf-deep) 100%);
+  border: none;
+  color: #eef4f1;
+}
+.masthead h2 { color: #fff; font-size: 28px; }
+.masthead p { color: #cfe0d8; max-width: 72ch; }
+.stat-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.stat-pill {
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  padding: 5px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+}
+.stat-pill b { color: #ffd489; font-weight: 700; }
+
+/* ── Tables ────────────────────────────────────────────── */
+.spec-table, .fix-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 13.5px;
+}
+.spec-table th, .fix-table th {
+  text-align: left;
+  background: var(--leaf-wash);
+  color: var(--leaf-deep);
+  font-weight: 700;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+}
+.spec-table td, .fix-table td {
+  padding: 7px 12px;
+  border: 1px solid var(--rule);
+  vertical-align: top;
+}
+.spec-table tr:nth-child(even) td { background: #fafcfb; }
+.fix-table th { background: var(--sun-wash); color: #8a5104; }
+
+/* ── Code panes ────────────────────────────────────────── */
+.code-pane {
+  background: var(--night);
+  color: #d8e2ea;
+  font-family: var(--mono-face);
+  font-size: 13px;
+  line-height: 1.6;
+  border-radius: var(--bend-sm);
+  padding: 15px 18px;
+  overflow-x: auto;
+  margin: 12px 0;
+  white-space: pre;
+}
+code {
+  font-family: var(--mono-face);
+  font-size: .92em;
+  background: #eceff2;
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: #274156;
+}
+.code-pane code { background: none; padding: 0; color: inherit; }
+
+/* ── Hints ─────────────────────────────────────────────── */
+.hint, .warn-hint {
+  border-radius: var(--bend-sm);
+  padding: 11px 15px;
+  margin: 12px 0;
+  font-size: 13.5px;
+}
+.hint { background: var(--leaf-wash); border-left: 4px solid var(--leaf); }
+.warn-hint { background: var(--sun-wash); border-left: 4px solid var(--sun); }
+
+/* ── Chips ─────────────────────────────────────────────── */
+.define-chip {
+  font-family: var(--mono-face);
+  font-size: 12px;
+  background: var(--night);
+  color: #ffd489;
+  border-radius: 3px;
+  padding: 1px 7px;
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+.basement {
+  margin-left: var(--rail-w);
+  max-width: 1040px;
+  padding: 8px 42px 42px;
+  color: var(--ink-faint);
+  font-size: 13px;
+  text-align: center;
+}
+.basement a { color: var(--leaf-deep); }
+
+@media (max-width: 900px) {
+  .rail { display: none; }
+  .page, .basement { margin-left: 0; padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="crown">
+  <div class="crown-mark">YB</div>
+  <div class="crown-name">Yarn <em>Bounce</em> &mdash; Documentation</div>
+  <div class="crown-rev">v1.0.0 &middot; Unity 6+ &middot; backend documented separately in the HyperCasual LiveOps Kit manual</div>
+</header>
+
+<nav class="rail" id="railNav">
+  <div class="rail-seek">
+    <input type="text" id="seekBox" placeholder="Filter sections&hellip;" autocomplete="off">
+  </div>
+  <div class="rail-none" id="seekEmpty">No section matches.</div>
+
+  <div class="rail-group">
+    <div class="rail-group-name">Yarn Bounce</div>
+    <a class="rail-link" href="#yarn-bounce">The Game</a>
+    <a class="rail-link" href="#important-template">Template &amp; Starting Point</a>
+    <a class="rail-link" href="#overview">Overview</a>
+    <a class="rail-link" href="#game-getting-started">Getting Started</a>
+    <a class="rail-link" href="#folder-structure">Folder Structure</a>
+    <a class="rail-link" href="#gameplay">Gameplay</a>
+    <a class="rail-link" href="#scripts-reference">Scripts Reference</a>
+    <a class="rail-link" href="#manual-level-editor">Manual Level Editor</a>
+    <a class="rail-link" href="#auto-level-generator">Auto Level Generator</a>
+    <a class="rail-link" href="#power-ups">Power-Ups</a>
+    <a class="rail-link" href="#level-variation">Level Variation</a>
+    <a class="rail-link" href="#customization-guide">Customization Guide</a>
+    <a class="rail-link" href="#level-format">Level Format</a>
+    <a class="rail-link" href="#game-troubleshooting">Common Issues</a>
+    <a class="rail-link" href="#contact-support">Support</a>
+  </div>
+</nav>
+
+<main class="page">
+
+<section class="module masthead" id="yarn-bounce">
+  <h2>Yarn Bounce</h2>
+  <p>A portrait puzzle game for Unity 6 (URP), shipped as a complete, playable template on top of the
+  HyperCasual LiveOps Kit. Tap a glass dispenser to roll its top run of matching spools onto a spring
+  plunger, fire a volley, and watch the yarn sew itself into the fabric picture above.</p>
+  <div class="stat-row">
+    <span class="stat-pill">Unity <b>6+</b> URP</span>
+    <span class="stat-pill"><b>500</b> Levels</span>
+    <span class="stat-pill">Portrait</span>
+    <span class="stat-pill"><b>3</b> Power-Ups</span>
+  </div>
+</section>
+
+<section class="module" id="important-template">
+  <h2>Important: Template / Starting Point</h2>
+  <div class="warn-hint">
+    <p>This asset is a <strong>template and starting point</strong> for your own game. It provides the
+    mechanic, the level pipeline, 500 ready levels and a full LiveOps backend, and it is expected that
+    you customise, extend and rebrand it. It is not a finished, ready-to-publish product &mdash; the
+    store listing, artwork, ad unit IDs, signing keys and store products are yours to supply.</p>
+  </div>
+</section>
+
+<section class="module" id="overview">
+  <h2>Overview</h2>
+  <p>Yarn Bounce is a colour-matching puzzle. Each level is a picture made of polyomino
+  <strong>patches</strong>, and a row of glass <strong>dispensers</strong> holding coloured spools.
+  The player empties the dispensers into the picture, one volley at a time, until every patch is
+  sewn.</p>
+  <p>Everything that differs between levels lives in a single ScriptableObject. The machine, camera,
+  lighting, VFX and animation all come from shared prefabs, so a new level is a new asset and zero
+  lines of code.</p>
+  <ul>
+    <li><strong>Two editor tools</strong> &mdash; curate levels by hand, or generate them in bulk with
+    ranged settings.</li>
+    <li><strong>Verified levels</strong> &mdash; nothing is written to disk until a solver has proved
+    it can be cleared.</li>
+    <li><strong>LiveOps included</strong> &mdash; economy, ads, IAP, daily rewards, quests, battle
+    pass, minigames and more, through the kit documented below.</li>
+  </ul>
+</section>
+
+<section class="module" id="game-getting-started">
+  <h2>Getting Started</h2>
+
+  <h3>Requirements</h3>
+  <ul>
+    <li>Unity 6 or newer</li>
+    <li>Universal Render Pipeline (URP), Linear colour space</li>
+    <li>TextMesh Pro (included with Unity)</li>
+  </ul>
+
+  <h3>Installation</h3>
+  <ol>
+    <li>Import the Yarn Bounce package into your project.</li>
+    <li>When prompted, import <strong>TMP Essential Resources</strong> (Window &rsaquo; TextMeshPro).</li>
+    <li>Open <span class="define-chip">Assets/YarnBounce/Scenes/YarnBounce_Game.unity</span> for the
+    gameplay scene, or the kit's Starter Menu scene for the full app flow.</li>
+    <li>Press Play.</li>
+  </ol>
+
+  <h3>Quick Test</h3>
+  <p>In Play mode, tap a dispenser whose top spools share a colour. They roll onto the plunger. Tap the
+  plunger to fire. Each spool homes to a matching uncovered patch cell and sews it. Clear every patch to
+  win the level.</p>
+  <div class="hint">
+    <p>The plunger chamber is strictly single-colour. Tapping a second colour while it is loaded is
+    refused &mdash; that is the core constraint the puzzle is built on.</p>
+  </div>
+</section>
+
+<section class="module" id="folder-structure">
+  <h2>Folder Structure</h2>
+  <div class="code-pane"><code>YarnBounce/
+├── Editor/                    the three buyer-facing tools plus their engine
+│   ├── YarnLevelEditorWindow.cs          Manual Level Editor
+│   ├── YarnAutoLevelGeneratorWindow.cs   Auto Level Generator
+│   ├── YarnWelcomePopup.cs               Welcome
+│   └── YarnLevelCatalogEditor.cs         level engine (no menu item)
+├── Levels/                    the golden showcase board, kept untouched
+├── Materials/  Meshes/  Textures/  Shaders/
+├── PowerUps/                  power-up definitions
+├── Prefabs/                   YarnMachine, YarnSpool, VFX
+├── Resources/Levels/          the 500 shipped levels + the catalogue asset
+├── Scenes/                    YarnBounce_Game.unity
+├── Settings/                  palette + machine themes
+└── Scripts/
+    ├── Board/                 grid, shapes, layer peeling
+    ├── Core/                  game root, level manager, input, LiveOps adapter
+    ├── Data/                  level asset, generator, solver, balancer, palette, theme
+    ├── Mechanics/             dispensers, plunger, homing, socket row
+    ├── PowerUps/              power-up adapter
+    └── Visuals/               camera rig, HUD, VFX, themed parts</code></div>
+</section>
+
+<section class="module" id="gameplay">
+  <h2>Gameplay</h2>
+
+  <h3>Core Mechanics</h3>
+  <ul>
+    <li><strong>Dispensers</strong> &mdash; vertical glass tubes of spools. Tapping one rolls its top
+    run of <em>same-coloured</em> spools onto the plunger.</li>
+    <li><strong>Plunger</strong> &mdash; a single-colour chamber. Tap it to fire a volley.</li>
+    <li><strong>Homing</strong> &mdash; each spool flies to a matching, uncovered patch cell and sews it.</li>
+    <li><strong>Layers</strong> &mdash; patches can be stacked, and a patch can only be sewn once
+    nothing physically covers it, so a layered picture peels top-down. The 500 levels that ship are
+    all single-layer; layers are an authoring feature you can use, set per patch in the Manual
+    Level Editor. See <a href="#level-variation">Level Variation</a>.</li>
+    <li><strong>Mystery patches</strong> &mdash; start blacked out with "?" marks and reveal their real
+    colour once uncovered.</li>
+    <li><strong>Holes</strong> &mdash; a spool with no valid target plugs a hole in the socket row.</li>
+  </ul>
+
+  <h3>Win &amp; Lose Conditions</h3>
+  <ul>
+    <li><strong>Win</strong> &mdash; every patch on the board is sewn.</li>
+    <li><strong>Lose</strong> &mdash; every hole in the socket row is plugged.</li>
+  </ul>
+  <div class="hint">
+    <p>Two per-level rules soften this, both editable in the Manual Level Editor:
+    <strong>Guard Impossible Taps</strong> blocks tapping a dispenser whose colour has no reachable
+    patch, and <strong>Recycle Unmatched Spools</strong> rolls a spool with no target back into the
+    chamber instead of plugging a hole.</p>
+  </div>
+</section>
+
+<section class="module" id="scripts-reference">
+  <h2>Scripts Reference</h2>
+  <p>All game scripts use the <span class="define-chip">YarnBounce</span> namespace; editor tools use
+  <span class="define-chip">YarnBounce.EditorTools</span>.</p>
+
+  <h3>Core Scripts</h3>
+  <table class="spec-table">
+    <tr><th>Script</th><th>Description</th></tr>
+    <tr><td><code>YarnGameRoot</code></td><td>Owns a running level: builds the board, wires the machine, routes taps, raises the gameplay events.</td></tr>
+    <tr><td><code>YarnGameManager</code></td><td>Binds the campaign level, settles win/lose exactly once, credits the reward and shows the results overlay.</td></tr>
+    <tr><td><code>YarnLevelManager</code></td><td>Facade over the kit's progression keys &mdash; selected level, completed levels, unlock state.</td></tr>
+    <tr><td><code>YarnLiveOpsAdapter</code></td><td>Bridges gameplay to the LiveOps backend (quests, battle pass, analytics).</td></tr>
+    <tr><td><code>YarnLevelAsset</code></td><td>One level: grid, patches, dispensers, rules. Also validates itself.</td></tr>
+    <tr><td><code>YarnLevelGenerator</code></td><td>Procedural board builder used by the Auto Level Generator.</td></tr>
+    <tr><td><code>YarnLevelSolver</code></td><td>Proves a board can actually be cleared. Nothing ships unsolved.</td></tr>
+    <tr><td><code>YarnLevelAutoBalancer</code></td><td>Rebuilds dispenser supply so it exactly matches patch demand.</td></tr>
+    <tr><td><code>YarnLevelCatalog</code></td><td>The ordered campaign, stored as level asset names.</td></tr>
+  </table>
+
+  <h3>Utility Scripts</h3>
+  <table class="spec-table">
+    <tr><th>Script</th><th>Description</th></tr>
+    <tr><td><code>YarnCameraRig</code></td><td>Frames the board for any aspect ratio, reserving bands for the HUD and the ad banner.</td></tr>
+    <tr><td><code>YarnPalette</code> / <code>YarnMachineTheme</code></td><td>Spool colours, and the machine's visual identity.</td></tr>
+    <tr><td><code>YarnPowerUpAdapter</code></td><td>Implements the four power-up effects against the running board.</td></tr>
+    <tr><td><code>YarnHaptics</code>, <code>YarnTween</code>, <code>YarnEase</code></td><td>Small helpers for feel.</td></tr>
+    <tr><td><code>YarnVfxPool</code>, <code>YarnVfxBurst</code>, <code>YarnThreadTrail</code></td><td>Pooled effects for sewing, clearing and revealing.</td></tr>
+  </table>
+
+  <h3>Editor Scripts</h3>
+  <table class="spec-table">
+    <tr><th>Script</th><th>Description</th></tr>
+    <tr><td><code>YarnLevelEditorWindow</code></td><td>Manual Level Editor &mdash; <code>Tools &rsaquo; Yarn Bounce &rsaquo; Manual Level Editor</code>.</td></tr>
+    <tr><td><code>YarnAutoLevelGeneratorWindow</code></td><td>Auto Level Generator &mdash; <code>Tools &rsaquo; Yarn Bounce &rsaquo; Auto Level Generator</code>.</td></tr>
+    <tr><td><code>YarnWelcomePopup</code></td><td>Welcome window &mdash; <code>Tools &rsaquo; Yarn Bounce &rsaquo; Welcome</code>.</td></tr>
+    <tr><td><code>YarnLevelCatalogEditor</code></td><td>The engine both level tools are built on. No menu item.</td></tr>
+  </table>
+</section>
+
+<section class="module" id="manual-level-editor">
+  <h2>Manual Level Editor</h2>
+
+  <h3>Opening the Manual Level Editor</h3>
+  <p>In the Unity menu bar, go to <code>Tools &rsaquo; Yarn Bounce &rsaquo; Manual Level Editor</code>.
+  This opens a dedicated editor window &mdash; no need to enter Play mode.</p>
+
+  <h3>Features</h3>
+  <ul>
+    <li><strong>Campaign list</strong> &mdash; browse, duplicate, delete and reorder levels in the left panel.</li>
+    <li><strong>Clickable board</strong> &mdash; the level is edited by clicking cells, not by typing coordinates.</li>
+    <li><strong>Patch inspector</strong> &mdash; layer, colour swatches, mystery toggle, and a warning when a patch is split into disconnected pieces.</li>
+    <li><strong>Dispenser view</strong> &mdash; every tube's spools drawn in order, with a live demand-vs-supply readout.</li>
+    <li><strong>Auto-Balance Supply</strong> &mdash; rebuilds the tubes so supply exactly matches the patches on the board.</li>
+    <li><strong>Rules</strong> &mdash; plunger capacity, tap guarding, spool recycling, cabinet recolour.</li>
+    <li><strong>Validate</strong> &mdash; runs the full structural check and the solver, and reports in the window.</li>
+    <li><strong>Finished fabric preview</strong> &mdash; a small picture of the level with every patch sewn.</li>
+    <li><strong>Undo</strong> &mdash; <code>Ctrl+Z</code> (<code>Cmd+Z</code> on macOS) steps back
+    through every edit; <code>Ctrl+Shift+Z</code> redoes. A whole drag counts as one step.</li>
+  </ul>
+
+  <div class="hint">
+    <p><strong>Undo covers the board, not the file.</strong> <code>Ctrl+Z</code> reverses edits to the
+    level you are looking at &mdash; painting, erasing, latching, adding or deleting a patch,
+    Auto-Balance, the rules and booster fields. It does not reverse <strong>Save All</strong>,
+    <strong>Delete</strong> from the campaign list, or <strong>Reload from Disk</strong>, all of which
+    touch the files themselves.</p>
+  </div>
+
+  <h3>Edit Modes</h3>
+  <table class="spec-table">
+    <tr><th>Mode</th><th>Click Action</th></tr>
+    <tr><td><strong>Select</strong></td><td>Click a patch to select it. Its colour, layer and mystery flag appear below.</td></tr>
+    <tr><td><strong>Patch</strong></td><td>Click cells to add them to the selected patch, or click its own cells to remove them. Drag to paint a run; the whole drag undoes as one step.</td></tr>
+    <tr><td><strong>Wall</strong></td><td>Click a cell to make it a wall &mdash; no patch may occupy it.</td></tr>
+    <tr><td><strong>Erase</strong></td><td>Click to remove a wall, or a cell from the patch that owns it.</td></tr>
+    <tr><td><strong>Latch</strong></td><td>Click a patch to latch or unlatch it. A latched level must grant UNPICK &mdash; see <a href="#level-variation">Level Variation</a>.</td></tr>
+    <tr><td><strong>Mystery</strong></td><td>Click a patch to hide or reveal its colour.</td></tr>
+  </table>
+  <div class="hint">
+    <p>Painting a cell that another patch already owns <em>on the same layer</em> is refused with a
+    message naming the patch that owns it, rather than silently creating an overlap the validator
+    would reject later.</p>
+  </div>
+
+  <h3>Level Storage</h3>
+  <p>Levels are ScriptableObjects in
+  <span class="define-chip">Assets/YarnBounce/Resources/Levels/</span>, named
+  <code>YarnLevel_001.asset</code>, <code>YarnLevel_002.asset</code> and so on, loaded at runtime
+  through <code>Resources</code>. Pressing <strong>Save All</strong> renumbers the assets on disk to
+  match the order in the list, so the campaign's order <em>is</em> the file numbering. The catalogue
+  asset beside them is rewritten from that result.</p>
+  <div class="warn-hint">
+    <p>There is deliberately no "generate the whole campaign" button in this window. Bulk creation
+    lives in the Auto Level Generator, behind its own confirmation dialog.</p>
+  </div>
+</section>
+
+<section class="module" id="auto-level-generator">
+  <h2>Automatic Level Generator</h2>
+  <p>Batch-creates levels. Every setting is a <strong>min/max range</strong> and each level rolls its
+  own value inside those bounds, which is what makes one press produce a varied campaign rather than N
+  copies of the same board.</p>
+
+  <h3>Opening the Tool</h3>
+  <p>In the Unity menu bar, go to <code>Tools &rsaquo; Yarn Bounce &rsaquo; Auto Level Generator</code>.</p>
+
+  <h3>Settings</h3>
+  <table class="spec-table">
+    <tr><th>Setting</th><th>Description</th></tr>
+    <tr><td><strong>Levels to generate</strong></td><td>How many levels this run produces.</td></tr>
+    <tr><td><strong>Colours (Min/Max)</strong></td><td>Palette colours per level. More colours means more dispenser reading, which is the real skill.</td></tr>
+    <tr><td><strong>Grid Width / Height (Min/Max)</strong></td><td>Playable board size in cells.</td></tr>
+    <tr><td><strong>Layers (Min/Max)</strong></td><td>How many stacked layers the picture peels through.</td></tr>
+    <tr><td><strong>Patch Cells (Min/Max)</strong></td><td>Size of each polyomino patch. Smaller patches pack more colours into the same area.</td></tr>
+    <tr><td><strong>Mystery Patches (Min/Max)</strong></td><td>How many patches start hidden.</td></tr>
+    <tr><td><strong>Tube Capacity (Min/Max)</strong></td><td>How many spools a dispenser holds.</td></tr>
+    <tr><td><strong>Board Fill % (Min/Max)</strong></td><td>How much of the grid height the picture occupies.</td></tr>
+    <tr><td><strong>Mirror Symmetry % (Min/Max)</strong></td><td>Chance a board is mirrored left/right. Symmetry reads as "composed".</td></tr>
+    <tr><td><strong>Walls % (Min/Max)</strong></td><td>Share of the grid painted as walls &mdash; cells no patch may occupy. Rises with difficulty.</td></tr>
+    <tr><td><strong>Latched Patches % (Min/Max)</strong></td><td>Share of patches that ship latched. Rises with difficulty, and every level that latches also grants the UNPICK that answers it. See <a href="#level-variation">Level Variation</a>.</td></tr>
+    <tr><td><strong>Difficulty Curve</strong></td><td>How fast the ramp climbs across the run. 1.0 is linear; the default 0.4 climbs faster early, because a linear ramp spends most of a long campaign being too easy.</td></tr>
+    <tr><td><strong>Seed</strong></td><td>Seeds the whole run. <strong>The same seed with the same settings and the same included themes reproduces the same campaign</strong> &mdash; which is how you get back a set you liked after pressing Generate again. <em>Randomise</em> draws a new one.</td></tr>
+    <tr><td><strong>Mode</strong></td><td><em>Append</em> adds to the end of the campaign. <em>Replace</em> deletes every existing level first, and asks you to confirm with the real counts before it does.</td></tr>
+  </table>
+
+  <div class="hint">
+    <p>The line above the green <strong>Generate Levels</strong> button always names both numbers
+    &mdash; how many levels this run writes, and how many are on disk right now &mdash; so you can
+    see whether you are about to append or to destroy before you press it.</p>
+  </div>
+
+  <h3>How It Works</h3>
+  <ol>
+    <li><strong>Themes are the sources.</strong> Every machine theme in
+    <span class="define-chip">Assets/YarnBounce/Settings/</span> is listed with a colour swatch and an
+    include toggle, so you can see what will be used and exclude individual themes before pressing
+    anything. Generated levels take a theme in turn.</li>
+    <li><strong>Each level rolls its own settings</strong> inside your min/max ranges.</li>
+    <li><strong>The board is generated</strong>, and its dispenser supply is balanced against patch demand.</li>
+    <li><strong>It is then verified</strong> &mdash; structure first, then the solver. A board that
+    cannot be cleared is re-rolled, and after enough failures it falls back to a guaranteed-clearable
+    board and says so in the run report. The re-rolls are drawn from the run seed, so the whole run
+    stays reproducible.</li>
+    <li><strong>Duplicates are rejected.</strong> A board whose content fingerprint already exists in
+    the campaign is thrown away and re-rolled rather than shipped as filler.</li>
+    <li><strong>Only then is it written</strong>, and numbering is assigned on success, so a skipped
+    level never leaves a hole in the sequence.</li>
+  </ol>
+  <div class="hint">
+    <p>A run reports in the window: how many levels were written, how many were skipped and why, and
+    how many duplicates were re-rolled. Nothing is ever saved with a warning.</p>
+  </div>
+
+  <h3>Append or Replace</h3>
+  <div class="warn-hint">
+    <p>Choose between <strong>append mode</strong>, which adds levels after the existing ones, and
+    <strong>replace mode</strong>, which deletes every level asset currently in the campaign first.
+    Both ask for confirmation before doing anything. Use append to add content safely.</p>
+  </div>
+</section>
+
+<section class="module" id="power-ups">
+  <h2>Power-Ups</h2>
+  <p>Three power-ups ship with the game. None of them can make a board unwinnable, and an invalid use
+  consumes nothing.</p>
+  <table class="spec-table">
+    <tr><th>Power-Up</th><th>Effect</th></tr>
+    <tr><td><strong>Hole Punch</strong> <code>yarn_hole_punch</code></td><td>Clears plugged holes out of the socket row, undoing wasted yarn.</td></tr>
+    <tr><td><strong>Re-Spool</strong> <code>yarn_respool</code></td><td>Reshuffles dispenser contents so a new colour becomes reachable.</td></tr>
+    <tr><td><strong>Unload</strong> <code>yarn_unload</code></td><td>Empties the plunger chamber, returning its spools to the dispensers.</td></tr>
+  </table>
+  <p>Each shows a tutorial on first use, checks an eligibility gate, and is consumed exactly once on a
+  valid use. Counts and tutorial state persist through the kit's save system.</p>
+
+  <h3>Adding a Power-Up Adapter</h3>
+  <ol>
+    <li>Add a power-up definition asset under <span class="define-chip">Assets/YarnBounce/PowerUps/</span>
+    with a new id.</li>
+    <li>Register a handler for that id in <code>YarnPowerUpAdapter</code>, alongside the three existing ones.</li>
+    <li>Return a refusal reason when the effect cannot apply &mdash; that is what stops the count from
+    being consumed.</li>
+  </ol>
+</section>
+
+<section class="module" id="level-variation">
+  <h2>Level Variation</h2>
+  <p>A five-hundred-level campaign needs level 400 to feel different from level 4, and that
+  difference comes from three families, introduced one at a time. The numbers below are
+  <strong>measured from the level assets on disk</strong>, not read off a generator setting &mdash;
+  a generator threshold is a floor, not a promise about what was actually written.</p>
+
+  <table class="spec-table">
+    <tr><th>Family</th><th>First shipped level</th><th>What changes</th><th>Counter-booster</th></tr>
+    <tr>
+      <td><strong>Mystery patches</strong></td>
+      <td>Level&nbsp;8 <br><small>in 492 of the 500</small></td>
+      <td>The patch starts blacked out under a "?" and reveals its real colour only when nothing
+      covers it. You cannot plan a volley for a colour you cannot see yet.</td>
+      <td>&mdash; none needed; the reveal is free</td>
+    </tr>
+    <tr>
+      <td><strong>Latched patches</strong></td>
+      <td>Level&nbsp;18 <br><small>in 474 of the 500</small></td>
+      <td>The patch is latched shut and refuses yarn until it is unpicked, so the peel order is
+      forced rather than chosen.</td>
+      <td><strong>UNPICK</strong>, unlocked at level&nbsp;4</td>
+    </tr>
+    <tr>
+      <td><strong>Walls</strong></td>
+      <td>Authoring only <br><small>no shipped level uses them</small></td>
+      <td>Cells no patch may occupy, so the picture is cut into separate regions. Paint them with
+      the Wall tool, or raise <em>Walls&nbsp;%</em> in the Auto Level Generator.</td>
+      <td>&mdash;</td>
+    </tr>
+  </table>
+
+  <div class="hint">
+    <p><strong>The counter-booster always unlocks before the mechanic it answers.</strong> UNPICK is
+    available from level&nbsp;4 and the first latched patch appears at level&nbsp;18. If you move the
+    latch ramp earlier &mdash; by regenerating with a higher <em>Latched Patches&nbsp;%</em> at low
+    difficulty, or by painting a latch into an early level by hand &mdash; move UNPICK's unlock with
+    it. A latched patch on a level that grants no UNPICK has no counter-move, and the Manual Level
+    Editor refuses to validate it.</p>
+  </div>
+
+  <h3>How the ramp is produced</h3>
+  <p>The Auto Level Generator lerps every min/max pair across the run, shaped by
+  <strong>Difficulty Curve</strong> (default 0.4, deliberately sub-linear &mdash; a linear ramp spends
+  most of a long campaign being too easy). <em>Mystery Patches</em> and <em>Latched Patches&nbsp;%</em>
+  are the two ramps that produce the families above; both start at zero, which is why the opening
+  levels are plain.</p>
+
+  <div class="hint">
+    <p><strong>The first eight levels are a stated table, not a curve.</strong> A level's size is a
+    <em>product</em> &mdash; region width &times; region height &mdash; so nudging the ranges lands the
+    total wherever the product happens to fall, which is how a campaign ends up with a tutorial the
+    same size as level 300. The shipped campaign states those eight sizes outright and the rest of
+    the run ramps from there. If you regenerate, the opening is regenerated from the same table.</p>
+  </div>
+  <p>Because the ramp is a probability and not a schedule, <strong>the first level a family actually
+  appears on is whatever the generator wrote</strong>. After regenerating, re-measure it rather than
+  quoting the setting &mdash; and re-check the unlock levels of the boosters that answer it.</p>
+
+  <h3>Layers</h3>
+  <p>Patches carry a <code>layer</code> (1&ndash;4) and a higher layer physically covers a lower one,
+  so a layered picture has to be peeled top-down. Every level in the shipped campaign is single-layer;
+  the field is there for you. Set it in the Manual Level Editor's <em>Selected Patch</em> panel, and
+  remember that a covered patch cannot be sewn &mdash; the solver will reject a board whose lower
+  layers can never be reached.</p>
+</section>
+
+<section class="module" id="customization-guide">
+  <h2>Customization Guide</h2>
+
+  <h3>Day Two: the first things to change</h3>
+  <ol>
+    <li><strong>Identity</strong> &mdash; product name, company and bundle id in Player Settings.</li>
+    <li><strong>Colours</strong> &mdash; edit <code>YarnPalette_Main</code> in
+    <span class="define-chip">Assets/YarnBounce/Settings/</span>. Every level indexes into it, so one
+    edit repaints the whole campaign.</li>
+    <li><strong>Machine look</strong> &mdash; duplicate a <code>YarnTheme_*</code> asset, change its
+    colours, and it appears in the Auto Level Generator's source list automatically.</li>
+    <li><strong>Levels</strong> &mdash; generate a fresh campaign, or curate the shipped one.</li>
+    <li><strong>Backend</strong> &mdash; work through the kit sections below for economy, ads, IAP and
+    LiveOps.</li>
+  </ol>
+
+  <h3>Adding a Level</h3>
+  <ol>
+    <li>Open <code>Tools &rsaquo; Yarn Bounce &rsaquo; Manual Level Editor</code>.</li>
+    <li>Select a level close to what you want and press <strong>Duplicate</strong>.</li>
+    <li>Paint the patches, set colours and layers, press <strong>Auto-Balance Supply</strong>.</li>
+    <li>Press <strong>Validate This Level</strong> until it reports valid and solvable.</li>
+    <li>Press <strong>Save All</strong>.</li>
+  </ol>
+
+  <h3>Adjusting Difficulty</h3>
+  <ul>
+    <li>More colours and more layers are the two strongest difficulty levers.</li>
+    <li>Smaller <em>Patch Cells</em> pack more distinct patches into the same board.</li>
+    <li>A smaller <em>Plunger Capacity</em> forces shorter volleys and more planning.</li>
+    <li>Turning off <em>Guard Impossible Taps</em> makes wasted yarn possible, which is much harsher.</li>
+  </ul>
+
+  <h3>Changing Audio</h3>
+  <p>Sound is played through the kit's audio engine from a single sound bank asset. Swap a clip in the
+  bank and every cue that uses it changes; see <a href="https://satisvizion.github.io/HyperCasual-LiveOps-Kit/Documentation.html#audio-engine">Audio Engine</a>.</p>
+</section>
+
+<section class="module" id="level-format">
+  <h2>Level Format</h2>
+  <p>A level is a <code>YarnLevelAsset</code> ScriptableObject. The fields that matter:</p>
+  <div class="code-pane"><code>levelLabel      "Level 12"
+gridSize        (6, 8)          playable grid in cells, origin bottom-left
+boardOffset     (0.24, -0.38)   shifts the board inside the cabinet
+
+shapes[]                        the picture, one entry per patch
+  label       "Patch 3"
+  layer       1                 1 = bottom of the stack
+  colorIndex  2                 index into YarnPalette_Main
+  mystery     false             starts blacked out with "?" marks
+  cells[]     [(2,3), (3,3)]    grid cells this patch covers
+
+tubeCapacity    12              spools per dispenser
+tubes[]                         element 0 is the BOTTOM of the tube
+  spools[]    [2, 2, 0, 1]      palette indices
+
+launcherCapacity        6       plunger chamber size (single-colour)
+guardImpossibleTaps     true
+recycleUnmatchedSpools  true
+cabinetAccentBlend      0..1    0 keeps the painted cabinet, 1 recolours it
+paletteOverride / themeOverride  optional per-level look</code></div>
+  <div class="hint">
+    <p>Supply must exactly match demand: the total spools across all tubes must equal the total patch
+    cells on the board, per colour. <strong>Auto-Balance Supply</strong> in the Manual Level Editor
+    enforces this for you.</p>
+  </div>
+</section>
+
+<section class="module" id="game-troubleshooting">
+  <h2>Yarn Bounce &mdash; Common Issues</h2>
+  <table class="fix-table">
+    <tr><th>Issue</th><th>Solution</th></tr>
+    <tr><td>No levels load, or only one level appears</td><td>Check that level assets exist in <code>Assets/YarnBounce/Resources/Levels/</code> alongside the catalogue asset. Use the Auto Level Generator to create more.</td></tr>
+    <tr><td>Pink / magenta machine</td><td>The project must use URP with a URP asset assigned in Project Settings &rsaquo; Graphics. Yarn Bounce ships URP shaders.</td></tr>
+    <tr><td>Text is missing or shows boxes</td><td>Import TMP Essential Resources: Window &rsaquo; TextMeshPro &rsaquo; Import TMP Essential Resources.</td></tr>
+    <tr><td>Manual Level Editor shows an empty list</td><td>Press <strong>Reload from Disk</strong>, and confirm the catalogue asset exists in <code>Resources/Levels/</code>.</td></tr>
+    <tr><td>Auto Level Generator lists no themes</td><td>It scans <code>Assets/YarnBounce/Settings/</code> for machine theme assets. Press <strong>Refresh</strong> after adding one.</td></tr>
+    <tr><td>A generated level was skipped</td><td>The solver could not clear it within the attempt budget. Widen the ranges &mdash; more colours with very small patches is the usual cause.</td></tr>
+    <tr><td>Level says supply does not match demand</td><td>Press <strong>Auto-Balance Supply</strong> in the Manual Level Editor.</td></tr>
+  </table>
+</section>
+
+
+<section class="module" id="contact-support">
+  <div class="crumb">Support</div>
+  <h2>Support</h2>
+  <p>Stuck on something this manual doesn&rsquo;t cover? Reach out &mdash; real answers from the
+  developer, usually within two business days.</p>
+  <ul>
+    <li><strong>Email:</strong> <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a></li>
+  </ul>
+  <p>To get the fastest turnaround, include:</p>
+  <ul>
+    <li>Unity version, target platform, and render pipeline;</li>
+    <li>the level number and, where relevant, the level asset involved;</li>
+    <li>whether it reproduces from the Manual Level Editor, the Auto Level Generator, or in play;</li>
+    <li>console output around the failure.</li>
+  </ul>
+  <p>Questions about the menu, ads, in-app purchases, boosters, daily rewards or any other backend
+  system belong in the <a href="https://satisvizion.github.io/HyperCasual-LiveOps-Kit/Documentation.html">HyperCasual
+  LiveOps Kit manual</a>, which ships alongside this one.</p>
+</section>
+
+</main>
+
+<footer class="basement">
+  <p>Support: <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a></p>
+  <p>&copy; 2026 Satisvizion. All rights reserved.</p>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var seekBox   = document.getElementById("seekBox");
+  var seekEmpty = document.getElementById("seekEmpty");
+  var links     = Array.prototype.slice.call(document.querySelectorAll(".rail-link"));
+  var groups    = Array.prototype.slice.call(document.querySelectorAll(".rail-group"));
+
+  // ── Section filter: token-prefix matching ──────────────
+  // Each query token must be a prefix of at least one word in the
+  // link's label (case-insensitive). "re wh" matches "Reward Wheel".
+  function tokensOf(text) {
+    return text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  }
+
+  var labelWords = links.map(function (a) { return tokensOf(a.textContent); });
+
+  function linkMatches(idx, queryTokens) {
+    var words = labelWords[idx];
+    for (var q = 0; q < queryTokens.length; q++) {
+      var tok = queryTokens[q], hit = false;
+      for (var w = 0; w < words.length; w++) {
+        if (words[w].indexOf(tok) === 0) { hit = true; break; }
+      }
+      if (!hit) return false;
+    }
+    return true;
+  }
+
+  function applyFilter() {
+    var queryTokens = tokensOf(seekBox.value);
+    var anyVisible = false;
+
+    links.forEach(function (a, i) {
+      var show = queryTokens.length === 0 || linkMatches(i, queryTokens);
+      a.style.display = show ? "" : "none";
+      if (show) anyVisible = true;
+    });
+
+    groups.forEach(function (g) {
+      var visible = g.querySelectorAll(".rail-link:not([style*='none'])").length > 0;
+      g.style.display = visible ? "" : "none";
+    });
+
+    seekEmpty.style.display = anyVisible ? "none" : "block";
+  }
+
+  seekBox.addEventListener("input", applyFilter);
+
+  // ── Scrollspy: pick the last section whose top passed the fold ──
+  var sections = Array.prototype.slice.call(document.querySelectorAll("section.module"));
+  var linkById = {};
+  links.forEach(function (a) {
+    linkById[a.getAttribute("href").slice(1)] = a;
+  });
+
+  var spyTicking = false;
+
+  function currentSectionId() {
+    var fold = window.scrollY + 96;
+    var winner = sections.length ? sections[0].id : null;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= fold) winner = sections[i].id;
+      else break;
+    }
+    // Bottom of document: force the last section.
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
+      winner = sections[sections.length - 1].id;
+    }
+    return winner;
+  }
+
+  function refreshSpy() {
+    spyTicking = false;
+    var id = currentSectionId();
+    links.forEach(function (a) { a.classList.remove("lit"); });
+    var active = linkById[id];
+    if (active) {
+      active.classList.add("lit");
+      var railBox = document.getElementById("railNav");
+      var top = active.offsetTop - railBox.clientHeight / 2;
+      if (Math.abs(railBox.scrollTop - top) > railBox.clientHeight / 2)
+        railBox.scrollTop = top;
+    }
+  }
+
+  window.addEventListener("scroll", function () {
+    if (!spyTicking) {
+      spyTicking = true;
+      window.requestAnimationFrame(refreshSpy);
+    }
+  }, { passive: true });
+
+  refreshSpy();
+})();
+</script>
+</body>
+</html>
