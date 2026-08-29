@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cup Stack Jam - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1372f9 0%, #0a4694 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .header .version {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .important-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .important-notice h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .important-notice p {
+            color: #856404;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #1d6f66;
+            border-bottom: 2px solid #2a9d8f;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            color: #444;
+            margin: 20px 0 10px 0;
+        }
+
+        .folder-structure {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .folder-structure .folder {
+            color: #f1fa8c;
+        }
+
+        .folder-structure .file {
+            color: #8be9fd;
+        }
+
+        .folder-structure .comment {
+            color: #6272a4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #1d6f66;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre;
+        }
+
+        .code-block .keyword {
+            color: #ff79c6;
+        }
+
+        .code-block .class {
+            color: #8be9fd;
+        }
+
+        .code-block .string {
+            color: #f1fa8c;
+        }
+
+        .code-block .comment {
+            color: #6272a4;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        ol li {
+            margin: 8px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2a9d8f;
+        }
+
+        .feature-card h4 {
+            color: #1d6f66;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: #1d6f66;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: #2a9d8f;
+            color: white;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin-right: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background: white;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .nav ul {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Cup Stack Jam</h1>
+        <p class="subtitle">A Cup-Sorting Puzzle &mdash; Unity Template</p>
+        <p class="version">Version 1.0 | Unity 6+</p>
+    </div>
+
+    <div class="container">
+        <nav class="nav">
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#folder-structure">Folder Structure</a></li>
+                <li><a href="#gameplay">Gameplay</a></li>
+                <li><a href="#scripts">Scripts</a></li>
+                <li><a href="#level-editor">Level Editor</a></li>
+                <li><a href="#auto-level-generator">Auto Level Generator</a></li>
+                <li><a href="#boosters">Boosters</a></li>
+                <li><a href="#variation">Level Variation</a></li>
+                <li><a href="#customization">Customization</a></li>
+                <li><a href="#level-format">Level Format</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+        </nav>
+
+        <div class="important-notice">
+            <h3>Important: Template / Starting Point</h3>
+            <p>This asset is designed as a <strong>template and starting point</strong> for your own
+               game development. It provides the core systems, architecture and tools needed to build
+               a cup-sorting puzzle. You are expected to customize, extend and modify it to create
+               your unique game. This is not a complete, ready-to-publish game &mdash; it is a
+               foundation for developers to build upon.</p>
+        </div>
+
+    <main>
+        <!-- ==================== OVERVIEW ==================== -->
+        <section id="overview" class="section">
+            <h2>Overview</h2>
+            <p>Cup Stack Jam is a colour-sorting puzzle. A honeycomb <strong>pile</strong> of stacked
+               plastic cups sits above two <strong>tray slots</strong>, each fed by its own queue of
+               coloured trays. Tapping a cup stack merges it with every touching stack of the same
+               colour and feeds the whole group into a matching tray. Cups with nowhere to go park on
+               the <strong>pegs</strong> &mdash; and the pegs are the only thing standing between a
+               careless tap order and a jam.</p>
+            <p>The whole game is one deterministic, physics-free state machine. Nothing falls, nothing
+               collides, and a level plays out identically every time &mdash; which is what lets a
+               headless solver prove every shipped level winnable before it is written to disk.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>500 solver-verified levels</h4>
+                    <p>Every shipped level was played to a win by a headless solver before it was
+                       saved. Not parsed &mdash; solved.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Manual Level Editor</h4>
+                    <p>A two-panel window: the campaign on the left, a clickable pile and tray queues
+                       on the right. Paint colours, cup counts, cut-outs, locks and mystery stacks.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Auto Level Generator</h4>
+                    <p>Batch-generates levels from min/max ranges interpolated by a difficulty curve,
+                       and refuses to write one it cannot solve.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Four boosters</h4>
+                    <p>Shuffle, Extra Peg and Unlock fire on one press; Pull Forward arms and lets you
+                       choose a tray waiting deeper in a queue.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Data-driven levels</h4>
+                    <p>One JSON file per level, readable in a text editor. Palette, timing and camera
+                       live in shared assets, so retuning the game does not mean regenerating it.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>LiveOps backend included</h4>
+                    <p>Menu, level selector, shop, ads, IAP, minigames, daily rewards and battle pass
+                       all come from HyperCasualLiveOpsKit, documented separately.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== GETTING STARTED ==================== -->
+        <section id="getting-started" class="section">
+            <h2>Getting Started</h2>
+
+            <h3>Requirements</h3>
+            <ul>
+                <li>Unity <strong>6000.0.62f1</strong> or newer</li>
+                <li>Universal Render Pipeline (URP) 17.0.4</li>
+                <li>Input System package 1.14.2 (the project ships configured for it)</li>
+                <li>Linear colour space, portrait orientation</li>
+            </ul>
+
+            <h3>Installation</h3>
+            <ol>
+                <li>Import the package into a Unity 6 URP project.</li>
+                <li><strong>Import TextMesh Pro's essential resources</strong> if the project has
+                    never had them: <code>Window &gt; TextMeshPro &gt; Import TMP Essential
+                    Resources</code>. Every label in the menu uses TMP, and without them the menu
+                    installer fails with a <code>NullReferenceException</code> that does not mention
+                    TextMesh Pro at all.</li>
+                <li>Let Package Manager finish resolving. The kit needs <code>com.unity.ugui</code>,
+                    <code>com.unity.purchasing</code>, <code>com.unity.mobile.notifications</code> and
+                    the built-in <code>com.unity.modules.screencapture</code>.</li>
+                <li>Open <code>Assets/CupStackJam/Scenes/CupStackLevel.unity</code>.</li>
+                <li>Press Play.</li>
+            </ol>
+
+            <h3>Quick Test</h3>
+            <p>With the gameplay scene open, press Play and tap a cup stack in the pile. Every
+               touching stack of the same colour swells, merges into the one you tapped, and starts
+               feeding cups into a matching tray. Deliver every cup and the level is won.</p>
+            <p>To play the campaign rather than a single level, make
+               <code>Assets/HyperCasualLiveOpsKit/StarterMenu/Scenes/HLK_MainMenu.unity</code> build
+               scene 0 and press Play from there.</p>
+        </section>
+
+        <!-- ==================== FOLDER STRUCTURE ==================== -->
+        <section id="folder-structure" class="section">
+            <h2>Folder Structure</h2>
+            <div class="folder-structure"><span class="folder">Assets/CupStackJam/</span>
+  <span class="folder">Documentation/</span>      <span class="comment">this manual</span>
+  <span class="folder">Editor/</span>             <span class="comment">the three buyer-facing tools and their shared engine</span>
+    <span class="file">CupStackJamLevelEditorWindow.cs</span>       <span class="comment">Tools &gt; Cup Stack Jam &gt; Manual Level Editor</span>
+    <span class="file">CupStackJamAutoLevelGeneratorWindow.cs</span> <span class="comment">Tools &gt; Cup Stack Jam &gt; Auto Level Generator</span>
+    <span class="file">CupStackJamWelcomePopup.cs</span>            <span class="comment">Tools &gt; Cup Stack Jam &gt; Welcome</span>
+    <span class="file">CupStackJamLevelIO.cs</span>                 <span class="comment">reads and writes the level files</span>
+  <span class="folder">Levels/</span>             <span class="comment">the two hand-authored reference level assets</span>
+  <span class="folder">Materials/</span>          <span class="comment">cup, cap, tray, dimple, peg and board materials</span>
+  <span class="folder">Meshes/</span>             <span class="comment">cup, cap, hex cell, peg, tray and dimple</span>
+  <span class="folder">PowerUps/</span>           <span class="comment">the four booster definitions</span>
+  <span class="folder">Prefabs/</span>            <span class="comment">cup, cap, outline shell, hex cell, peg, tray, dimple, panel</span>
+  <span class="folder">Resources/</span>
+    <span class="folder">CupStackJam/</span>      <span class="comment">CupStackJamCampaign.asset - the shipped campaign</span>
+    <span class="folder">Levels/</span>           <span class="comment">Level_1.json ... Level_500.json</span>
+  <span class="folder">Scenes/</span>             <span class="comment">CupStackLevel.unity</span>
+  <span class="folder">Scripts/</span>            <span class="comment">runtime C#</span>
+  <span class="folder">Settings/</span>           <span class="comment">palette, style and the level generator</span>
+  <span class="folder">Shaders/</span>            <span class="comment">the outlined cup shader</span>
+  <span class="folder">Textures/</span>           <span class="comment">the neutral reflection probe</span>
+
+<span class="folder">Assets/HyperCasualLiveOpsKit/</span>   <span class="comment">the reusable backend, with its own manual</span></div>
+            <p>The two folders are separate products. <code>CupStackJam</code> holds this game's
+               mechanic and content; <code>HyperCasualLiveOpsKit</code> holds the menu, economy, ads,
+               IAP and minigames, and is documented in its own <code>Documentation.html</code>.</p>
+        </section>
+
+        <!-- ==================== GAMEPLAY ==================== -->
+        <section id="gameplay" class="section">
+            <h2>Gameplay</h2>
+
+            <h3>Core Mechanics</h3>
+            <ul>
+                <li><strong>The pile</strong> is a honeycomb grid of cup stacks. Each cell holds a
+                    number of cups of one colour, and the number is printed on the top cup.</li>
+                <li><strong>Tapping a stack</strong> flood-fills every touching stack of the same
+                    colour into one merged group, which then feeds cups out one at a time. Where you
+                    tap decides how big the merge is &mdash; that is the whole puzzle.</li>
+                <li><strong>Two tray slots</strong> sit at the far end of the board, each fed by its
+                    own queue of coloured trays. A tray holds
+                    <em>dimple rows &times; dimple columns</em> cups.</li>
+                <li><strong>A cup</strong> flies to a tray of its colour if one has room. If not, it
+                    parks on a <strong>peg</strong>. Pegs drain automatically the moment a tray of
+                    that colour arrives.</li>
+                <li><strong>A full tray</strong> seals, sparkles, flies away, and the next tray in
+                    that queue slides forward.</li>
+            </ul>
+
+            <h3>Palette Colours</h3>
+            <p>Colours live in <code>Settings/CupStackJamPalette.asset</code>. Each entry carries an id
+               character, a display name, four colours (cup body, lit cap, tray top and tray dimple)
+               and a default tray capacity. The id character is what the level files use, so adding a
+               colour can never renumber the levels already on disk.</p>
+
+            <h3>Win &amp; Lose Conditions</h3>
+            <ul>
+                <li><strong>Win:</strong> every cup in the level has been delivered into a tray.</li>
+                <li><strong>Lose:</strong> the board deadlocks &mdash; cups are still owed but nothing
+                    can move, because every remaining cup's tray is unreachable and the pegs are
+                    full.</li>
+            </ul>
+            <p>Because a level is only ever lost to a jam, the <strong>peg count is the game's
+               tightest difficulty lever</strong> &mdash; and the reason the Extra Peg booster
+               exists. Across the shipped campaign the pile grows while the peg grid shrinks.</p>
+
+            <h3>Balance</h3>
+            <p>A level is <em>balanced</em> when, for every colour, the cups in the pile exactly equal
+               the total capacity of the trays that accept them. The economy is zero-slack by design:
+               a cup with nowhere left to go is a loss, not a rounding error. An unbalanced level is
+               unwinnable <strong>by construction</strong>, and no amount of searching discovers that
+               &mdash; which is why the editor checks balance before it runs the solver.</p>
+        </section>
+
+        <!-- ==================== SCRIPTS ==================== -->
+        <section id="scripts" class="section">
+            <h2>Scripts Reference</h2>
+
+            <h3>Core Scripts</h3>
+            <table>
+                <tr><th>Script</th><th>Responsibility</th></tr>
+                <tr><td><code>CupStackSimulation</code></td><td>The whole game as data. No MonoBehaviour, no physics: taps, merges, flights, trays, pegs, win and lose. Advanced by <code>Tick(dt)</code>, so a level plays out identically headless and on screen.</td></tr>
+                <tr><td><code>CupStackGameDirector</code></td><td>Draws the simulation. Owns every pooled cup, tray, dimple, peg and badge, plus the gather, burst, sparkle and landing effects.</td></tr>
+                <tr><td><code>CupStackJamGame</code></td><td>The gameplay component: loads the campaign level, routes input, and exposes the four booster effects.</td></tr>
+                <tr><td><code>CupStackJamGameManager</code></td><td>Binds the campaign to the board: which level loads, what happens on win or lose, and every gameplay sound cue.</td></tr>
+                <tr><td><code>CupStackJamLevelManager</code></td><td>Which level is selected and how far the player has got. Reads and writes the same keys the menu's level selector uses.</td></tr>
+                <tr><td><code>CupStackJamLevelData</code></td><td>The runtime level: the pile grids, the tray queues and the variation feature lists.</td></tr>
+                <tr><td><code>CupStackJamJsonLevel</code></td><td>The on-disk mirror of a level. One JSON file per level.</td></tr>
+                <tr><td><code>CupStackJamLevelBuilder</code></td><td>Turns a level plus the shared palette and style into the runtime board definition the director consumes.</td></tr>
+                <tr><td><code>CupStackJamCampaign</code></td><td>How many levels ship, where they live, and which palette and style they are played with.</td></tr>
+                <tr><td><code>CupStackJamSolver</code></td><td>Headless playthrough simulator. Drives the real simulation, so what it proves is what the player gets.</td></tr>
+                <tr><td><code>CupStackJamLevelGenerator</code></td><td>The generation engine the Auto Level Generator window is built on.</td></tr>
+            </table>
+
+            <h3>Utility Scripts</h3>
+            <table>
+                <tr><th>Script</th><th>Responsibility</th></tr>
+                <tr><td><code>CupStackBoardLayout</code></td><td>Turns the level's grid numbers into cell and peg positions plus a neighbour table. Neighbours are found by distance, not index arithmetic, so any row pattern works.</td></tr>
+                <tr><td><code>CupStackLevelDefinition</code></td><td>The runtime board description: palette, pile, trays, pegs and every timing and shading dial.</td></tr>
+                <tr><td><code>CupStackJamStyle</code></td><td>Presentation shared by every level &mdash; timing, geometry, shading and the two camera reserves.</td></tr>
+                <tr><td><code>CupStackJamPalette</code></td><td>The colour set every level draws from.</td></tr>
+                <tr><td><code>CupStackJamBox</code> / <code>CupStackJamCrate</code></td><td>A tray as something a booster can point at, and the lock badge on a queued tray.</td></tr>
+                <tr><td><code>CupStackJamCameraRig</code></td><td>Frames the board inside the band the HUD and booster reserves leave, and applies shake presets.</td></tr>
+                <tr><td><code>CupStackBurstView</code> / <code>CupStackSparkleView</code> / <code>CupStackRingView</code></td><td>The spark burst on a merge, the sparkle scatter on a completed tray, and the impact ring on a landing.</td></tr>
+                <tr><td><code>CupStackJamPowerUpAdapter</code></td><td>Connects the four boosters to the reusable power-up framework.</td></tr>
+                <tr><td><code>CupStackJamLiveOpsAdapter</code></td><td>The only place the game talks to the backend: rewards, analytics and the leaderboard.</td></tr>
+            </table>
+
+            <h3>Editor Scripts</h3>
+            <table>
+                <tr><th>Script</th><th>Responsibility</th></tr>
+                <tr><td><code>CupStackJamLevelEditorWindow</code></td><td>The Manual Level Editor.</td></tr>
+                <tr><td><code>CupStackJamAutoLevelGeneratorWindow</code></td><td>The Auto Level Generator.</td></tr>
+                <tr><td><code>CupStackJamWelcomePopup</code></td><td>The first-run greeting.</td></tr>
+                <tr><td><code>CupStackJamLevelIO</code></td><td>Loads, saves, renumbers and validates the level set. Shared by both windows.</td></tr>
+            </table>
+        </section>
+
+        <!-- ==================== LEVEL EDITOR ==================== -->
+        <section id="level-editor" class="section">
+            <h2>Level Editor</h2>
+
+            <h3>Opening the Level Editor</h3>
+            <p>Menu path: <code>Tools &gt; Cup Stack Jam &gt; Manual Level Editor</code></p>
+
+            <h3>Layout</h3>
+            <p>Two panels. The <strong>left</strong> lists every level in the campaign, with buttons to
+               add, duplicate, delete and reorder. The <strong>right</strong> shows the level you have
+               selected: the pile grid on top, the two tray queues below it, and the per-level
+               properties beneath those.</p>
+
+            <h3>Editing</h3>
+            <ul>
+                <li><strong>Click a pile cell</strong> to paint it with the currently selected tool
+                    &mdash; a colour, a cup count, a cut-out, or a mystery marker.</li>
+                <li><strong>Click a queue position</strong> to set that tray's colour, or to lock it
+                    behind a countdown.</li>
+                <li><strong>Undo</strong> works with <kbd>Ctrl</kbd>+<kbd>Z</kbd> and with the
+                    <strong>Undo</strong> button in the toolbar. Both go through Unity's own undo
+                    stack, so an edit here behaves like every other edit in the editor.</li>
+            </ul>
+
+            <h3>Validation</h3>
+            <ul>
+                <li><strong>Check Balance</strong> reports, per colour, how many cups the pile supplies
+                    against how much tray capacity wants them. It runs first because an unbalanced
+                    level is unwinnable by construction and the solver would only report "gave up".</li>
+                <li><strong>Validate</strong> plays the level headlessly and tells you whether it can
+                    be won, how many taps it took, how close the pegs came to filling, and how many
+                    turns offered a real choice.</li>
+                <li><strong>Validate All</strong> does the same for the whole campaign and lists every
+                    level that fails. File existence is never validation.</li>
+            </ul>
+        </section>
+
+        <!-- ==================== AUTO LEVEL GENERATOR ==================== -->
+        <section id="auto-level-generator" class="section">
+            <h2>Automatic Level Generator</h2>
+
+            <h3>Opening the Generator</h3>
+            <p>Menu path: <code>Tools &gt; Cup Stack Jam &gt; Auto Level Generator</code></p>
+
+            <div class="important-notice">
+                <h3>The generator is a serialized asset</h3>
+                <p>Every setting below lives in
+                   <code>Assets/CupStackJam/Settings/CupStackJamLevelGenerator.asset</code>, and the
+                   generator reads <em>that</em>. Editing the default values in
+                   <code>CupStackJamLevelGenerator.cs</code> changes nothing: the C# defaults only ever
+                   apply to an asset that does not exist yet. Change the asset, regenerate, then read
+                   the level files back to see what you actually got.</p>
+            </div>
+
+            <h3>Settings</h3>
+            <table>
+                <tr><th>Setting</th><th>What it does</th></tr>
+                <tr><td>Difficulty curve exponent</td><td>Shapes the ramp across the campaign. Below 1 front-loads it so early levels differ from each other; above 1 holds the game easy and then climbs.</td></tr>
+                <tr><td>Colours</td><td>How many palette colours a level may use, as a min/max range interpolated by the curve.</td></tr>
+                <tr><td>Board columns / rows</td><td>The pile's widest row, and its row count. Leave rows at 0 to derive them from the width.</td></tr>
+                <tr><td>Min / max stack depth</td><td>The band each cell's cup count is drawn from.</td></tr>
+                <tr><td>Tray rows / columns</td><td>The dimple grid on a tray. Rows &times; columns is its capacity.</td></tr>
+                <tr><td>Buffer slots</td><td>How many pegs the level ships with &mdash; the scarce resource.</td></tr>
+                <tr><td>Family thresholds</td><td>The level each variation family is <em>permitted</em> from. A threshold is a <strong>floor, not a guarantee</strong>: whether one lands depends on the board rolled and whether the solver accepts it.</td></tr>
+                <tr><td>Family shares</td><td>What fraction of the board each family occupies once permitted.</td></tr>
+                <tr><td>Pile shapes</td><td>Which outlines the generator may cut: full, diamond, V, split columns, U, scattered.</td></tr>
+                <tr><td>Boosters</td><td>How many of each booster a level grants.</td></tr>
+                <tr><td>Max attempts</td><td>Seeds tried per stage before the ladder loosens. Higher costs time and buys fewer loosened levels.</td></tr>
+            </table>
+
+            <h3>Seeds</h3>
+            <p>Generation is deterministic. The same seed and the same settings produce a
+               byte-identical campaign, and each level's seed is derived from its own number &mdash;
+               so level 250 is the same board whether you generated 250 levels or 500, and re-rolling
+               one level does not shift every level after it.</p>
+
+            <h3>How a level is built</h3>
+            <p>Backwards, from the trays. The generator chooses the trays first and then fills the
+               pile to match, so the zero-slack balance holds <em>by construction</em> rather than by
+               luck. Rolling a board first and hoping makes an unwinnable level the common case.</p>
+
+            <h3>The three-stage ladder</h3>
+            <p>No level is ever written without being solved. When one cannot be, the generator
+               degrades in a defined order and <strong>names the stage in its report</strong>:</p>
+            <table>
+                <tr><th>Stage</th><th>What it tries</th></tr>
+                <tr><td>1</td><td>The level as specified.</td></tr>
+                <tr><td>2 &mdash; LOOSENED</td><td>Variation features reduced to 40%.</td></tr>
+                <tr><td>3 &mdash; LAST-RESORT</td><td>A plain board with no variation features at all.</td></tr>
+                <tr><td>FAILED</td><td>Reported and skipped. Numbering stays contiguous.</td></tr>
+            </table>
+            <p>The run report lists the loosened and last-resort counts, the duplicate rate, each
+               family's <em>measured</em> first occurrence, and the difficulty trend per fifty-level
+               band. A report that only said "500 written" would hide every one of those.</p>
+        </section>
+
+        <!-- ==================== BOOSTERS ==================== -->
+        <section id="boosters" class="section">
+            <h2>Boosters</h2>
+            <p>Boosters are catalogue-driven. Each one is a <code>PowerUpDefinition</code> asset in
+               <code>Assets/CupStackJam/PowerUps/</code> that owns its inventory, persistence,
+               tutorial, arming, sound, haptics and unlock level; the game supplies only what the
+               effect does to the board.</p>
+
+            <table>
+                <tr><th>Booster</th><th>Effect</th><th>Targeted?</th></tr>
+                <tr><td><strong>Shuffle</strong></td><td>Re-orders the trays still queued behind both slots. Trays already in a slot are left alone, and a lock travels with its tray.</td><td>No</td></tr>
+                <tr><td><strong>Extra Peg</strong></td><td>Adds one peg to the buffer for the rest of the level. The peg grid is rebuilt so the new peg has somewhere to be.</td><td>No</td></tr>
+                <tr><td><strong>Unlock</strong></td><td>Opens every locked tray in both queues at once, without waiting for its countdown.</td><td>No</td></tr>
+                <tr><td><strong>Pull Forward</strong></td><td>Pulls one queued tray straight to the front of its queue. While armed, every tray it can reach pulses.</td><td>Yes</td></tr>
+            </table>
+
+            <h3>Refusals cost nothing</h3>
+            <p>Every effect returns whether it actually changed something, and the framework consumes a
+               charge only when it did. Shuffling a board with nothing queued, or pressing Unlock with
+               nothing locked, refuses and spends no charge. <em>Reports success and changes
+               nothing</em> is the worst failure a booster can have.</p>
+            <p>Pull Forward deliberately refuses a <em>locked</em> tray rather than quietly opening it
+               &mdash; that is Unlock's job, and doing two boosters' work in one would make both
+               harder to reason about.</p>
+
+            <h3>Adding a fifth booster</h3>
+            <ol>
+                <li>Add an <code>IPowerUpEffectHandler</code> to <code>CupStackJamPowerUpAdapter</code>
+                    and register it in <code>Awake</code> (and unregister in <code>OnDestroy</code>).</li>
+                <li>Author a <code>PowerUpDefinition</code> asset for it.</li>
+                <li>Raise <code>StarterMenuConfig &gt; Authored Gameplay UI &gt; Booster Slot
+                    Capacity</code> and re-run the gameplay UI factory rebuild. <strong>The bar's
+                    socket count is authored, not dynamic</strong> &mdash; skip the rebuild and the
+                    fifth booster is catalogued, tested and unreachable.</li>
+            </ol>
+        </section>
+
+        <!-- ==================== LEVEL VARIATION ==================== -->
+        <section id="variation" class="section">
+            <h2>Level Variation</h2>
+            <p>What makes level 90 different from level 9 is not more cups &mdash; it is that the
+               <em>content</em> changes. Four families ship, and every one of them is introduced inside
+               the first ten levels, because a player who stops before then would never find out the
+               game has it.</p>
+
+            <table>
+                <tr><th>Family</th><th>What it is</th><th>Counter-booster</th></tr>
+                <tr><td><strong>Cut-outs</strong></td><td>Holes in the pile. They change the shape of the board and therefore which stacks touch which.</td><td>&mdash;</td></tr>
+                <tr><td><strong>Locked trays</strong></td><td>A tray in a queue that will not come forward until a number of trays have completed. It shows its countdown, and it <em>blocks</em> its queue rather than being skipped.</td><td>Unlock</td></tr>
+                <tr><td><strong>Mystery stacks</strong></td><td>A cup stack whose colour is concealed behind a <code>?</code>. It cannot be tapped, and a merge stops at it. Clearing a neighbouring stack reveals it, and the reveal <em>lerps</em> to the real colour.</td><td>&mdash;</td></tr>
+                <tr><td><strong>Wildcard stacks</strong></td><td>A pale stack that any tray with room will take. It routes to the tray that most needs it, not simply the first one open.</td><td>&mdash;</td></tr>
+            </table>
+
+            <p>The peg count is a fifth axis and is present from level 1: it is the level's scarce
+               resource, and the campaign tightens it as the pile grows.</p>
+
+            <h3>Reading the real first occurrence</h3>
+            <p>The generator's thresholds are floors. To find out when a family actually first appears,
+               read <code>Artifacts/Levels/campaign-report.txt</code>, which measures the level files on
+               disk. Configured and measured are routinely different by a level or two.</p>
+        </section>
+
+        <!-- ==================== CUSTOMIZATION ==================== -->
+        <section id="customization" class="section">
+            <h2>Customization Guide</h2>
+
+            <h3>Re-skinning the colours</h3>
+            <p>Open <code>Settings/CupStackJamPalette.asset</code>. Each entry has four colours: the cup
+               body, the lit cap, the tray top and the tray dimple. They are separate fields rather than
+               shades of one because the reference art shifts hue differently per colour &mdash; one
+               shared darkening factor cannot produce all of them.</p>
+
+            <h3>Retuning the feel</h3>
+            <p>Open <code>Settings/CupStackJamStyle.asset</code>. Everything about timing, geometry,
+               shading and the camera lives there, shared by every level &mdash; so you can retune the
+               whole game without regenerating a single level file.</p>
+
+            <h3>Framing the board</h3>
+            <p>The style asset carries two <strong>reserves</strong>: the fraction of screen height the
+               HUD owns at the top, and the fraction the booster shelf and banner own at the bottom.
+               The camera fits the board into the band those leave. They are measurements taken from a
+               played build, not preferences &mdash; if you move the HUD, re-measure them.</p>
+
+            <h3>Replacing the art</h3>
+            <p>Cups, caps, trays, dimples, pegs and hex cells are ordinary prefabs in
+               <code>Prefabs/</code>, each backed by an FBX in <code>Meshes/</code>. Swap the mesh and
+               the game re-measures itself around it: cup height, radius and nesting step are all read
+               off the mesh rather than typed in.</p>
+        </section>
+
+        <!-- ==================== LEVEL FORMAT ==================== -->
+        <section id="level-format" class="section">
+            <h2>Level Format</h2>
+            <p>One JSON file per level, at
+               <code>Assets/CupStackJam/Resources/Levels/Level_N.json</code>, numbered from 1 with no
+               gaps. The loader walks upward until a file is missing, so a gap silently truncates the
+               campaign &mdash; reordering in the editor renumbers the files on disk rather than
+               keeping a separate order list.</p>
+
+            <h3>Fields</h3>
+            <table>
+                <tr><th>Field</th><th>Meaning</th></tr>
+                <tr><td><code>levelNumber</code> / <code>levelName</code></td><td>Campaign position and display name. The position is re-assigned from the file index on load, so a hand-edited number cannot fight its own filename.</td></tr>
+                <tr><td><code>boardColors</code></td><td>Pile rows, top first. One character per cell: a palette id, <code>.</code> for a hole, <code>*</code> for a wildcard. Rows may differ in length &mdash; shorter rows are centred, which produces the honeycomb stagger.</td></tr>
+                <tr><td><code>boardStacks</code></td><td>Cup count per cell, same shape. <code>1</code>&ndash;<code>9</code> then <code>A</code>&ndash;<code>Z</code> for 10&ndash;35.</td></tr>
+                <tr><td><code>defaultStackDepth</code></td><td>Cups in a stack whose count character is missing.</td></tr>
+                <tr><td><code>trayBoxes</code></td><td>The two queues. Row 0 is the left queue, row 1 the right; each character is one tray's colour, front of the queue first.</td></tr>
+                <tr><td><code>trayCapacities</code></td><td>Per-tray capacity override. Empty means "use the level default".</td></tr>
+                <tr><td><code>trayDimpleRows</code> / <code>trayDimpleColumns</code></td><td>The dimple grid on a tray. Their product is the default capacity.</td></tr>
+                <tr><td><code>bufferSlotCount</code> / <code>pegCapacity</code></td><td>How many pegs, and how many cups each holds.</td></tr>
+                <tr><td><code>obstacles</code></td><td>Cut-out cells, as row/column pairs. Also stamped into <code>boardColors</code> as <code>.</code> so there is one read path for the board.</td></tr>
+                <tr><td><code>crates</code></td><td>Locked trays: <code>row</code> is the queue, <code>col</code> the position, <code>boxesRequired</code> the completions needed.</td></tr>
+                <tr><td><code>mysteryBoxes</code> / <code>wildcards</code></td><td>Concealed and wildcard cells, as row/column pairs.</td></tr>
+                <tr><td><code>accessMode</code></td><td>0 = any cell tappable (the shipped rule), 1 = edge cells only, 2 = the front row only.</td></tr>
+                <tr><td><code>completeBoxesThatRunOutOfTiles</code></td><td>When on, a tray whose colour has run out completes anyway instead of deadlocking. A safety net for hand-authored levels; solver-verified ones do not need it.</td></tr>
+                <tr><td>booster counts and unlock levels</td><td>Four pairs. The count is how many uses this level grants; the unlock level overrides the catalogue's, or <code>-1</code> to leave it alone.</td></tr>
+                <tr><td><code>difficultyBand</code> / <code>generatorSeed</code></td><td>Provenance written by the generator. Nothing in the game reads them.</td></tr>
+            </table>
+
+            <h3>Example</h3>
+            <div class="code-block"><pre>{
+    "levelNumber": 2,
+    "levelName": "Level 2",
+    "boardColors": [ "GGG", "BBGG", "GGB", "BBBG", "GGB" ],
+    "boardStacks": [ "233", "2223", "322", "2232", "223" ],
+    "defaultStackDepth": 2,
+    "trayRows": 2,
+    "trayColumns": 2,
+    "trayBoxes": [ "GB", "GB" ],
+    "trayCapacities": [ "", "" ],
+    "trayDimpleRows": 3,
+    "trayDimpleColumns": 4,
+    "bufferSlotCount": 12,
+    "pegCapacity": 4,
+    "accessMode": 0,
+    "shuffleCount": 3,
+    "extraSlotCount": 2
+}</pre></div>
+            <p>The board above is illustrative. Every shipped level is balanced &mdash; each colour's
+               cup total equals the capacity of the trays that take it &mdash; and has been solved.</p>
+        </section>
+
+        <!-- ==================== SUPPORT ==================== -->
+        <section id="support" class="section">
+            <h2>Support</h2>
+
+            <h3>Common Issues</h3>
+            <table>
+                <tr><th>Symptom</th><th>Cause and fix</th></tr>
+                <tr><td>Everything renders pink</td><td>The project is not using URP, or the render pipeline asset is not assigned. Set it in <em>Project Settings &gt; Graphics</em>.</td></tr>
+                <tr><td>"The campaign cannot start"</td><td><code>CupStackJamCampaign.asset</code> is missing from <code>Resources/CupStackJam/</code>, or its level count is 0. Open the Manual Level Editor and press Save All.</td></tr>
+                <tr><td>A level says it is not balanced</td><td>Some colour has more or fewer cups in the pile than its trays can hold. The report names the colour and the difference.</td></tr>
+                <tr><td>Taps do nothing on device</td><td>The gameplay scene needs an EventSystem. The kit's gameplay UI installer authors one; re-run it from <em>Tools &gt; HLK &gt; Gameplay UI</em>.</td></tr>
+                <tr><td>A booster button is greyed out</td><td>It is either locked (the button shows the level it opens on) or empty (it shows <code>0</code>). Both are set per level.</td></tr>
+                <tr><td>The generator reports "LAST-RESORT"</td><td>That level could not be made winnable with its variation features and a plain board was written instead. Widen the tray or peg ranges, or lower the family shares.</td></tr>
+                <tr><td>A change to the generator did nothing</td><td>You edited the C# defaults. The generator reads its <em>asset</em>; edit <code>Settings/CupStackJamLevelGenerator.asset</code>.</td></tr>
+            </table>
+
+            <h3>Tips</h3>
+            <ul>
+                <li>Keep the opening level as level 1. It is the board the mechanic was derived from and
+                    the fixture the tests compare against.</li>
+                <li>A locked tray's countdown must cost <em>more</em> than its queue position, or it
+                    opens before the tray reaches the front and the lock is decoration.</li>
+                <li>Every mystery stack needs at least one ordinary neighbour, or nothing can ever
+                    reveal it.</li>
+                <li>Re-run <strong>Validate All</strong> after any bulk edit. File existence is not
+                    validation.</li>
+            </ul>
+
+            <h3>Contact Us</h3>
+            <p>If you get stuck or have any issues, feel free to reach out to us at
+               <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>. We are happy to
+               help!</p>
+        </section>
+    </main>
+    </div>
+
+    <div class="footer">
+        <p>Cup Stack Jam &mdash; a Unity template. Built on HyperCasualLiveOpsKit.</p>
+    </div>
+</body>
+</html>

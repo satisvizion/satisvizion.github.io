@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexa Fall - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2a9d8f 0%, #1d6f66 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .header .version {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .important-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .important-notice h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .important-notice p {
+            color: #856404;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #1d6f66;
+            border-bottom: 2px solid #2a9d8f;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            color: #444;
+            margin: 20px 0 10px 0;
+        }
+
+        .folder-structure {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .folder-structure .folder {
+            color: #f1fa8c;
+        }
+
+        .folder-structure .file {
+            color: #8be9fd;
+        }
+
+        .folder-structure .comment {
+            color: #6272a4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #1d6f66;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+            white-space: pre;
+        }
+
+        .code-block .keyword {
+            color: #ff79c6;
+        }
+
+        .code-block .class {
+            color: #8be9fd;
+        }
+
+        .code-block .string {
+            color: #f1fa8c;
+        }
+
+        .code-block .comment {
+            color: #6272a4;
+        }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        ol li {
+            margin: 8px 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2a9d8f;
+        }
+
+        .feature-card h4 {
+            color: #1d6f66;
+            margin-bottom: 10px;
+        }
+
+        .nav {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: #1d6f66;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: #2a9d8f;
+            color: white;
+        }
+
+        .color-swatch {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin-right: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background: white;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .nav ul {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Hexa Fall</h1>
+        <p class="subtitle">A Hexagon Sorting Puzzle &mdash; Unity Template</p>
+        <p class="version">Version 1.0 | Unity 6+</p>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%); padding: 18px 20px; text-align: center;">
+        <a href="https://assetstore.unity.com/packages/templates/packs/hypercasual-game-engine-mobile-puzzle-templates-136631" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 1.05rem;">
+            &#127775; <strong>This asset was made with the HyperCasual Game Engine!</strong> &nbsp; Check it out &mdash; mobile puzzle templates &amp; more. Click here to learn more &#10132;
+        </a>
+    </div>
+
+    <div class="container">
+        <nav class="nav">
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#folder-structure">Folder Structure</a></li>
+                <li><a href="#gameplay">Gameplay</a></li>
+                <li><a href="#scripts">Scripts</a></li>
+                <li><a href="#level-editor">Level Editor</a></li>
+                <li><a href="#auto-level-generator">Auto Level Generator</a></li>
+                <li><a href="#boosters">Boosters</a></li>
+                <li><a href="#variation">Level Variation</a></li>
+                <li><a href="#customization">Customization</a></li>
+                <li><a href="#level-format">Level Format</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+        </nav>
+
+        <div class="important-notice">
+            <h3>Important: Template / Starting Point</h3>
+            <p>This asset is designed as a <strong>template and starting point</strong> for your own game development. It provides the core systems, architecture and tools needed to build a hexagon sorting puzzle. You are expected to customize, extend and modify this template to create your unique game. This is not a complete, ready-to-publish game &mdash; it is a foundation for developers to build upon.</p>
+        </div>
+
+    <main>
+        <!-- ==================== OVERVIEW ==================== -->
+        <section id="overview" class="section">
+            <h2>Overview</h2>
+            <p>Hexa Fall is a colour-sorting puzzle. A board of hexagon stacks sits above a tray of crates. Tapping a crate sends it up into the buffer, where it fills itself with matching hexes drawn off the board's front row. A crate can only be tapped when the column above it is clear, so the <em>order</em> you take them in is the whole puzzle.</p>
+            <p>Everything you can see is generated by the project itself &mdash; meshes, materials, the toon shader, the counter font and the particle systems are all produced in code, so there are no imported models or textures to license, swap or maintain.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>500 verified levels</h4>
+                    <p>Every shipped level was played by a headless solver <strong>many times over</strong> before it was written, and kept only if it was won often enough. "A winning line exists" is not the same claim as "a player will find one", and in a game with no undo it is the weaker one: a board that clears on a single tap order deadlocks everyone else twenty moves later. Levels 1&ndash;10 win <strong>100%</strong> of simulated playthroughs and every later level at least <strong>80%</strong>.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Manual Level Editor</h4>
+                    <p>A two-panel editor window: the set on the left, a clickable tray and board on the right. Paint colours, crates, mystery crates and cut-outs directly.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Auto Level Generator</h4>
+                    <p>Batch-generates levels with min/max ranges for every tunable, interpolated by a difficulty curve across the campaign.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Four boosters</h4>
+                    <p>Shuffle, Extra Slot and Crate Buster fire on one press; Pick Any arms and lets you choose a crate the rules would otherwise refuse.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Procedural art pipeline</h4>
+                    <p>Every mesh, material, texture and glyph is built from a style asset. Change a radius and the whole game re-forms around it.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>LiveOps backend included</h4>
+                    <p>Menu, level selector, shop, ads, IAP, minigames, daily rewards and battle pass all come from HyperCasualLiveOpsKit, documented separately.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== GETTING STARTED ==================== -->
+        <section id="getting-started" class="section">
+            <h2>Getting Started</h2>
+
+            <h3>Requirements</h3>
+            <ul>
+                <li>Unity <strong>6000.0.62f1</strong> or newer</li>
+                <li>Universal Render Pipeline (URP) 17.0.4</li>
+                <li>Input System package 1.14.2 (the project ships configured for it)</li>
+                <li>Linear colour space, portrait orientation</li>
+            </ul>
+
+            <h3>Installation</h3>
+            <ol>
+                <li>Import the package into a Unity 6 URP project.</li>
+                <li><strong>Import TextMesh Pro's essential resources</strong> if the project has
+                never had them: <code>Window &gt; TextMeshPro &gt; Import TMP Essential Resources</code>.
+                Every label in the menu uses TMP, and without them the menu installer fails with a
+                <code>NullReferenceException</code> that does not mention TextMesh Pro at all.</li>                <li>Let Package Manager finish resolving. The kit needs <code>com.unity.ugui</code>, <code>com.unity.purchasing</code>, <code>com.unity.mobile.notifications</code> and the built-in <code>com.unity.modules.screencapture</code>.</li>
+                <li>Open <code>Assets/HexaFall/Scenes/HexaFall_Level.unity</code>.</li>
+                <li>Press Play.</li>
+            </ol>
+
+            <h3>Quick Test</h3>
+            <p>With the gameplay scene open, press Play and tap a crate in the bottom tray. It should arc up into the buffer row and start drawing matching hexes off the front of the board. Fill every crate and the level is won.</p>
+            <p>To play the campaign rather than a single level, add the menu scene <code>Assets/HyperCasualLiveOpsKit/StarterMenu/Scenes/HLK_MainMenu.unity</code> as build scene 0 and press Play from there.</p>
+        </section>
+
+        <!-- ==================== FOLDER STRUCTURE ==================== -->
+        <section id="folder-structure" class="section">
+            <h2>Folder Structure</h2>
+            <div class="folder-structure"><span class="folder">Assets/HexaFall/</span>
+  <span class="folder">Documentation/</span>      <span class="comment">this manual</span>
+  <span class="folder">Editor/</span>             <span class="comment">the three buyer-facing tools and their shared engine</span>
+    <span class="file">HexaFallLevelEditorWindow.cs</span>          <span class="comment">Tools &gt; Hexa Fall &gt; Manual Level Editor</span>
+    <span class="file">HexaFallAutoLevelGeneratorWindow.cs</span>    <span class="comment">Tools &gt; Hexa Fall &gt; Auto Level Generator</span>
+    <span class="file">HexaFallWelcomePopup.cs</span>               <span class="comment">Tools &gt; Hexa Fall &gt; Welcome</span>
+    <span class="file">HexaFallLevelIO.cs</span>                    <span class="comment">reads and writes the level files</span>
+    <span class="file">HexaFallLevelDataEditor.cs</span>            <span class="comment">inspector for a level asset</span>
+  <span class="folder">Materials/</span>          <span class="comment">generated, one per palette colour plus the scenery</span>
+  <span class="folder">Meshes/</span>             <span class="comment">generated hex, crate, plate and socket meshes</span>
+  <span class="folder">PowerUps/</span>           <span class="comment">the four booster definitions</span>
+  <span class="folder">Prefabs/</span>            <span class="comment">tile, crate, wooden crate, plate, buffer socket</span>
+  <span class="folder">Resources/</span>
+    <span class="folder">HexaFall/</span>         <span class="comment">HexaFallCampaign.asset - the shipped campaign</span>
+    <span class="folder">Levels/</span>           <span class="comment">Level_1.json ... Level_500.json</span>
+  <span class="folder">Scenes/</span>             <span class="comment">HexaFall_Level.unity</span>
+  <span class="folder">Scripts/</span>            <span class="comment">runtime C#</span>
+  <span class="folder">Settings/</span>           <span class="comment">palette, style, materials, font, generator</span>
+  <span class="folder">Shaders/</span>            <span class="comment">hand-written URP toon, glass, outline, particle</span>
+  <span class="folder">Textures/</span>           <span class="comment">generated wood, sparkle, counter-font atlas</span>
+
+<span class="folder">Assets/HyperCasualLiveOpsKit/</span>   <span class="comment">the reusable backend, with its own manual</span></div>
+            <p>The two folders are separate products. <code>HexaFall</code> holds this game's mechanic and content; <code>HyperCasualLiveOpsKit</code> holds the menu, economy, ads, IAP and minigames, and is documented in its own <code>Documentation.html</code>.</p>
+        </section>
+
+        <!-- ==================== GAMEPLAY ==================== -->
+        <section id="gameplay" class="section">
+            <h2>Gameplay</h2>
+
+            <h3>Core Mechanics</h3>
+            <ul>
+                <li><strong>The board</strong> is a hexagonal grid of colour stacks. Only stacks on the front line &mdash; the edge nearest the buffer, with nothing in front of them &mdash; can be collected. When a front stack empties, the stacks behind advance into the gap.</li>
+                <li><strong>The tray</strong> is a grid of crates. Each crate collects one colour and holds a fixed number of hexes.</li>
+                <li><strong>Tapping a crate</strong> sends it to a free buffer slot, where it starts pulling matching hexes off the board. A crate is only tappable when every tray cell between it and the buffer is empty.</li>
+                <li><strong>Only one crate per colour collects at a time.</strong> Later crates of the same colour wait at 0% until the first one finishes.</li>
+                <li><strong>A full crate</strong> seals, pops and leaves, and the buffer closes up.</li>
+            </ul>
+
+            <h3>Palette Colours</h3>
+            <p>Colours live in <code>Settings/HexaFallPalette.asset</code>. Each entry carries an id character, a display name, a tint and a crate capacity &mdash; how many hexes one crate of that colour holds. The id character is what the level files use.</p>
+
+            <h3>Win &amp; Lose Conditions</h3>
+            <ul>
+                <li><strong>Win:</strong> the tray and the buffer are both empty.</li>
+                <li><strong>Lose:</strong> the buffer is full and none of the colours parked in it are on the board's front line, so nothing can progress.</li>
+            </ul>
+            <p>Because a level is only lost when the buffer jams, buffer size is the game's tightest difficulty lever &mdash; and the reason the Extra Slot booster exists.</p>
+
+            <h3>Balance</h3>
+            <p>A level is <em>balanced</em> when every colour has exactly as many hexes on the board as its crates can swallow. An unbalanced level is finishable but leaves a stack stranded, which reads as a bug rather than a difficulty. The editor's <strong>Check Balance</strong> and <strong>Auto-Balance Stack Depths</strong> buttons report and fix this.</p>
+        </section>
+
+        <!-- ==================== SCRIPTS ==================== -->
+        <section id="scripts" class="section">
+            <h2>Scripts Reference</h2>
+
+            <h3>Core Scripts</h3>
+            <table>
+                <tr><th>Script</th><th>Responsibility</th></tr>
+                <tr><td><code>HexaFallGame</code></td><td>Owns the level: taps, the flow of hexes into buffered crates, crate countdowns, win and lose. Also exposes the four booster effects.</td></tr>
+                <tr><td><code>HexaFallGameManager</code></td><td>Binds the campaign to the board: which level loads, what happens on win or lose, and every gameplay sound cue.</td></tr>
+                <tr><td><code>HexaFallLevelManager</code></td><td>Which level is selected and how far the player has got. Reads and writes the same keys the menu's level selector uses.</td></tr>
+                <tr><td><code>HexaFallLevelBuilder</code></td><td>Assembles a whole playable level out of level data: board, tray, crates, buffer, frame and camera framing.</td></tr>
+                <tr><td><code>HexaFallLevelData</code></td><td>The runtime level: board grids, tray grids and the variation feature lists.</td></tr>
+                <tr><td><code>HexaFallJsonLevel</code></td><td>The on-disk mirror of a level. One JSON file per level.</td></tr>
+                <tr><td><code>HexaFallCampaign</code></td><td>How many levels ship, where they live, and which palette and style they are played with.</td></tr>
+                <tr><td><code>HexaFallSolver</code></td><td>Headless playthrough simulator. Measures how <em>often</em> a level is won across independent playthroughs, not merely whether it can be, before it is saved.</td></tr>
+                <tr><td><code>HexaFallLevelGenerator</code></td><td>The generation engine the Auto Level Generator window is built on.</td></tr>
+            </table>
+
+            <h3>Utility Scripts</h3>
+            <table>
+                <tr><th>Script</th><th>Responsibility</th></tr>
+                <tr><td><code>HexaFallBoard</code> / <code>HexaFallBoardModel</code></td><td>The board's visuals and its pure-C# model. The solver and the game share the model, so both obey the same rules.</td></tr>
+                <tr><td><code>HexaFallTray</code></td><td>The tray grid and the accessibility rule that decides which crates are tappable.</td></tr>
+                <tr><td><code>HexaFallBuffer</code></td><td>The row of parking slots, including the widening the Extra Slot booster performs.</td></tr>
+                <tr><td><code>HexaFallBox</code></td><td>One collector crate: fill percentage, mystery concealment and the reveal lerp.</td></tr>
+                <tr><td><code>HexaFallCrate</code></td><td>A wooden crate: its countdown, its shudder and its shatter.</td></tr>
+                <tr><td><code>HexaFallGlyphMarker</code></td><td>The world-space "?" on a mystery crate.</td></tr>
+                <tr><td><code>HexaFallMeshFactory</code> / <code>HexaFallTextureFactory</code></td><td>Build every mesh and texture in the game from the style asset.</td></tr>
+                <tr><td><code>HexaFallCameraRig</code></td><td>Frames the board, buffer and tray, and applies shake presets.</td></tr>
+                <tr><td><code>HexaFallHaptics</code></td><td>Android vibration and iOS Core Haptics, written from scratch. Safe on every platform.</td></tr>
+                <tr><td><code>HexaFallPowerUpAdapter</code></td><td>Connects the four boosters to the reusable power-up framework.</td></tr>
+                <tr><td><code>HexaFallLiveOpsAdapter</code></td><td>The only place the game talks to the backend: rewards, analytics and the leaderboard.</td></tr>
+            </table>
+
+            <h3>Editor Scripts</h3>
+            <table>
+                <tr><th>Script</th><th>Responsibility</th></tr>
+                <tr><td><code>HexaFallLevelEditorWindow</code></td><td>The Manual Level Editor.</td></tr>
+                <tr><td><code>HexaFallAutoLevelGeneratorWindow</code></td><td>The Auto Level Generator.</td></tr>
+                <tr><td><code>HexaFallWelcomePopup</code></td><td>The first-run greeting.</td></tr>
+                <tr><td><code>HexaFallLevelIO</code></td><td>Loads, saves, renumbers and validates the level set. Shared by both windows.</td></tr>
+                <tr><td><code>HexaFallLevelDataEditor</code></td><td>Inspector for a hand-authored level asset, with balance and simulation buttons.</td></tr>
+            </table>
+        </section>
+
+        <!-- ==================== LEVEL EDITOR ==================== -->
+        <section id="level-editor" class="section">
+            <h2>Level Editor</h2>
+
+            <h3>Opening the Level Editor</h3>
+            <p>Menu path: <code>Tools &gt; Hexa Fall &gt; Manual Level Editor</code></p>
+
+            <h3>Features</h3>
+            <ul>
+                <li><strong>Left panel &mdash; the set.</strong> Every level in campaign order. Add, Duplicate, Delete, Move Up and Move Down. <strong>Save All</strong> writes the whole set back and renumbers the files on disk, so the list order is always the shipped order.</li>
+                <li><strong>Right panel &mdash; the selected level.</strong> Bold-labelled sections over a clickable board and tray.</li>
+                <li><strong>Board.</strong> Click a hex to cycle its colour. The number on it is the stack depth. <strong>Rebuild Board For This Tray</strong> repaints the board so every colour in the tray has somewhere to come from.</li>
+                <li><strong>Tray grid.</strong> Rows and columns sliders, a tool bar, and a clickable grid.</li>
+                <li><strong>Selected Cell.</strong> Colour, capacity override, mystery toggle, crate toggle and crate cost for one cell.</li>
+                <li><strong>Rules.</strong> Buffer slots, access rule, and whether a starved crate closes early.</li>
+                <li><strong>Boosters.</strong> Per-level counts and unlock levels for all four boosters.</li>
+                <li><strong>Validation.</strong> Check Balance, Simulate Playthrough and Validate All. Failures are shown in the window, not only in the console.</li>
+            </ul>
+
+            <h3>Edit Modes</h3>
+            <table>
+                <tr><th>Tool</th><th>What a click does</th></tr>
+                <tr><td><strong>Select</strong></td><td>Picks a cell to edit in the Selected Cell section below.</td></tr>
+                <tr><td><strong>Colour</strong></td><td>Puts a crate of the chosen colour in the cell.</td></tr>
+                <tr><td><strong>Crate</strong></td><td>Covers the cell with a wooden crate, or removes one. The number on it is how many crates must be collected before it opens.</td></tr>
+                <tr><td><strong>Mystery</strong></td><td>Conceals the cell's colour behind a "?" until it becomes reachable.</td></tr>
+                <tr><td><strong>Cut-out</strong></td><td>Cuts the cell out of the tray floor. Nothing can ever stand there.</td></tr>
+                <tr><td><strong>Erase</strong></td><td>Empties the cell completely.</td></tr>
+            </table>
+
+            <h3>Level Storage</h3>
+            <p>Levels are JSON files at <code>Assets/HexaFall/Resources/Levels/Level_N.json</code>, numbered from 1 with no gaps. <code>Assets/HexaFall/Resources/HexaFall/HexaFallCampaign.asset</code> records how many there are and which palette and style they use.</p>
+            <p>There is deliberately no bulk-generate button in this window. A destructive rewrite of the whole set should not sit one mis-click away from somebody browsing a list &mdash; that lives in the Auto Level Generator.</p>
+        </section>
+
+        <!-- ==================== AUTO LEVEL GENERATOR ==================== -->
+        <section id="auto-level-generator" class="section">
+            <h2>Automatic Level Generator</h2>
+
+            <h3>Opening the Tool</h3>
+            <p>Menu path: <code>Tools &gt; Hexa Fall &gt; Auto Level Generator</code></p>
+
+            <h3>Settings</h3>
+            <p>Every tunable is a <strong>min/max pair</strong>. Min is what level 1 gets, max is what the last level gets, and everything between is interpolated by the difficulty curve then jittered so neighbouring levels are not identical.</p>
+            <table>
+                <tr><th>Setting</th><th>Meaning</th></tr>
+                <tr><td>Difficulty curve</td><td><code>pow(t, exponent)</code> across the campaign. 1.0 is linear; below 1 ramps faster early. Default <strong>0.4</strong>, so a 500-level batch is at roughly 40% difficulty by level 50 instead of waiting until level 375.</td></tr>
+                <tr><td>Colours</td><td>How many palette colours a level uses.</td></tr>
+                <tr><td>Board columns</td><td>Width of the hex board.</td></tr>
+                <tr><td>Tray rows / columns</td><td>Size of the crate grid.</td></tr>
+                <tr><td>Min / max stack depth</td><td>How deep the board's stacks may be.</td></tr>
+                <tr><td>Buffer slots</td><td>Parking slots. This one runs <em>down</em> with difficulty.</td></tr>
+                <tr><td>Cut-outs / crates / mystery from level</td><td>The campaign level each variation family is introduced on.</td></tr>
+                <tr><td>&hellip; share</td><td>How much of the eligible population each family covers, at the easiest and hardest levels.</td></tr>
+                <tr><td>Crate cost</td><td>How many crates must be collected before a wooden crate opens by itself.</td></tr>
+                <tr><td>Booster counts</td><td>Uses each level grants, per booster.</td></tr>
+                <tr><td>Attempts per level</td><td>Seeds tried before a level is loosened, and again before it falls back to a plain board.</td></tr>
+                <tr><td>Boxes &ndash; first / last level</td><td>The campaign's size ramp, and the one thing that is <strong>enforced</strong>. The tray, its cut-outs and the board are all fitted around this number rather than the other way round.</td></tr>
+                <tr><td>Board tiles &ndash; first / last</td><td>Tiles standing on the board at each end of the campaign, checked as a band on the level that was <em>built</em>.</td></tr>
+                <tr><td>Band, early / late</td><td>How far a level may sit from its tile target. Keep the early figure tight: early on the target barely moves, so a wide tolerance admits everything and enforces nothing.</td></tr>
+                <tr><td>Playthroughs per candidate</td><td>How many independent playthroughs judge a candidate. Acceptance is a win <strong>rate</strong>, not a single win.</td></tr>
+            </table>
+
+            <h3>Sources</h3>
+            <p>Below the settings is the list of sources the run will consume: every colour in <code>HexaFallPalette.asset</code> with a swatch and an include toggle, and the tray silhouettes the cut-outs are biased toward. Exclude a colour or a silhouette before pressing Generate and it will not appear in the output.</p>
+
+            <h3>How It Works</h3>
+            <ol>
+                <li>The level's difficulty is read off the curve, and every setting is rolled inside its own min/max pair.</li>
+                <li>The tray footprint is laid out and the cut-outs are cut from it, biased toward the chosen silhouette.</li>
+                <li>Crates are shared between the colours, and the board is given exactly enough cells and stack depth to fill them &mdash; so the level balances by construction.</li>
+                <li>Wooden crates and mystery crates are placed only on crates that are <em>buried</em> at the start. A lock over something the player could already tap opens on the first move.</li>
+                <li>The candidate is checked against the <strong>ramp</strong> &mdash; its box count and its board tiles, measured on the level that was just built rather than on the settings it was asked for.</li>
+                <li>The candidate is <strong>played by the solver many times</strong>. It is kept only if it is won often enough; a board that can be won but almost never is gets thrown away like one that cannot be won at all. Survivors are re-measured a second time on an independent run of the simulation, because a test repeated a few hundred times per level stops being a test and becomes a search for a board that got lucky.</li>
+                <li>After the configured number of attempts the level is <strong>loosened</strong> &mdash; its variation features cut to 40% &mdash; and tried again.</li>
+                <li>If that also fails, a plain board is written as a <strong>last resort</strong> and logged loudly. A level is never saved with a warning.</li>
+            </ol>
+            <p>The run report appears in the window and names how many levels were loosened, how many fell back, and why.</p>
+
+            <h3>Append or Replace</h3>
+            <ul>
+                <li><strong>Append</strong> adds the new levels after the highest existing one and leaves the earlier levels alone.</li>
+                <li><strong>Replace</strong> rebuilds the set from scratch, after a confirmation dialog. Tick <strong>Keep level 1</strong> to leave the hand-authored opening level untouched.</li>
+            </ul>
+            <p>The seed makes a run reproducible: the same seed and the same settings produce the same set. Cancelling mid-run keeps everything already written.</p>
+        </section>
+
+        <!-- ==================== BOOSTERS ==================== -->
+        <section id="boosters" class="section">
+            <h2>Boosters</h2>
+            <p>Four boosters, each answering one thing the levels do to the player. Three of them fire on a single press; only Pick Any arms and waits, because it is the only one where the choice of target matters.</p>
+
+            <table>
+                <tr><th>Booster</th><th>Kind</th><th>What it does</th><th>Unlocks</th></tr>
+                <tr><td><strong>Shuffle</strong></td><td>one press</td><td>Swaps every uncovered crate in the tray into a different cell, flying each along an arc.</td><td>level 1</td></tr>
+                <tr><td><strong>Extra Slot</strong></td><td>one press</td><td>Adds one parking slot to the buffer for this level, and re-centres the row.</td><td>level 2</td></tr>
+                <tr><td><strong>Pick Any</strong></td><td>armed</td><td>Takes any crate, even one that is boxed in or under a wooden crate. Every crate it can reach pulses while it is armed.</td><td>level 5</td></tr>
+                <tr><td><strong>Crate Buster</strong></td><td>one press</td><td>Smashes every wooden crate on the tray at once, without waiting for the countdowns.</td><td>level 16</td></tr>
+            </table>
+
+            <h3>Booster Button States</h3>
+            <ul>
+                <li><strong>Locked</strong> &mdash; the button shows the level it opens on and is not pressable.</li>
+                <li><strong>Empty</strong> &mdash; unlocked but out of charges; the button shows <code>0</code> and refuses with a sound.</li>
+                <li><strong>Armed</strong> (Pick Any only) &mdash; the button pulses and every eligible crate pulses with it. Pressing the button again cancels.</li>
+            </ul>
+            <p>A charge is consumed only when the effect actually does something. Pressing Shuffle with one crate left, or Crate Buster on a board with no crates, is refused and costs nothing.</p>
+            <p>The first time a booster is pressed, its tutorial popup appears &mdash; <em>before</em> the can-use check, so a player who taps an empty booster still gets the explanation.</p>
+
+            <h3>Per-level counts and unlocks</h3>
+            <p>Both live on the level, not in code. Set them in the Manual Level Editor's Boosters section, or as ranges in the Auto Level Generator. An unlock level of <code>-1</code> keeps the catalogue's own value.</p>
+        </section>
+
+        <!-- ==================== VARIATION ==================== -->
+        <section id="variation" class="section">
+            <h2>Level Variation</h2>
+            <p>Three families make level 400 feel different from level 4, and each is introduced on its own level so the player meets one new idea at a time.</p>
+
+            <h3>Tray cut-outs</h3>
+            <p>Cells with no floor plate that no crate may ever occupy. They shape the tray's silhouette and shorten the columns crates queue in. Nothing stands in a cut-out, so it never blocks the path to the buffer.</p>
+
+            <h3>Wooden crates</h3>
+            <p>A wooden crate hides the crate beneath it and blocks everything behind it. It is a lock with a <em>cost</em>: it opens once the level's required number of crates has been collected, and it shows that number counting down while the player works elsewhere. The Crate Buster booster opens them early; Pick Any takes one crate out from under its lid.</p>
+
+            <h3>Mystery crates</h3>
+            <p>A mystery crate renders as a neutral slate with a "?" and reveals its real colour &mdash; lerping, not snapping &mdash; the moment it becomes reachable. It is never tappable while concealed, so the player is never asked to commit to a colour they cannot see. Mystery removes <em>planning ahead</em>; it is not a gamble.</p>
+
+            <h3>Buffer slots</h3>
+            <p>The quietest lever and the strongest one: how many crates can be parked at once. It falls as the campaign progresses, and the Extra Slot booster is the counter-move.</p>
+        </section>
+
+        <!-- ==================== CUSTOMIZATION ==================== -->
+        <section id="customization" class="section">
+            <h2>Customization Guide</h2>
+
+            <h3>Adding a level</h3>
+            <ol>
+                <li>Open <code>Tools &gt; Hexa Fall &gt; Manual Level Editor</code>.</li>
+                <li>Press <strong>+ Add</strong>, or select a level and press <strong>Duplicate</strong>.</li>
+                <li>Set the tray rows and columns, then paint crates with the <strong>Colour</strong> tool.</li>
+                <li>Press <strong>Rebuild Board For This Tray</strong> so the board matches what you painted.</li>
+                <li>Press <strong>Simulate Playthrough</strong>. It reports three states, and only the first is a pass: <strong>winnable and forgiving</strong>, <strong>FRAGILE</strong> (a winning line exists but players will rarely find it), or <strong>NOT WINNABLE</strong>. Treat FRAGILE as a failure &mdash; widen the buffer, drop a colour, or shorten the board.</li>
+                <li>Press <strong>Save All</strong>.</li>
+            </ol>
+
+            <h3>Adding a colour</h3>
+            <ol>
+                <li>Open <code>Settings/HexaFallPalette.asset</code> and add an entry: an id character, a display name, a tint and a crate capacity.</li>
+                <li>Press Play. Materials and meshes are generated per colour on demand, so there is nothing to build by hand.</li>
+                <li>The new colour appears in both level tools automatically.</li>
+            </ol>
+
+            <h3>Adjusting the look</h3>
+            <p>Everything visual is in <code>Settings/HexaFallStyle.asset</code>: hex radius and bevel, stack spacing, crate size, tray spacing and frame, buffer layout, every animation duration, camera framing and shake, particle counts, lighting and post-processing. Changing a value regenerates the affected meshes the next time the level is built.</p>
+
+            <h3>Adjusting the difficulty curve</h3>
+            <p>Open the Auto Level Generator and change <strong>Difficulty curve</strong>, or any min/max pair. Then re-run with <strong>Replace</strong> and <strong>Keep level 1</strong> ticked.</p>
+
+            <h3>Adding a booster</h3>
+            <ol>
+                <li>Add a handler class to <code>HexaFallPowerUpAdapter</code> implementing <code>IPowerUpEffectHandler</code>, and register it in <code>Awake</code>.</li>
+                <li>Create a <code>PowerUpDefinition</code> asset under <code>Assets/HexaFall/PowerUps/</code> with the same id.</li>
+                <li>Set <code>RequiresTarget</code>: off for a booster that acts on the level as a whole, on for one where the player picks the victim.</li>
+                <li>Raise <code>StarterMenuConfig.GameplayUiBoosterSlotCapacity</code> so the authored bar has a slot for it, then re-run the gameplay UI installer.</li>
+            </ol>
+            <div class="code-block"><span class="keyword">sealed class</span> <span class="class">MyEffect</span> : <span class="class">IPowerUpEffectHandler</span>
+{
+    <span class="keyword">public string</span> PowerUpId =&gt; <span class="string">"hexafall_my_effect"</span>;
+
+    <span class="keyword">public</span> <span class="class">PowerUpUseResult</span> TryApply(<span class="class">Object</span> target)
+    {
+        <span class="comment">// Refuse rather than throw: a rejected use must not cost a charge.</span>
+        <span class="keyword">if</span> (nothingToDo) <span class="keyword">return</span> <span class="class">PowerUpUseResult</span>.Rejected(<span class="string">"Nothing to do."</span>);
+        <span class="keyword">return</span> <span class="class">PowerUpUseResult</span>.Used(<span class="string">"Done!"</span>);
+    }
+}</div>
+        </section>
+
+        <!-- ==================== LEVEL FORMAT ==================== -->
+        <section id="level-format" class="section">
+            <h2>Level Format</h2>
+            <p>One JSON file per level. The board and the crate colours are text grids &mdash; one character per cell &mdash; because that is what makes a level readable in a diff and typeable by hand. Everything sparse is a list of cell addresses instead.</p>
+            <table>
+                <tr><th>Character</th><th>Meaning</th></tr>
+                <tr><td><code>.</code></td><td>empty cell</td></tr>
+                <tr><td><code>R</code>, <code>W</code>, <code>B</code>&hellip;</td><td>a palette id: places that colour</td></tr>
+                <tr><td><code>1</code>-<code>9</code>, then <code>A</code>-<code>Z</code></td><td>a count from 1 to 35 (stack depth, crate capacity)</td></tr>
+            </table>
+            <div class="code-block">{
+    <span class="string">"levelNumber"</span>: 42,
+    <span class="string">"levelName"</span>: <span class="string">"Level 42"</span>,
+
+    <span class="comment">// Board: one string per row. Odd rows sit half a cell in.</span>
+    <span class="string">"boardColors"</span>: [<span class="string">"RWBWB"</span>, <span class="string">"WBBRWB"</span>, <span class="string">"BWRRB"</span>],
+    <span class="string">"boardStacks"</span>: [<span class="string">"54455"</span>, <span class="string">"445554"</span>, <span class="string">"44654"</span>],
+    <span class="string">"defaultStackDepth"</span>: 4,
+
+    <span class="comment">// Tray: the crate grid, plus an optional per-cell capacity override.</span>
+    <span class="string">"trayRows"</span>: 4,
+    <span class="string">"trayColumns"</span>: 5,
+    <span class="string">"trayBoxes"</span>: [<span class="string">"..B.."</span>, <span class="string">".RWR."</span>, <span class="string">"RWBWR"</span>, <span class="string">".BWB."</span>],
+    <span class="string">"trayCapacities"</span>: [],
+
+    <span class="comment">// Variation families, as cell addresses.</span>
+    <span class="string">"obstacles"</span>:   [ { <span class="string">"row"</span>: 0, <span class="string">"col"</span>: 0 } ],
+    <span class="string">"crates"</span>:      [ { <span class="string">"row"</span>: 2, <span class="string">"col"</span>: 1, <span class="string">"boxesRequired"</span>: 3 } ],
+    <span class="string">"mysteryBoxes"</span>: [ { <span class="string">"row"</span>: 3, <span class="string">"col"</span>: 2 } ],
+
+    <span class="comment">// Rules.</span>
+    <span class="string">"bufferSlotCount"</span>: 5,
+    <span class="string">"accessMode"</span>: 0,
+    <span class="string">"completeBoxesThatRunOutOfTiles"</span>: false,
+
+    <span class="comment">// Boosters. -1 on an unlock level keeps the catalogue's own value.</span>
+    <span class="string">"shuffleCount"</span>: 3,
+    <span class="string">"extraSlotCount"</span>: 2,
+    <span class="string">"crateBusterCount"</span>: 2,
+    <span class="string">"pickAnyCount"</span>: 2,
+    <span class="string">"shuffleUnlockLevel"</span>: -1,
+    <span class="string">"extraSlotUnlockLevel"</span>: -1,
+    <span class="string">"crateBusterUnlockLevel"</span>: -1,
+    <span class="string">"pickAnyUnlockLevel"</span>: -1,
+
+    <span class="comment">// Informational only.</span>
+    <span class="string">"difficultyBand"</span>: 2,
+    <span class="string">"generatorSeed"</span>: 20260816
+}</div>
+            <p><code>accessMode</code> is <code>0</code> for the default rule (the column above the crate must be clear), <code>1</code> for any straight line to a grid edge, and <code>2</code> for any empty orthogonal neighbour.</p>
+        </section>
+
+        <!-- ==================== SUPPORT ==================== -->
+        <section id="support" class="section">
+            <h2>Support</h2>
+
+            <h3>Common Issues</h3>
+            <table>
+                <tr><th>Symptom</th><th>Cause and fix</th></tr>
+                <tr><td>Everything renders pink</td><td>The project is not using URP, or the render pipeline asset is not assigned. Set it in <em>Project Settings &gt; Graphics</em>.</td></tr>
+                <tr><td>"The campaign cannot start"</td><td><code>HexaFallCampaign.asset</code> is missing from <code>Resources/HexaFall/</code>, or its level count is 0. Open the Manual Level Editor and press Save All.</td></tr>
+                <tr><td>A level says it is not balanced</td><td>Some colour has more or fewer hexes on the board than its crates can hold. Press <strong>Auto-Balance Stack Depths</strong>.</td></tr>
+                <tr><td>Taps do nothing on device</td><td>The gameplay scene needs an EventSystem. The kit's gameplay UI installer authors one; re-run it from <em>Tools &gt; HLK &gt; Gameplay UI</em>.</td></tr>
+                <tr><td>A booster button is greyed out</td><td>It is either locked (the button shows the level it opens on) or empty (it shows <code>0</code>). Both are set per level.</td></tr>
+                <tr><td>The generator reports "LAST-RESORT"</td><td>That level could not be made winnable at the requested difficulty and a plain board was written instead. Widen the tray or buffer ranges, or lower the family shares.</td></tr>
+                <tr><td>A level is reported as <strong>FRAGILE</strong></td><td>It has a winning line, but too few of the simulated playthroughs find it. Give the player more room: raise the buffer slots, drop a colour, or reduce the crates. This is the state that produces "this level is impossible" reports while every other check stays green.</td></tr>
+                <tr><td>The campaign report says a trend is <strong>FLAT</strong> for several bands</td><td>The first and last fifty-level bands differ but the middle does not, so the campaign stops getting harder while the player is still playing it. Widen the ramp's first/last pair rather than the jitter.</td></tr>
+            </table>
+
+            <h3>Tips</h3>
+            <ul>
+                <li>Keep the golden opening level as level 1. It is the board the mechanic was derived from and the fixture the tests compare against.</li>
+                <li>Place wooden crates and mystery crates only where they are buried at the start &mdash; the generator enforces this, and hand-authored levels should too.</li>
+                <li>A crate's countdown can never ask for more crates than the level contains, or it will never open.</li>
+                <li>Re-run <strong>Validate All</strong> after any bulk edit. File existence is not validation.</li>
+            </ul>
+
+            <h3>Contact Us</h3>
+            <p>If you get stuck or have any issues, feel free to reach out to us at
+               <a href="mailto:satisvizion@gmail.com">satisvizion@gmail.com</a>. We are happy to help!</p>
+        </section>
+    </main>
+    </div>
+
+    <div class="footer">
+        <p>Hexa Fall &mdash; a Unity template. Built on HyperCasualLiveOpsKit.</p>
+    </div>
+</body>
+</html>
